@@ -13,8 +13,7 @@ dependencies:
     path: ../groups_api
   events_api:
     path: ../events_api
-  win1251:
-    path: ../win1251
+  enough_convert: ^1.6.0
 
 dev_dependencies:
   lints: ^5.0.0
