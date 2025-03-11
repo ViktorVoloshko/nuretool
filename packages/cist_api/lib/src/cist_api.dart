@@ -1,28 +1,32 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:events_api/events_api.dart';
 import 'package:groups_api/groups_api.dart';
-import 'package:win1251/win1251.dart';
+import 'package:enough_convert/enough_convert.dart';
 
 /// API client class for `cist.nure.ua`.
 class CistApi implements GroupsApi, EventsApi {
   CistApi({required Dio dio}) : _dio = dio;
 
   final Dio _dio;
+
+  final Windows1251Decoder _decoder = const Windows1251Decoder();
   static const _domain = 'cist.nure.ua';
 
   @override
   Future<List<Faculty>> fetchGroups() async {
     final response = await _dio.getUri(
       Uri.https(_domain, '/ias/app/tt/P_API_GROUP_JSON'),
+      options: Options(responseType: ResponseType.bytes),
     );
     if (response.statusCode != HttpStatus.ok) throw GroupsRequestFailure();
 
     final Map<String, dynamic> json;
     try {
-      final jsonString = response.data.toString().from1251();
+      final jsonString = _decoder.convert(Uint8List.fromList(response.data));
       json = jsonDecode(jsonString);
     } catch (_) {
       throw GroupsRequestFailure();
@@ -48,12 +52,13 @@ class CistApi implements GroupsApi, EventsApi {
         'time_to': [toTimestamp.toString()],
         'idClient': ['KNURESked'],
       }),
+      options: Options(responseType: ResponseType.bytes),
     );
     if (response.statusCode != HttpStatus.ok) throw EventsRequestFailure();
 
     final Map<String, dynamic> json;
     try {
-      final jsonString = response.data.toString().from1251();
+      final jsonString = _decoder.convert(response.data);
       json = jsonDecode(jsonString);
     } catch (_) {
       throw EventsRequestFailure();
