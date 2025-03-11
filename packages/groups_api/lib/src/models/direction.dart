@@ -21,6 +21,7 @@ class Direction extends Equatable {
   final String fullName;
   final String shortName;
   final List<Speciality> specialities;
+  @JsonKey(defaultValue: [])
   final List<Group> groups;
 
   factory Direction.fromJson(Map<String, dynamic> json) =>

@@ -24,9 +24,10 @@ Direction _$DirectionFromJson(Map<String, dynamic> json) => $checkedCreate(
       groups: $checkedConvert(
         'groups',
         (v) =>
-            (v as List<dynamic>)
-                .map((e) => Group.fromJson(e as Map<String, dynamic>))
-                .toList(),
+            (v as List<dynamic>?)
+                ?.map((e) => Group.fromJson(e as Map<String, dynamic>))
+                .toList() ??
+            [],
       ),
     );
     return val;
