@@ -12,13 +12,13 @@ part 'faculty.g.dart';
 class Faculty extends Equatable {
   const Faculty({
     required this.id,
-    required this.name,
+    required this.fullName,
     required this.shortName,
     required this.directions,
   });
 
   final int id;
-  final String name;
+  final String fullName;
   final String shortName;
   final List<Direction> directions;
 
@@ -28,5 +28,5 @@ class Faculty extends Equatable {
   Map<String, dynamic> toJson() => _$FacultyToJson(this);
 
   @override
-  List<Object?> get props => [id, name, shortName, directions];
+  List<Object?> get props => [id, fullName, shortName, directions];
 }

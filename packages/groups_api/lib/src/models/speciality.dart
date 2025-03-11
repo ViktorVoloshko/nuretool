@@ -11,13 +11,13 @@ part 'speciality.g.dart';
 class Speciality extends Equatable {
   const Speciality({
     required this.id,
-    required this.name,
+    required this.fullName,
     required this.shortName,
     required this.groups,
   });
 
   final int id;
-  final String name;
+  final String fullName;
   final String shortName;
   final List<Group> groups;
 
@@ -27,5 +27,5 @@ class Speciality extends Equatable {
   Map<String, dynamic> toJson() => _$SpecialityToJson(this);
 
   @override
-  List<Object?> get props => [id, name, shortName, groups];
+  List<Object?> get props => [id, fullName, shortName, groups];
 }

@@ -11,14 +11,14 @@ part 'direction.g.dart';
 class Direction extends Equatable {
   const Direction({
     required this.id,
-    required this.name,
+    required this.fullName,
     required this.shortName,
     required this.specialities,
     required this.groups,
   });
 
   final int id;
-  final String name;
+  final String fullName;
   final String shortName;
   final List<Speciality> specialities;
   final List<Group> groups;
@@ -29,5 +29,5 @@ class Direction extends Equatable {
   Map<String, dynamic> toJson() => _$DirectionToJson(this);
 
   @override
-  List<Object?> get props => [id, name, shortName, specialities, groups];
+  List<Object?> get props => [id, fullName, shortName, specialities, groups];
 }
