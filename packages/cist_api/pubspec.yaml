@@ -11,6 +11,8 @@ dependencies:
   dio: ^5.8.0+1
   groups_api:
     path: ../groups_api
+  events_api:
+    path: ../events_api
   win1251:
     path: ../win1251
 
