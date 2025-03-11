@@ -1,4 +1,4 @@
-/// Events API client interface and models.
+/// Interface for events API for API clients to implement.
 library;
 
 export 'src/events_api.dart';

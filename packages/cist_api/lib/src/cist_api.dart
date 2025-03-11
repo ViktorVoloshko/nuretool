@@ -7,6 +7,8 @@ import 'package:groups_api/groups_api.dart';
 import 'package:enough_convert/enough_convert.dart';
 
 /// API client class for `cist.nure.ua`.
+///
+/// It's API described in groups_api, teachers_api and events_api docs.
 class CistApi implements GroupsApi, EventsApi {
   CistApi({required Dio dio}) : _dio = dio;
 
