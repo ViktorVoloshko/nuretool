@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:events_api/events_api.dart';
@@ -26,7 +25,7 @@ class CistApi implements GroupsApi, EventsApi {
 
     final Map<String, dynamic> json;
     try {
-      final jsonString = _decoder.convert(Uint8List.fromList(response.data));
+      final jsonString = _decoder.convert(response.data);
       json = jsonDecode(jsonString);
     } catch (_) {
       throw GroupsRequestFailure();
