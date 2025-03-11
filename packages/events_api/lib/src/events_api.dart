@@ -9,3 +9,5 @@ abstract interface class EventsApi {
   Future<({List<Event> events, List<Subject> subjects, List<Type> types})>
   fetchEventsForTeacher(int teacherID, int fromTimestamp, int toTimestamp);
 }
+
+class EventsRequestFailure implements Exception {}
