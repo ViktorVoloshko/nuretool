@@ -4,5 +4,5 @@ abstract interface class GroupsApi {
   const GroupsApi();
 
   /// Returns [List] of [Faculty] which, recursively, contains all groups.
-  Future<void> fetchGroups();
+  Future<List<Faculty>> fetchGroups();
 }
