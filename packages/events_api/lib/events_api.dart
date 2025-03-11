@@ -2,3 +2,4 @@
 library;
 
 export 'src/events_api.dart';
+export 'src/models/models.dart';

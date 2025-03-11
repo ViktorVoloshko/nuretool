@@ -11,7 +11,7 @@ Event _$EventFromJson(Map<String, dynamic> json) => $checkedCreate(
   json,
   ($checkedConvert) {
     final val = Event(
-      subjectId: $checkedConvert('subject_id', (v) => (v as num).toInt()),
+      subjectID: $checkedConvert('subject_id', (v) => (v as num).toInt()),
       startTime: $checkedConvert('start_time', (v) => (v as num).toInt()),
       endTime: $checkedConvert('end_time', (v) => (v as num).toInt()),
       type: $checkedConvert('type', (v) => (v as num).toInt()),
@@ -29,7 +29,7 @@ Event _$EventFromJson(Map<String, dynamic> json) => $checkedCreate(
     return val;
   },
   fieldKeyMap: const {
-    'subjectId': 'subject_id',
+    'subjectID': 'subject_id',
     'startTime': 'start_time',
     'endTime': 'end_time',
     'numberPair': 'number_pair',
@@ -37,7 +37,7 @@ Event _$EventFromJson(Map<String, dynamic> json) => $checkedCreate(
 );
 
 Map<String, dynamic> _$EventToJson(Event instance) => <String, dynamic>{
-  'subject_id': instance.subjectId,
+  'subject_id': instance.subjectID,
   'start_time': instance.startTime,
   'end_time': instance.endTime,
   'type': instance.type,

@@ -8,7 +8,7 @@ part 'event.g.dart';
 @JsonSerializable()
 class Event extends Equatable {
   const Event({
-    required this.subjectId,
+    required this.subjectID,
     required this.startTime,
     required this.endTime,
     required this.type,
@@ -18,7 +18,8 @@ class Event extends Equatable {
     required this.groups,
   });
 
-  final int subjectId;
+  @JsonKey(name: 'subject_id')
+  final int subjectID;
   final int startTime;
   final int endTime;
   final int type;
@@ -33,7 +34,7 @@ class Event extends Equatable {
 
   @override
   List<Object?> get props => [
-    subjectId,
+    subjectID,
     startTime,
     endTime,
     type,
