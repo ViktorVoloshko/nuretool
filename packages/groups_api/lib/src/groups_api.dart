@@ -1,5 +1,9 @@
 import 'models/models.dart';
 
+class GroupsRequestFailure implements Exception {}
+
+class GroupsNotFoundFailure implements Exception {}
+
 abstract interface class GroupsApi {
   const GroupsApi();
 
