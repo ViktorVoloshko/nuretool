@@ -10,23 +10,31 @@ import 'package:enough_convert/enough_convert.dart';
 ///
 /// It's API described in groups_api, teachers_api and events_api docs.
 class CistApi implements GroupsApi, EventsApi {
-  CistApi({Dio? dio}) : _dio = dio ?? Dio();
+  CistApi({Dio? dio})
+    : _dio =
+          dio ??
+          Dio(
+            BaseOptions(
+              responseType: ResponseType.plain,
+              responseDecoder:
+                  (responseBytes, _, _) =>
+                      const Windows1251Decoder().convert(responseBytes),
+            ),
+          );
 
   final Dio _dio;
-  final _transformer = const Windows1251Decoder().fuse(const JsonDecoder());
   static const _domain = 'cist.nure.ua';
 
   @override
   Future<List<Faculty>> fetchGroups() async {
-    final response = await _dio.getUri<List<int>>(
+    final response = await _dio.getUri<String>(
       Uri.https(_domain, '/ias/app/tt/P_API_GROUP_JSON'),
-      options: Options(responseType: ResponseType.bytes),
     );
     if (response.statusCode != HttpStatus.ok) throw GroupsRequestFailure();
 
     final Map<String, dynamic> json;
     try {
-      json = _transformer.convert(response.data!) as Map<String, dynamic>;
+      json = jsonDecode(response.data!) as Map<String, dynamic>;
     } catch (_) {
       throw GroupsRequestFailure();
     }
@@ -43,21 +51,20 @@ class CistApi implements GroupsApi, EventsApi {
   @override
   Future<({List<Event> events, List<Subject> subjects, List<Type> types})>
   fetchEventsForGroup(int groupID, int fromTimestamp, int toTimestamp) async {
-    final response = await _dio.getUri<List<int>>(
+    final response = await _dio.getUri<String>(
       Uri.https(_domain, '/ias/app/tt/P_API_EVEN_JSON', {
-        'type_id': ['1'],
+        'type_id': const ['1'],
         'timetable_id': [groupID.toString()],
         'time_from': [fromTimestamp.toString()],
         'time_to': [toTimestamp.toString()],
-        'idClient': ['KNURESked'],
+        'idClient': const ['KNURESked'],
       }),
-      options: Options(responseType: ResponseType.bytes),
     );
     if (response.statusCode != HttpStatus.ok) throw EventsRequestFailure();
 
     final Map<String, dynamic> json;
     try {
-      json = _transformer.convert(response.data!) as Map<String, dynamic>;
+      json = jsonDecode(response.data!) as Map<String, dynamic>;
     } catch (_) {
       throw EventsRequestFailure();
     }
