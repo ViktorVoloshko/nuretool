@@ -10,16 +10,15 @@ import 'package:enough_convert/enough_convert.dart';
 ///
 /// It's API described in groups_api, teachers_api and events_api docs.
 class CistApi implements GroupsApi, EventsApi {
-  CistApi({required Dio dio}) : _dio = dio;
+  CistApi({Dio? dio}) : _dio = dio ?? Dio();
 
   final Dio _dio;
-
-  final Windows1251Decoder _decoder = const Windows1251Decoder();
+  final _transformer = const Windows1251Decoder().fuse(const JsonDecoder());
   static const _domain = 'cist.nure.ua';
 
   @override
   Future<List<Faculty>> fetchGroups() async {
-    final response = await _dio.getUri(
+    final response = await _dio.getUri<List<int>>(
       Uri.https(_domain, '/ias/app/tt/P_API_GROUP_JSON'),
       options: Options(responseType: ResponseType.bytes),
     );
@@ -27,8 +26,7 @@ class CistApi implements GroupsApi, EventsApi {
 
     final Map<String, dynamic> json;
     try {
-      final jsonString = _decoder.convert(response.data);
-      json = jsonDecode(jsonString);
+      json = _transformer.convert(response.data!) as Map<String, dynamic>;
     } catch (_) {
       throw GroupsRequestFailure();
     }
@@ -45,7 +43,7 @@ class CistApi implements GroupsApi, EventsApi {
   @override
   Future<({List<Event> events, List<Subject> subjects, List<Type> types})>
   fetchEventsForGroup(int groupID, int fromTimestamp, int toTimestamp) async {
-    final response = await _dio.getUri(
+    final response = await _dio.getUri<List<int>>(
       Uri.https(_domain, '/ias/app/tt/P_API_EVEN_JSON', {
         'type_id': ['1'],
         'timetable_id': [groupID.toString()],
@@ -59,8 +57,7 @@ class CistApi implements GroupsApi, EventsApi {
 
     final Map<String, dynamic> json;
     try {
-      final jsonString = _decoder.convert(response.data);
-      json = jsonDecode(jsonString);
+      json = _transformer.convert(response.data!) as Map<String, dynamic>;
     } catch (_) {
       throw EventsRequestFailure();
     }
