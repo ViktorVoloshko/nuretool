@@ -1,0 +1,7 @@
+/// Package that provides local SQLite storage for nuretool.
+///
+/// Part of data layer.
+library;
+
+export 'src/local_db_api.dart';
+export 'src/tables/tables.dart';
