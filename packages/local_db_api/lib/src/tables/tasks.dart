@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 
-import 'tables.dart';
+enum TaskType { subject, project, practice, laboratory, test, exam }
 
 class Tasks extends Table {
   IntColumn get id => integer().autoIncrement()();
@@ -9,5 +9,5 @@ class Tasks extends Table {
   BoolColumn get isCustom => boolean()();
   IntColumn get supertaskId => integer().nullable()();
   DateTimeColumn get deadline => dateTime().nullable()();
-  IntColumn get type => intEnum<Type>().nullable()();
+  IntColumn get type => intEnum<TaskType>().nullable()();
 }
