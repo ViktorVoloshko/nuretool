@@ -9,7 +9,9 @@ class Events extends Table {
   DateTimeColumn get startTime => dateTime()();
   DateTimeColumn get endTime => dateTime()();
   BoolColumn get isCustom => boolean()();
+  IntColumn get baseTypeID =>
+      intEnum<EventBaseType>().nullable().named('base_type_id')();
   IntColumn get typeID =>
-      integer().named('type_id').nullable().references(EventTypes, #id)();
+      integer().nullable().named('type_id').references(EventTypes, #id)();
   TextColumn get room => text().nullable()();
 }

@@ -627,6 +627,15 @@ class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
       'CHECK ("is_custom" IN (0, 1))',
     ),
   );
+  @override
+  late final GeneratedColumnWithTypeConverter<EventBaseType?, int> baseTypeID =
+      GeneratedColumn<int>(
+        'base_type_id',
+        aliasedName,
+        true,
+        type: DriftSqlType.int,
+        requiredDuringInsert: false,
+      ).withConverter<EventBaseType?>($EventsTable.$converterbaseTypeIDn);
   static const VerificationMeta _typeIDMeta = const VerificationMeta('typeID');
   @override
   late final GeneratedColumn<int> typeID = GeneratedColumn<int>(
@@ -655,6 +664,7 @@ class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
     startTime,
     endTime,
     isCustom,
+    baseTypeID,
     typeID,
     room,
   ];
@@ -751,6 +761,12 @@ class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
             DriftSqlType.bool,
             data['${effectivePrefix}is_custom'],
           )!,
+      baseTypeID: $EventsTable.$converterbaseTypeIDn.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}base_type_id'],
+        ),
+      ),
       typeID: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}type_id'],
@@ -766,6 +782,11 @@ class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
   $EventsTable createAlias(String alias) {
     return $EventsTable(attachedDatabase, alias);
   }
+
+  static JsonTypeConverter2<EventBaseType, int, int> $converterbaseTypeID =
+      const EnumIndexConverter<EventBaseType>(EventBaseType.values);
+  static JsonTypeConverter2<EventBaseType?, int?, int?> $converterbaseTypeIDn =
+      JsonTypeConverter2.asNullable($converterbaseTypeID);
 }
 
 class Event extends DataClass implements Insertable<Event> {
@@ -774,6 +795,7 @@ class Event extends DataClass implements Insertable<Event> {
   final DateTime startTime;
   final DateTime endTime;
   final bool isCustom;
+  final EventBaseType? baseTypeID;
   final int? typeID;
   final String? room;
   const Event({
@@ -782,6 +804,7 @@ class Event extends DataClass implements Insertable<Event> {
     required this.startTime,
     required this.endTime,
     required this.isCustom,
+    this.baseTypeID,
     this.typeID,
     this.room,
   });
@@ -793,6 +816,11 @@ class Event extends DataClass implements Insertable<Event> {
     map['start_time'] = Variable<DateTime>(startTime);
     map['end_time'] = Variable<DateTime>(endTime);
     map['is_custom'] = Variable<bool>(isCustom);
+    if (!nullToAbsent || baseTypeID != null) {
+      map['base_type_id'] = Variable<int>(
+        $EventsTable.$converterbaseTypeIDn.toSql(baseTypeID),
+      );
+    }
     if (!nullToAbsent || typeID != null) {
       map['type_id'] = Variable<int>(typeID);
     }
@@ -809,6 +837,10 @@ class Event extends DataClass implements Insertable<Event> {
       startTime: Value(startTime),
       endTime: Value(endTime),
       isCustom: Value(isCustom),
+      baseTypeID:
+          baseTypeID == null && nullToAbsent
+              ? const Value.absent()
+              : Value(baseTypeID),
       typeID:
           typeID == null && nullToAbsent ? const Value.absent() : Value(typeID),
       room: room == null && nullToAbsent ? const Value.absent() : Value(room),
@@ -826,6 +858,9 @@ class Event extends DataClass implements Insertable<Event> {
       startTime: serializer.fromJson<DateTime>(json['startTime']),
       endTime: serializer.fromJson<DateTime>(json['endTime']),
       isCustom: serializer.fromJson<bool>(json['isCustom']),
+      baseTypeID: $EventsTable.$converterbaseTypeIDn.fromJson(
+        serializer.fromJson<int?>(json['baseTypeID']),
+      ),
       typeID: serializer.fromJson<int?>(json['typeID']),
       room: serializer.fromJson<String?>(json['room']),
     );
@@ -839,6 +874,9 @@ class Event extends DataClass implements Insertable<Event> {
       'startTime': serializer.toJson<DateTime>(startTime),
       'endTime': serializer.toJson<DateTime>(endTime),
       'isCustom': serializer.toJson<bool>(isCustom),
+      'baseTypeID': serializer.toJson<int?>(
+        $EventsTable.$converterbaseTypeIDn.toJson(baseTypeID),
+      ),
       'typeID': serializer.toJson<int?>(typeID),
       'room': serializer.toJson<String?>(room),
     };
@@ -850,6 +888,7 @@ class Event extends DataClass implements Insertable<Event> {
     DateTime? startTime,
     DateTime? endTime,
     bool? isCustom,
+    Value<EventBaseType?> baseTypeID = const Value.absent(),
     Value<int?> typeID = const Value.absent(),
     Value<String?> room = const Value.absent(),
   }) => Event(
@@ -858,6 +897,7 @@ class Event extends DataClass implements Insertable<Event> {
     startTime: startTime ?? this.startTime,
     endTime: endTime ?? this.endTime,
     isCustom: isCustom ?? this.isCustom,
+    baseTypeID: baseTypeID.present ? baseTypeID.value : this.baseTypeID,
     typeID: typeID.present ? typeID.value : this.typeID,
     room: room.present ? room.value : this.room,
   );
@@ -868,6 +908,8 @@ class Event extends DataClass implements Insertable<Event> {
       startTime: data.startTime.present ? data.startTime.value : this.startTime,
       endTime: data.endTime.present ? data.endTime.value : this.endTime,
       isCustom: data.isCustom.present ? data.isCustom.value : this.isCustom,
+      baseTypeID:
+          data.baseTypeID.present ? data.baseTypeID.value : this.baseTypeID,
       typeID: data.typeID.present ? data.typeID.value : this.typeID,
       room: data.room.present ? data.room.value : this.room,
     );
@@ -881,6 +923,7 @@ class Event extends DataClass implements Insertable<Event> {
           ..write('startTime: $startTime, ')
           ..write('endTime: $endTime, ')
           ..write('isCustom: $isCustom, ')
+          ..write('baseTypeID: $baseTypeID, ')
           ..write('typeID: $typeID, ')
           ..write('room: $room')
           ..write(')'))
@@ -888,8 +931,16 @@ class Event extends DataClass implements Insertable<Event> {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, subjectID, startTime, endTime, isCustom, typeID, room);
+  int get hashCode => Object.hash(
+    id,
+    subjectID,
+    startTime,
+    endTime,
+    isCustom,
+    baseTypeID,
+    typeID,
+    room,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -899,6 +950,7 @@ class Event extends DataClass implements Insertable<Event> {
           other.startTime == this.startTime &&
           other.endTime == this.endTime &&
           other.isCustom == this.isCustom &&
+          other.baseTypeID == this.baseTypeID &&
           other.typeID == this.typeID &&
           other.room == this.room);
 }
@@ -909,6 +961,7 @@ class EventsCompanion extends UpdateCompanion<Event> {
   final Value<DateTime> startTime;
   final Value<DateTime> endTime;
   final Value<bool> isCustom;
+  final Value<EventBaseType?> baseTypeID;
   final Value<int?> typeID;
   final Value<String?> room;
   const EventsCompanion({
@@ -917,6 +970,7 @@ class EventsCompanion extends UpdateCompanion<Event> {
     this.startTime = const Value.absent(),
     this.endTime = const Value.absent(),
     this.isCustom = const Value.absent(),
+    this.baseTypeID = const Value.absent(),
     this.typeID = const Value.absent(),
     this.room = const Value.absent(),
   });
@@ -926,6 +980,7 @@ class EventsCompanion extends UpdateCompanion<Event> {
     required DateTime startTime,
     required DateTime endTime,
     required bool isCustom,
+    this.baseTypeID = const Value.absent(),
     this.typeID = const Value.absent(),
     this.room = const Value.absent(),
   }) : subjectID = Value(subjectID),
@@ -938,6 +993,7 @@ class EventsCompanion extends UpdateCompanion<Event> {
     Expression<DateTime>? startTime,
     Expression<DateTime>? endTime,
     Expression<bool>? isCustom,
+    Expression<int>? baseTypeID,
     Expression<int>? typeID,
     Expression<String>? room,
   }) {
@@ -947,6 +1003,7 @@ class EventsCompanion extends UpdateCompanion<Event> {
       if (startTime != null) 'start_time': startTime,
       if (endTime != null) 'end_time': endTime,
       if (isCustom != null) 'is_custom': isCustom,
+      if (baseTypeID != null) 'base_type_id': baseTypeID,
       if (typeID != null) 'type_id': typeID,
       if (room != null) 'room': room,
     });
@@ -958,6 +1015,7 @@ class EventsCompanion extends UpdateCompanion<Event> {
     Value<DateTime>? startTime,
     Value<DateTime>? endTime,
     Value<bool>? isCustom,
+    Value<EventBaseType?>? baseTypeID,
     Value<int?>? typeID,
     Value<String?>? room,
   }) {
@@ -967,6 +1025,7 @@ class EventsCompanion extends UpdateCompanion<Event> {
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
       isCustom: isCustom ?? this.isCustom,
+      baseTypeID: baseTypeID ?? this.baseTypeID,
       typeID: typeID ?? this.typeID,
       room: room ?? this.room,
     );
@@ -990,6 +1049,11 @@ class EventsCompanion extends UpdateCompanion<Event> {
     if (isCustom.present) {
       map['is_custom'] = Variable<bool>(isCustom.value);
     }
+    if (baseTypeID.present) {
+      map['base_type_id'] = Variable<int>(
+        $EventsTable.$converterbaseTypeIDn.toSql(baseTypeID.value),
+      );
+    }
     if (typeID.present) {
       map['type_id'] = Variable<int>(typeID.value);
     }
@@ -1007,6 +1071,7 @@ class EventsCompanion extends UpdateCompanion<Event> {
           ..write('startTime: $startTime, ')
           ..write('endTime: $endTime, ')
           ..write('isCustom: $isCustom, ')
+          ..write('baseTypeID: $baseTypeID, ')
           ..write('typeID: $typeID, ')
           ..write('room: $room')
           ..write(')'))
@@ -2477,6 +2542,7 @@ typedef $$EventsTableCreateCompanionBuilder =
       required DateTime startTime,
       required DateTime endTime,
       required bool isCustom,
+      Value<EventBaseType?> baseTypeID,
       Value<int?> typeID,
       Value<String?> room,
     });
@@ -2487,6 +2553,7 @@ typedef $$EventsTableUpdateCompanionBuilder =
       Value<DateTime> startTime,
       Value<DateTime> endTime,
       Value<bool> isCustom,
+      Value<EventBaseType?> baseTypeID,
       Value<int?> typeID,
       Value<String?> room,
     });
@@ -2556,6 +2623,12 @@ class $$EventsTableFilterComposer extends Composer<_$LocalDBApi, $EventsTable> {
   ColumnFilters<bool> get isCustom => $composableBuilder(
     column: $table.isCustom,
     builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<EventBaseType?, EventBaseType, int>
+  get baseTypeID => $composableBuilder(
+    column: $table.baseTypeID,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
   ColumnFilters<String> get room => $composableBuilder(
@@ -2639,6 +2712,11 @@ class $$EventsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get baseTypeID => $composableBuilder(
+    column: $table.baseTypeID,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get room => $composableBuilder(
     column: $table.room,
     builder: (column) => ColumnOrderings(column),
@@ -2711,6 +2789,12 @@ class $$EventsTableAnnotationComposer
 
   GeneratedColumn<bool> get isCustom =>
       $composableBuilder(column: $table.isCustom, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<EventBaseType?, int> get baseTypeID =>
+      $composableBuilder(
+        column: $table.baseTypeID,
+        builder: (column) => column,
+      );
 
   GeneratedColumn<String> get room =>
       $composableBuilder(column: $table.room, builder: (column) => column);
@@ -2795,6 +2879,7 @@ class $$EventsTableTableManager
                 Value<DateTime> startTime = const Value.absent(),
                 Value<DateTime> endTime = const Value.absent(),
                 Value<bool> isCustom = const Value.absent(),
+                Value<EventBaseType?> baseTypeID = const Value.absent(),
                 Value<int?> typeID = const Value.absent(),
                 Value<String?> room = const Value.absent(),
               }) => EventsCompanion(
@@ -2803,6 +2888,7 @@ class $$EventsTableTableManager
                 startTime: startTime,
                 endTime: endTime,
                 isCustom: isCustom,
+                baseTypeID: baseTypeID,
                 typeID: typeID,
                 room: room,
               ),
@@ -2813,6 +2899,7 @@ class $$EventsTableTableManager
                 required DateTime startTime,
                 required DateTime endTime,
                 required bool isCustom,
+                Value<EventBaseType?> baseTypeID = const Value.absent(),
                 Value<int?> typeID = const Value.absent(),
                 Value<String?> room = const Value.absent(),
               }) => EventsCompanion.insert(
@@ -2821,6 +2908,7 @@ class $$EventsTableTableManager
                 startTime: startTime,
                 endTime: endTime,
                 isCustom: isCustom,
+                baseTypeID: baseTypeID,
                 typeID: typeID,
                 room: room,
               ),
