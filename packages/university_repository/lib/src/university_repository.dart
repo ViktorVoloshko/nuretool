@@ -38,7 +38,7 @@ class UniversityRepository {
       _teachersStreamController.asBroadcastStream();
 
   Future<void> fetchGroups() async {
-    // Since ine group may appear multiple times in a JSON, [Set] is used.
+    // Since one group may appear multiple times in a JSON, Set is used.
     final groups = <Group>{};
 
     final response = await _groupsApi.fetchGroups();
