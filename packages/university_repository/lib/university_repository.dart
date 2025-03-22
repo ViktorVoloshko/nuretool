@@ -1,5 +1,5 @@
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+/// Repository that abstracts over EventsApi, GroupsApi and TeachersApi.
+library;
+
+export 'src/university_repository.dart';
+export 'src/models/models.dart';
