@@ -20,25 +20,25 @@ class LocalDBApi {
       _database.into(_database.events).insertOnConflictUpdate(event);
 
   Future<void> saveEvents(
-    List<EventsCompanion> events,
-    List<EventType> types,
-    List<EventsGroupsCompanion> groups,
-    List<EventsTeachersCompanion> teachers,
+    Iterable<EventsCompanion> events,
+    Iterable<EventType> types,
+    Iterable<EventsGroupsCompanion> groups,
+    Iterable<EventsTeachersCompanion> teachers,
   ) => _database.batch((batch) {
     batch.insertAllOnConflictUpdate(_database.events, events);
     batch.insertAllOnConflictUpdate(_database.eventTypes, types);
     batch.insertAllOnConflictUpdate(_database.eventsGroups, groups);
     batch.insertAllOnConflictUpdate(_database.eventsTeachers, teachers);
   });
-  Future<void> saveSubjects(List<SubjectsCompanion> subjects) =>
+  Future<void> saveSubjects(Iterable<SubjectsCompanion> subjects) =>
       _database.batch(
         (batch) =>
             batch.insertAllOnConflictUpdate(_database.subjects, subjects),
       );
-  Future<void> saveGroups(List<GroupsCompanion> groups) => _database.batch(
+  Future<void> saveGroups(Iterable<GroupsCompanion> groups) => _database.batch(
     (batch) => batch.insertAllOnConflictUpdate(_database.groups, groups),
   );
-  Future<void> saveTeachers(List<TeachersCompanion> teachers) =>
+  Future<void> saveTeachers(Iterable<TeachersCompanion> teachers) =>
       _database.batch(
         (batch) =>
             batch.insertAllOnConflictUpdate(_database.teachers, teachers),
@@ -48,7 +48,7 @@ class LocalDBApi {
 
   Future<int> saveTask(TasksCompanion task) =>
       _database.into(_database.tasks).insertOnConflictUpdate(task);
-  Future<void> saveTasks(List<TasksCompanion> tasks) => _database.batch(
+  Future<void> saveTasks(Iterable<TasksCompanion> tasks) => _database.batch(
     (batch) => batch.insertAllOnConflictUpdate(_database.tasks, tasks),
   );
 }
