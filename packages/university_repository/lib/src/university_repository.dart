@@ -1,7 +1,7 @@
 import 'package:events_api/events_api.dart' show EventsApi;
 import 'package:groups_api/groups_api.dart' show GroupsApi;
 import 'package:teachers_api/teachers_api.dart' show TeachersApi;
-import 'package:local_db_api/local_db_api.dart' show LocalDBApi;
+import 'package:local_db_api/local_db_api.dart' show AppDatabase;
 import 'package:rxdart/rxdart.dart';
 
 import 'models/models.dart';
@@ -11,7 +11,7 @@ class UniversityRepository {
     required EventsApi eventsApi,
     required GroupsApi groupsApi,
     required TeachersApi teachersApi,
-    required LocalDBApi localDBApi,
+    required AppDatabase localDBApi,
   }) : _eventsApi = eventsApi,
        _groupsApi = groupsApi,
        _teachersApi = teachersApi,
@@ -20,7 +20,7 @@ class UniversityRepository {
   final EventsApi _eventsApi;
   final GroupsApi _groupsApi;
   final TeachersApi _teachersApi;
-  final LocalDBApi _localDBApi;
+  final AppDatabase _localDBApi;
 
   late final _eventsStreamController = BehaviorSubject<List<Event>>.seeded(
     const [],

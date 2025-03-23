@@ -4,4 +4,4 @@
 library;
 
 export 'src/local_db_api.dart';
-export 'src/tables/tables.dart';
+export 'src/database/database.dart';

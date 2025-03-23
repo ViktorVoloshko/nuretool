@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'local_db_api.dart';
+part of 'database.dart';
 
 // ignore_for_file: type=lint
 class $SubjectsTable extends Subjects with TableInfo<$SubjectsTable, Subject> {
@@ -1975,9 +1975,9 @@ class TeachersCompanion extends UpdateCompanion<Teacher> {
   }
 }
 
-abstract class _$LocalDBApi extends GeneratedDatabase {
-  _$LocalDBApi(QueryExecutor e) : super(e);
-  $LocalDBApiManager get managers => $LocalDBApiManager(this);
+abstract class _$AppDatabase extends GeneratedDatabase {
+  _$AppDatabase(QueryExecutor e) : super(e);
+  $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $SubjectsTable subjects = $SubjectsTable(this);
   late final $EventTypesTable eventTypes = $EventTypesTable(this);
   late final $EventsTable events = $EventsTable(this);
@@ -2012,11 +2012,11 @@ typedef $$SubjectsTableUpdateCompanionBuilder =
     });
 
 final class $$SubjectsTableReferences
-    extends BaseReferences<_$LocalDBApi, $SubjectsTable, Subject> {
+    extends BaseReferences<_$AppDatabase, $SubjectsTable, Subject> {
   $$SubjectsTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
   static MultiTypedResultKey<$EventsTable, List<Event>> _eventsRefsTable(
-    _$LocalDBApi db,
+    _$AppDatabase db,
   ) => MultiTypedResultKey.fromTable(
     db.events,
     aliasName: $_aliasNameGenerator(db.subjects.id, db.events.subjectID),
@@ -2036,7 +2036,7 @@ final class $$SubjectsTableReferences
 }
 
 class $$SubjectsTableFilterComposer
-    extends Composer<_$LocalDBApi, $SubjectsTable> {
+    extends Composer<_$AppDatabase, $SubjectsTable> {
   $$SubjectsTableFilterComposer({
     required super.$db,
     required super.$table,
@@ -2086,7 +2086,7 @@ class $$SubjectsTableFilterComposer
 }
 
 class $$SubjectsTableOrderingComposer
-    extends Composer<_$LocalDBApi, $SubjectsTable> {
+    extends Composer<_$AppDatabase, $SubjectsTable> {
   $$SubjectsTableOrderingComposer({
     required super.$db,
     required super.$table,
@@ -2111,7 +2111,7 @@ class $$SubjectsTableOrderingComposer
 }
 
 class $$SubjectsTableAnnotationComposer
-    extends Composer<_$LocalDBApi, $SubjectsTable> {
+    extends Composer<_$AppDatabase, $SubjectsTable> {
   $$SubjectsTableAnnotationComposer({
     required super.$db,
     required super.$table,
@@ -2157,7 +2157,7 @@ class $$SubjectsTableAnnotationComposer
 class $$SubjectsTableTableManager
     extends
         RootTableManager<
-          _$LocalDBApi,
+          _$AppDatabase,
           $SubjectsTable,
           Subject,
           $$SubjectsTableFilterComposer,
@@ -2169,7 +2169,7 @@ class $$SubjectsTableTableManager
           Subject,
           PrefetchHooks Function({bool eventsRefs})
         > {
-  $$SubjectsTableTableManager(_$LocalDBApi db, $SubjectsTable table)
+  $$SubjectsTableTableManager(_$AppDatabase db, $SubjectsTable table)
     : super(
         TableManagerState(
           db: db,
@@ -2241,7 +2241,7 @@ class $$SubjectsTableTableManager
 
 typedef $$SubjectsTableProcessedTableManager =
     ProcessedTableManager<
-      _$LocalDBApi,
+      _$AppDatabase,
       $SubjectsTable,
       Subject,
       $$SubjectsTableFilterComposer,
@@ -2269,11 +2269,11 @@ typedef $$EventTypesTableUpdateCompanionBuilder =
     });
 
 final class $$EventTypesTableReferences
-    extends BaseReferences<_$LocalDBApi, $EventTypesTable, EventType> {
+    extends BaseReferences<_$AppDatabase, $EventTypesTable, EventType> {
   $$EventTypesTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
   static MultiTypedResultKey<$EventsTable, List<Event>> _eventsRefsTable(
-    _$LocalDBApi db,
+    _$AppDatabase db,
   ) => MultiTypedResultKey.fromTable(
     db.events,
     aliasName: $_aliasNameGenerator(db.eventTypes.id, db.events.typeID),
@@ -2293,7 +2293,7 @@ final class $$EventTypesTableReferences
 }
 
 class $$EventTypesTableFilterComposer
-    extends Composer<_$LocalDBApi, $EventTypesTable> {
+    extends Composer<_$AppDatabase, $EventTypesTable> {
   $$EventTypesTableFilterComposer({
     required super.$db,
     required super.$table,
@@ -2349,7 +2349,7 @@ class $$EventTypesTableFilterComposer
 }
 
 class $$EventTypesTableOrderingComposer
-    extends Composer<_$LocalDBApi, $EventTypesTable> {
+    extends Composer<_$AppDatabase, $EventTypesTable> {
   $$EventTypesTableOrderingComposer({
     required super.$db,
     required super.$table,
@@ -2379,7 +2379,7 @@ class $$EventTypesTableOrderingComposer
 }
 
 class $$EventTypesTableAnnotationComposer
-    extends Composer<_$LocalDBApi, $EventTypesTable> {
+    extends Composer<_$AppDatabase, $EventTypesTable> {
   $$EventTypesTableAnnotationComposer({
     required super.$db,
     required super.$table,
@@ -2428,7 +2428,7 @@ class $$EventTypesTableAnnotationComposer
 class $$EventTypesTableTableManager
     extends
         RootTableManager<
-          _$LocalDBApi,
+          _$AppDatabase,
           $EventTypesTable,
           EventType,
           $$EventTypesTableFilterComposer,
@@ -2440,7 +2440,7 @@ class $$EventTypesTableTableManager
           EventType,
           PrefetchHooks Function({bool eventsRefs})
         > {
-  $$EventTypesTableTableManager(_$LocalDBApi db, $EventTypesTable table)
+  $$EventTypesTableTableManager(_$AppDatabase db, $EventTypesTable table)
     : super(
         TableManagerState(
           db: db,
@@ -2523,7 +2523,7 @@ class $$EventTypesTableTableManager
 
 typedef $$EventTypesTableProcessedTableManager =
     ProcessedTableManager<
-      _$LocalDBApi,
+      _$AppDatabase,
       $EventTypesTable,
       EventType,
       $$EventTypesTableFilterComposer,
@@ -2559,10 +2559,10 @@ typedef $$EventsTableUpdateCompanionBuilder =
     });
 
 final class $$EventsTableReferences
-    extends BaseReferences<_$LocalDBApi, $EventsTable, Event> {
+    extends BaseReferences<_$AppDatabase, $EventsTable, Event> {
   $$EventsTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static $SubjectsTable _subjectIDTable(_$LocalDBApi db) => db.subjects
+  static $SubjectsTable _subjectIDTable(_$AppDatabase db) => db.subjects
       .createAlias($_aliasNameGenerator(db.events.subjectID, db.subjects.id));
 
   $$SubjectsTableProcessedTableManager get subjectID {
@@ -2579,7 +2579,7 @@ final class $$EventsTableReferences
     );
   }
 
-  static $EventTypesTable _typeIDTable(_$LocalDBApi db) => db.eventTypes
+  static $EventTypesTable _typeIDTable(_$AppDatabase db) => db.eventTypes
       .createAlias($_aliasNameGenerator(db.events.typeID, db.eventTypes.id));
 
   $$EventTypesTableProcessedTableManager? get typeID {
@@ -2597,7 +2597,8 @@ final class $$EventsTableReferences
   }
 }
 
-class $$EventsTableFilterComposer extends Composer<_$LocalDBApi, $EventsTable> {
+class $$EventsTableFilterComposer
+    extends Composer<_$AppDatabase, $EventsTable> {
   $$EventsTableFilterComposer({
     required super.$db,
     required super.$table,
@@ -2684,7 +2685,7 @@ class $$EventsTableFilterComposer extends Composer<_$LocalDBApi, $EventsTable> {
 }
 
 class $$EventsTableOrderingComposer
-    extends Composer<_$LocalDBApi, $EventsTable> {
+    extends Composer<_$AppDatabase, $EventsTable> {
   $$EventsTableOrderingComposer({
     required super.$db,
     required super.$table,
@@ -2770,7 +2771,7 @@ class $$EventsTableOrderingComposer
 }
 
 class $$EventsTableAnnotationComposer
-    extends Composer<_$LocalDBApi, $EventsTable> {
+    extends Composer<_$AppDatabase, $EventsTable> {
   $$EventsTableAnnotationComposer({
     required super.$db,
     required super.$table,
@@ -2849,7 +2850,7 @@ class $$EventsTableAnnotationComposer
 class $$EventsTableTableManager
     extends
         RootTableManager<
-          _$LocalDBApi,
+          _$AppDatabase,
           $EventsTable,
           Event,
           $$EventsTableFilterComposer,
@@ -2861,7 +2862,7 @@ class $$EventsTableTableManager
           Event,
           PrefetchHooks Function({bool subjectID, bool typeID})
         > {
-  $$EventsTableTableManager(_$LocalDBApi db, $EventsTable table)
+  $$EventsTableTableManager(_$AppDatabase db, $EventsTable table)
     : super(
         TableManagerState(
           db: db,
@@ -2979,7 +2980,7 @@ class $$EventsTableTableManager
 
 typedef $$EventsTableProcessedTableManager =
     ProcessedTableManager<
-      _$LocalDBApi,
+      _$AppDatabase,
       $EventsTable,
       Event,
       $$EventsTableFilterComposer,
@@ -3012,7 +3013,7 @@ typedef $$TasksTableUpdateCompanionBuilder =
       Value<TaskType?> type,
     });
 
-class $$TasksTableFilterComposer extends Composer<_$LocalDBApi, $TasksTable> {
+class $$TasksTableFilterComposer extends Composer<_$AppDatabase, $TasksTable> {
   $$TasksTableFilterComposer({
     required super.$db,
     required super.$table,
@@ -3057,7 +3058,8 @@ class $$TasksTableFilterComposer extends Composer<_$LocalDBApi, $TasksTable> {
       );
 }
 
-class $$TasksTableOrderingComposer extends Composer<_$LocalDBApi, $TasksTable> {
+class $$TasksTableOrderingComposer
+    extends Composer<_$AppDatabase, $TasksTable> {
   $$TasksTableOrderingComposer({
     required super.$db,
     required super.$table,
@@ -3102,7 +3104,7 @@ class $$TasksTableOrderingComposer extends Composer<_$LocalDBApi, $TasksTable> {
 }
 
 class $$TasksTableAnnotationComposer
-    extends Composer<_$LocalDBApi, $TasksTable> {
+    extends Composer<_$AppDatabase, $TasksTable> {
   $$TasksTableAnnotationComposer({
     required super.$db,
     required super.$table,
@@ -3137,7 +3139,7 @@ class $$TasksTableAnnotationComposer
 class $$TasksTableTableManager
     extends
         RootTableManager<
-          _$LocalDBApi,
+          _$AppDatabase,
           $TasksTable,
           Task,
           $$TasksTableFilterComposer,
@@ -3145,11 +3147,11 @@ class $$TasksTableTableManager
           $$TasksTableAnnotationComposer,
           $$TasksTableCreateCompanionBuilder,
           $$TasksTableUpdateCompanionBuilder,
-          (Task, BaseReferences<_$LocalDBApi, $TasksTable, Task>),
+          (Task, BaseReferences<_$AppDatabase, $TasksTable, Task>),
           Task,
           PrefetchHooks Function()
         > {
-  $$TasksTableTableManager(_$LocalDBApi db, $TasksTable table)
+  $$TasksTableTableManager(_$AppDatabase db, $TasksTable table)
     : super(
         TableManagerState(
           db: db,
@@ -3213,7 +3215,7 @@ class $$TasksTableTableManager
 
 typedef $$TasksTableProcessedTableManager =
     ProcessedTableManager<
-      _$LocalDBApi,
+      _$AppDatabase,
       $TasksTable,
       Task,
       $$TasksTableFilterComposer,
@@ -3221,7 +3223,7 @@ typedef $$TasksTableProcessedTableManager =
       $$TasksTableAnnotationComposer,
       $$TasksTableCreateCompanionBuilder,
       $$TasksTableUpdateCompanionBuilder,
-      (Task, BaseReferences<_$LocalDBApi, $TasksTable, Task>),
+      (Task, BaseReferences<_$AppDatabase, $TasksTable, Task>),
       Task,
       PrefetchHooks Function()
     >;
@@ -3230,7 +3232,8 @@ typedef $$GroupsTableCreateCompanionBuilder =
 typedef $$GroupsTableUpdateCompanionBuilder =
     GroupsCompanion Function({Value<int> id, Value<String> name});
 
-class $$GroupsTableFilterComposer extends Composer<_$LocalDBApi, $GroupsTable> {
+class $$GroupsTableFilterComposer
+    extends Composer<_$AppDatabase, $GroupsTable> {
   $$GroupsTableFilterComposer({
     required super.$db,
     required super.$table,
@@ -3250,7 +3253,7 @@ class $$GroupsTableFilterComposer extends Composer<_$LocalDBApi, $GroupsTable> {
 }
 
 class $$GroupsTableOrderingComposer
-    extends Composer<_$LocalDBApi, $GroupsTable> {
+    extends Composer<_$AppDatabase, $GroupsTable> {
   $$GroupsTableOrderingComposer({
     required super.$db,
     required super.$table,
@@ -3270,7 +3273,7 @@ class $$GroupsTableOrderingComposer
 }
 
 class $$GroupsTableAnnotationComposer
-    extends Composer<_$LocalDBApi, $GroupsTable> {
+    extends Composer<_$AppDatabase, $GroupsTable> {
   $$GroupsTableAnnotationComposer({
     required super.$db,
     required super.$table,
@@ -3288,7 +3291,7 @@ class $$GroupsTableAnnotationComposer
 class $$GroupsTableTableManager
     extends
         RootTableManager<
-          _$LocalDBApi,
+          _$AppDatabase,
           $GroupsTable,
           Group,
           $$GroupsTableFilterComposer,
@@ -3296,11 +3299,11 @@ class $$GroupsTableTableManager
           $$GroupsTableAnnotationComposer,
           $$GroupsTableCreateCompanionBuilder,
           $$GroupsTableUpdateCompanionBuilder,
-          (Group, BaseReferences<_$LocalDBApi, $GroupsTable, Group>),
+          (Group, BaseReferences<_$AppDatabase, $GroupsTable, Group>),
           Group,
           PrefetchHooks Function()
         > {
-  $$GroupsTableTableManager(_$LocalDBApi db, $GroupsTable table)
+  $$GroupsTableTableManager(_$AppDatabase db, $GroupsTable table)
     : super(
         TableManagerState(
           db: db,
@@ -3336,7 +3339,7 @@ class $$GroupsTableTableManager
 
 typedef $$GroupsTableProcessedTableManager =
     ProcessedTableManager<
-      _$LocalDBApi,
+      _$AppDatabase,
       $GroupsTable,
       Group,
       $$GroupsTableFilterComposer,
@@ -3344,7 +3347,7 @@ typedef $$GroupsTableProcessedTableManager =
       $$GroupsTableAnnotationComposer,
       $$GroupsTableCreateCompanionBuilder,
       $$GroupsTableUpdateCompanionBuilder,
-      (Group, BaseReferences<_$LocalDBApi, $GroupsTable, Group>),
+      (Group, BaseReferences<_$AppDatabase, $GroupsTable, Group>),
       Group,
       PrefetchHooks Function()
     >;
@@ -3362,7 +3365,7 @@ typedef $$TeachersTableUpdateCompanionBuilder =
     });
 
 class $$TeachersTableFilterComposer
-    extends Composer<_$LocalDBApi, $TeachersTable> {
+    extends Composer<_$AppDatabase, $TeachersTable> {
   $$TeachersTableFilterComposer({
     required super.$db,
     required super.$table,
@@ -3387,7 +3390,7 @@ class $$TeachersTableFilterComposer
 }
 
 class $$TeachersTableOrderingComposer
-    extends Composer<_$LocalDBApi, $TeachersTable> {
+    extends Composer<_$AppDatabase, $TeachersTable> {
   $$TeachersTableOrderingComposer({
     required super.$db,
     required super.$table,
@@ -3412,7 +3415,7 @@ class $$TeachersTableOrderingComposer
 }
 
 class $$TeachersTableAnnotationComposer
-    extends Composer<_$LocalDBApi, $TeachersTable> {
+    extends Composer<_$AppDatabase, $TeachersTable> {
   $$TeachersTableAnnotationComposer({
     required super.$db,
     required super.$table,
@@ -3433,7 +3436,7 @@ class $$TeachersTableAnnotationComposer
 class $$TeachersTableTableManager
     extends
         RootTableManager<
-          _$LocalDBApi,
+          _$AppDatabase,
           $TeachersTable,
           Teacher,
           $$TeachersTableFilterComposer,
@@ -3441,11 +3444,11 @@ class $$TeachersTableTableManager
           $$TeachersTableAnnotationComposer,
           $$TeachersTableCreateCompanionBuilder,
           $$TeachersTableUpdateCompanionBuilder,
-          (Teacher, BaseReferences<_$LocalDBApi, $TeachersTable, Teacher>),
+          (Teacher, BaseReferences<_$AppDatabase, $TeachersTable, Teacher>),
           Teacher,
           PrefetchHooks Function()
         > {
-  $$TeachersTableTableManager(_$LocalDBApi db, $TeachersTable table)
+  $$TeachersTableTableManager(_$AppDatabase db, $TeachersTable table)
     : super(
         TableManagerState(
           db: db,
@@ -3489,7 +3492,7 @@ class $$TeachersTableTableManager
 
 typedef $$TeachersTableProcessedTableManager =
     ProcessedTableManager<
-      _$LocalDBApi,
+      _$AppDatabase,
       $TeachersTable,
       Teacher,
       $$TeachersTableFilterComposer,
@@ -3497,14 +3500,14 @@ typedef $$TeachersTableProcessedTableManager =
       $$TeachersTableAnnotationComposer,
       $$TeachersTableCreateCompanionBuilder,
       $$TeachersTableUpdateCompanionBuilder,
-      (Teacher, BaseReferences<_$LocalDBApi, $TeachersTable, Teacher>),
+      (Teacher, BaseReferences<_$AppDatabase, $TeachersTable, Teacher>),
       Teacher,
       PrefetchHooks Function()
     >;
 
-class $LocalDBApiManager {
-  final _$LocalDBApi _db;
-  $LocalDBApiManager(this._db);
+class $AppDatabaseManager {
+  final _$AppDatabase _db;
+  $AppDatabaseManager(this._db);
   $$SubjectsTableTableManager get subjects =>
       $$SubjectsTableTableManager(_db, _db.subjects);
   $$EventTypesTableTableManager get eventTypes =>
