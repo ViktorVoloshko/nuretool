@@ -1,5 +1,9 @@
+import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
+import 'package:local_db_api/local_db_api.dart'
+    show EventsCompanion, EventsGroupsCompanion, EventsTeachersCompanion;
 import 'package:meta/meta.dart';
+import 'package:events_api/events_api.dart' as events_api;
 
 import 'models.dart';
 
@@ -28,6 +32,35 @@ class Event extends Equatable {
   final List<Group> groups;
   final List<Teacher> teachers;
   final String? room;
+
+  (EventsCompanion, List<EventsGroupsCompanion>, List<EventsTeachersCompanion>)
+  toDBModel() {
+    final List<EventsGroupsCompanion> groups = [];
+    for (final group in this.groups) {
+      groups.add(EventsGroupsCompanion.insert(eventID: id, groupID: group.id));
+    }
+
+    final List<EventsTeachersCompanion> teachers = [];
+    for (final teacher in this.teachers) {
+      teachers.add(
+        EventsTeachersCompanion.insert(eventID: id, teacherID: teacher.id),
+      );
+    }
+
+    return (
+      EventsCompanion.insert(
+        id: Value(id),
+        subjectID: subject.id,
+        startTime: startTime,
+        endTime: endTime,
+        isCustom: isCustom,
+        room: Value(room),
+        typeID: type != null ? Value(type!.id) : Value.absent(),
+      ),
+      groups,
+      teachers,
+    );
+  }
 
   Event copyWith({
     int? id,
