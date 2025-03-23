@@ -19,9 +19,17 @@ class LocalDBApi {
   Future<int> saveEvent(EventsCompanion event) =>
       _database.into(_database.events).insertOnConflictUpdate(event);
 
-  Future<void> saveEvents(List<EventsCompanion> events) => _database.batch(
-    (batch) => batch.insertAllOnConflictUpdate(_database.events, events),
-  );
+  Future<void> saveEvents(
+    List<EventsCompanion> events,
+    List<EventType> types,
+    List<EventsGroupsCompanion> groups,
+    List<EventsTeachersCompanion> teachers,
+  ) => _database.batch((batch) {
+    batch.insertAllOnConflictUpdate(_database.events, events);
+    batch.insertAllOnConflictUpdate(_database.eventTypes, types);
+    batch.insertAllOnConflictUpdate(_database.eventsGroups, groups);
+    batch.insertAllOnConflictUpdate(_database.eventsTeachers, teachers);
+  });
   Future<void> saveSubjects(List<SubjectsCompanion> subjects) =>
       _database.batch(
         (batch) =>
@@ -34,11 +42,6 @@ class LocalDBApi {
       _database.batch(
         (batch) =>
             batch.insertAllOnConflictUpdate(_database.teachers, teachers),
-      );
-  Future<void> saveEventTypes(List<EventTypesCompanion> eventTypes) =>
-      _database.batch(
-        (batch) =>
-            batch.insertAllOnConflictUpdate(_database.eventTypes, eventTypes),
       );
 
   Stream<List<Task>> loadTasks() => _database.select(_database.tasks).watch();
