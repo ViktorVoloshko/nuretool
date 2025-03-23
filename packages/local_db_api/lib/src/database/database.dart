@@ -6,7 +6,18 @@ import 'tables/tables.dart';
 
 part 'database.g.dart';
 
-@DriftDatabase(tables: [Subjects, Events, EventTypes, Tasks, Groups, Teachers])
+@DriftDatabase(
+  tables: [
+    Subjects,
+    Events,
+    EventTypes,
+    Tasks,
+    Groups,
+    Teachers,
+    EventsGroups,
+    EventsTeachers,
+  ],
+)
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 

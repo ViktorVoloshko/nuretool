@@ -4,3 +4,5 @@ export 'event_types.dart';
 export 'tasks.dart';
 export 'groups.dart';
 export 'teachers.dart';
+export 'events_groups.dart';
+export 'events_teachers.dart';
