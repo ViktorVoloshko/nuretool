@@ -1,9 +1,8 @@
 import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
-import 'package:local_db_api/local_db_api.dart'
-    show EventsCompanion, EventsGroupsCompanion, EventsTeachersCompanion;
 import 'package:meta/meta.dart';
-import 'package:events_api/events_api.dart' as events_api;
+import 'package:local_db_api/local_db_api.dart' as db;
+import 'package:events_api/events_api.dart' as api;
 
 import 'models.dart';
 
@@ -22,39 +21,59 @@ class Event extends Equatable {
     required this.room,
   });
 
+  Event.fromDBModel(
+    db.Event event,
+    this.subject,
+    this.type,
+    this.groups,
+    this.teachers,
+  ) : id = event.id,
+      startTime = event.startTime,
+      endTime = event.endTime,
+      isCustom = event.isCustom,
+      baseType = event.baseType!.toDBModel(),
+      room = event.room;
+
   final int id;
   final Subject subject;
   final DateTime startTime;
   final DateTime endTime;
   final bool isCustom;
-  final BaseEventType? baseType;
+  final EventBaseType baseType;
   final EventType? type;
   final List<Group> groups;
   final List<Teacher> teachers;
   final String? room;
 
-  (EventsCompanion, List<EventsGroupsCompanion>, List<EventsTeachersCompanion>)
+  (
+    db.EventsCompanion,
+    List<db.EventsGroupsCompanion>,
+    List<db.EventsTeachersCompanion>,
+  )
   toDBModel() {
-    final List<EventsGroupsCompanion> groups = [];
+    final List<db.EventsGroupsCompanion> groups = [];
     for (final group in this.groups) {
-      groups.add(EventsGroupsCompanion.insert(eventID: id, groupID: group.id));
+      groups.add(
+        db.EventsGroupsCompanion.insert(eventID: id, groupID: group.id),
+      );
     }
 
-    final List<EventsTeachersCompanion> teachers = [];
+    final List<db.EventsTeachersCompanion> teachers = [];
     for (final teacher in this.teachers) {
       teachers.add(
-        EventsTeachersCompanion.insert(eventID: id, teacherID: teacher.id),
+        db.EventsTeachersCompanion.insert(eventID: id, teacherID: teacher.id),
       );
     }
 
     return (
-      EventsCompanion.insert(
+      db.EventsCompanion.insert(
         id: Value(id),
         subjectID: subject.id,
         startTime: startTime,
         endTime: endTime,
         isCustom: isCustom,
         room: Value(room),
+        baseType: Value(baseType.toDBModel()),
         typeID: type != null ? Value(type!.id) : Value.absent(),
       ),
       groups,
@@ -68,7 +87,7 @@ class Event extends Equatable {
     DateTime? startTime,
     DateTime? endTime,
     bool? isCustom,
-    BaseEventType? baseType,
+    EventBaseType? baseType,
     EventType? type,
     List<Group>? groups,
     List<Teacher>? teachers,
@@ -101,7 +120,7 @@ class Event extends Equatable {
   ];
 }
 
-enum BaseEventType {
+enum EventBaseType {
   lecture,
   practice,
   laboratory,
@@ -111,14 +130,70 @@ enum BaseEventType {
   project,
 }
 
-extension IDBaseToBaseType on BaseEventType {
-  static BaseEventType fromIDBase(int id) => switch (id) {
-    0 => BaseEventType.lecture,
-    10 => BaseEventType.practice,
-    20 => BaseEventType.laboratory,
-    30 => BaseEventType.consultation,
-    40 || 50 => BaseEventType.exam,
-    60 => BaseEventType.project,
-    _ => throw UnimplementedError('id_base $id is not inplemented'),
+extension DomainToDBEventBaseType on EventBaseType {
+  db.EventBaseType toDBModel() => switch (this) {
+    EventBaseType.lecture => db.EventBaseType.lecture,
+    EventBaseType.practice => db.EventBaseType.practice,
+    EventBaseType.laboratory => db.EventBaseType.laboratory,
+    EventBaseType.consultation => db.EventBaseType.consultation,
+    EventBaseType.test => db.EventBaseType.test,
+    EventBaseType.exam => db.EventBaseType.exam,
+    EventBaseType.project => db.EventBaseType.project,
   };
+}
+
+extension DBToDomainEventBaseType on db.EventBaseType {
+  EventBaseType toDBModel() => switch (this) {
+    db.EventBaseType.lecture => EventBaseType.lecture,
+    db.EventBaseType.practice => EventBaseType.practice,
+    db.EventBaseType.laboratory => EventBaseType.laboratory,
+    db.EventBaseType.consultation => EventBaseType.consultation,
+    db.EventBaseType.test => EventBaseType.test,
+    db.EventBaseType.exam => EventBaseType.exam,
+    db.EventBaseType.project => EventBaseType.project,
+  };
+}
+
+db.EventBaseType _fromIDBase(int id) => switch (id) {
+  0 => db.EventBaseType.lecture,
+  1 => db.EventBaseType.practice,
+  2 => db.EventBaseType.laboratory,
+  3 => db.EventBaseType.consultation,
+  4 || 5 => db.EventBaseType.exam,
+  6 => db.EventBaseType.project,
+  _ => throw UnimplementedError('id_base $id is not inplemented'),
+};
+
+extension ApiToDBEvent on api.Event {
+  /// Since cist does not provide IDs for events, you have to retrive ID of
+  /// inserted event later to add it
+  /// to relations tables with [generateRelations].
+  db.EventsCompanion toDBModel() => db.EventsCompanion.insert(
+    subjectID: subjectID,
+    startTime: DateTime.fromMillisecondsSinceEpoch(startTime ~/ 1000),
+    endTime: DateTime.fromMillisecondsSinceEpoch(endTime ~/ 1000),
+    isCustom: false,
+    room: Value(auditory),
+    baseType: Value(_fromIDBase(type ~/ 10)),
+    typeID: Value(type),
+  );
+
+  (List<db.EventsGroupsCompanion>, List<db.EventsTeachersCompanion>)
+  generateRelations(int id) {
+    final List<db.EventsGroupsCompanion> groups = [];
+    for (final groupID in this.groups) {
+      groups.add(
+        db.EventsGroupsCompanion.insert(eventID: id, groupID: groupID),
+      );
+    }
+
+    final List<db.EventsTeachersCompanion> teachers = [];
+    for (final teacherID in this.teachers) {
+      teachers.add(
+        db.EventsTeachersCompanion.insert(eventID: id, teacherID: teacherID),
+      );
+    }
+
+    return (groups, teachers);
+  }
 }
