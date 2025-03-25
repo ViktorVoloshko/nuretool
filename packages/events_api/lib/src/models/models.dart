@@ -1,3 +1,3 @@
 export 'event.dart';
 export 'subject.dart';
-export 'type.dart';
+export 'event_type.dart';

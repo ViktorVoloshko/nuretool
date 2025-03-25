@@ -87,7 +87,7 @@ class CistApi
   }
 
   @override
-  Future<({List<Event> events, List<Subject> subjects, List<Type> types})>
+  Future<({List<Event> events, List<Subject> subjects, List<EventType> types})>
   fetchEventsForGroup(int groupID, int fromTimestamp, int toTimestamp) async {
     final response = await _dio.getUri<String>(
       Uri.https(_domain, '/ias/app/tt/P_API_EVEN_JSON', {
@@ -117,16 +117,16 @@ class CistApi
       subjects.add(Subject.fromJson(subjectJson));
     }
 
-    final List<Type> types = [];
+    final List<EventType> types = [];
     for (final typeJson in json['types']) {
-      types.add(Type.fromJson(typeJson));
+      types.add(EventType.fromJson(typeJson));
     }
 
     return (events: events, subjects: subjects, types: types);
   }
 
   @override
-  Future<({List<Event> events, List<Subject> subjects, List<Type> types})>
+  Future<({List<Event> events, List<Subject> subjects, List<EventType> types})>
   fetchEventsForTeacher(
     int teacherID,
     int fromTimestamp,
@@ -160,9 +160,9 @@ class CistApi
       subjects.add(Subject.fromJson(subjectJson));
     }
 
-    final List<Type> types = [];
+    final List<EventType> types = [];
     for (final typeJson in json['types']) {
-      types.add(Type.fromJson(typeJson));
+      types.add(EventType.fromJson(typeJson));
     }
 
     return (events: events, subjects: subjects, types: types);

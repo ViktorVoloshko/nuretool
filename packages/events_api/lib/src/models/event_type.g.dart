@@ -1,16 +1,16 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'type.dart';
+part of 'event_type.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Type _$TypeFromJson(Map<String, dynamic> json) => $checkedCreate(
+EventType _$TypeFromJson(Map<String, dynamic> json) => $checkedCreate(
   'Type',
   json,
   ($checkedConvert) {
-    final val = Type(
+    final val = EventType(
       id: $checkedConvert('id', (v) => (v as num).toInt()),
       fullName: $checkedConvert('full_name', (v) => v as String),
       shortName: $checkedConvert('short_name', (v) => v as String),
@@ -26,7 +26,7 @@ Type _$TypeFromJson(Map<String, dynamic> json) => $checkedCreate(
   },
 );
 
-Map<String, dynamic> _$TypeToJson(Type instance) => <String, dynamic>{
+Map<String, dynamic> _$TypeToJson(EventType instance) => <String, dynamic>{
   'id': instance.id,
   'full_name': instance.fullName,
   'short_name': instance.shortName,

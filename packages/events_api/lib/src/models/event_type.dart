@@ -2,12 +2,12 @@ import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 
-part 'type.g.dart';
+part 'event_type.g.dart';
 
 @immutable
 @JsonSerializable()
-class Type extends Equatable {
-  const Type({
+class EventType extends Equatable {
+  const EventType({
     required this.id,
     required this.fullName,
     required this.shortName,
@@ -21,7 +21,7 @@ class Type extends Equatable {
   final int idBase;
   final String type;
 
-  factory Type.fromJson(Map<String, dynamic> json) => _$TypeFromJson(json);
+  factory EventType.fromJson(Map<String, dynamic> json) => _$TypeFromJson(json);
 
   Map<String, dynamic> toJson() => _$TypeToJson(this);
 
