@@ -293,16 +293,7 @@ class $EventTypesTable extends EventTypes
     requiredDuringInsert: true,
   );
   @override
-  late final GeneratedColumnWithTypeConverter<EventBaseType, int> baseType =
-      GeneratedColumn<int>(
-        'base_type',
-        aliasedName,
-        false,
-        type: DriftSqlType.int,
-        requiredDuringInsert: true,
-      ).withConverter<EventBaseType>($EventTypesTable.$converterbaseType);
-  @override
-  List<GeneratedColumn> get $columns => [id, name, shortName, baseType];
+  List<GeneratedColumn> get $columns => [id, name, shortName];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -358,12 +349,6 @@ class $EventTypesTable extends EventTypes
             DriftSqlType.string,
             data['${effectivePrefix}short_name'],
           )!,
-      baseType: $EventTypesTable.$converterbaseType.fromSql(
-        attachedDatabase.typeMapping.read(
-          DriftSqlType.int,
-          data['${effectivePrefix}base_type'],
-        )!,
-      ),
     );
   }
 
@@ -371,21 +356,16 @@ class $EventTypesTable extends EventTypes
   $EventTypesTable createAlias(String alias) {
     return $EventTypesTable(attachedDatabase, alias);
   }
-
-  static JsonTypeConverter2<EventBaseType, int, int> $converterbaseType =
-      const EnumIndexConverter<EventBaseType>(EventBaseType.values);
 }
 
 class EventType extends DataClass implements Insertable<EventType> {
   final int id;
   final String name;
   final String shortName;
-  final EventBaseType baseType;
   const EventType({
     required this.id,
     required this.name,
     required this.shortName,
-    required this.baseType,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -393,11 +373,6 @@ class EventType extends DataClass implements Insertable<EventType> {
     map['id'] = Variable<int>(id);
     map['name'] = Variable<String>(name);
     map['short_name'] = Variable<String>(shortName);
-    {
-      map['base_type'] = Variable<int>(
-        $EventTypesTable.$converterbaseType.toSql(baseType),
-      );
-    }
     return map;
   }
 
@@ -406,7 +381,6 @@ class EventType extends DataClass implements Insertable<EventType> {
       id: Value(id),
       name: Value(name),
       shortName: Value(shortName),
-      baseType: Value(baseType),
     );
   }
 
@@ -419,9 +393,6 @@ class EventType extends DataClass implements Insertable<EventType> {
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       shortName: serializer.fromJson<String>(json['shortName']),
-      baseType: $EventTypesTable.$converterbaseType.fromJson(
-        serializer.fromJson<int>(json['baseType']),
-      ),
     );
   }
   @override
@@ -431,29 +402,19 @@ class EventType extends DataClass implements Insertable<EventType> {
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
       'shortName': serializer.toJson<String>(shortName),
-      'baseType': serializer.toJson<int>(
-        $EventTypesTable.$converterbaseType.toJson(baseType),
-      ),
     };
   }
 
-  EventType copyWith({
-    int? id,
-    String? name,
-    String? shortName,
-    EventBaseType? baseType,
-  }) => EventType(
+  EventType copyWith({int? id, String? name, String? shortName}) => EventType(
     id: id ?? this.id,
     name: name ?? this.name,
     shortName: shortName ?? this.shortName,
-    baseType: baseType ?? this.baseType,
   );
   EventType copyWithCompanion(EventTypesCompanion data) {
     return EventType(
       id: data.id.present ? data.id.value : this.id,
       name: data.name.present ? data.name.value : this.name,
       shortName: data.shortName.present ? data.shortName.value : this.shortName,
-      baseType: data.baseType.present ? data.baseType.value : this.baseType,
     );
   }
 
@@ -462,54 +423,46 @@ class EventType extends DataClass implements Insertable<EventType> {
     return (StringBuffer('EventType(')
           ..write('id: $id, ')
           ..write('name: $name, ')
-          ..write('shortName: $shortName, ')
-          ..write('baseType: $baseType')
+          ..write('shortName: $shortName')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, shortName, baseType);
+  int get hashCode => Object.hash(id, name, shortName);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is EventType &&
           other.id == this.id &&
           other.name == this.name &&
-          other.shortName == this.shortName &&
-          other.baseType == this.baseType);
+          other.shortName == this.shortName);
 }
 
 class EventTypesCompanion extends UpdateCompanion<EventType> {
   final Value<int> id;
   final Value<String> name;
   final Value<String> shortName;
-  final Value<EventBaseType> baseType;
   const EventTypesCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.shortName = const Value.absent(),
-    this.baseType = const Value.absent(),
   });
   EventTypesCompanion.insert({
     this.id = const Value.absent(),
     required String name,
     required String shortName,
-    required EventBaseType baseType,
   }) : name = Value(name),
-       shortName = Value(shortName),
-       baseType = Value(baseType);
+       shortName = Value(shortName);
   static Insertable<EventType> custom({
     Expression<int>? id,
     Expression<String>? name,
     Expression<String>? shortName,
-    Expression<int>? baseType,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
       if (shortName != null) 'short_name': shortName,
-      if (baseType != null) 'base_type': baseType,
     });
   }
 
@@ -517,13 +470,11 @@ class EventTypesCompanion extends UpdateCompanion<EventType> {
     Value<int>? id,
     Value<String>? name,
     Value<String>? shortName,
-    Value<EventBaseType>? baseType,
   }) {
     return EventTypesCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       shortName: shortName ?? this.shortName,
-      baseType: baseType ?? this.baseType,
     );
   }
 
@@ -539,11 +490,6 @@ class EventTypesCompanion extends UpdateCompanion<EventType> {
     if (shortName.present) {
       map['short_name'] = Variable<String>(shortName.value);
     }
-    if (baseType.present) {
-      map['base_type'] = Variable<int>(
-        $EventTypesTable.$converterbaseType.toSql(baseType.value),
-      );
-    }
     return map;
   }
 
@@ -552,8 +498,7 @@ class EventTypesCompanion extends UpdateCompanion<EventType> {
     return (StringBuffer('EventTypesCompanion(')
           ..write('id: $id, ')
           ..write('name: $name, ')
-          ..write('shortName: $shortName, ')
-          ..write('baseType: $baseType')
+          ..write('shortName: $shortName')
           ..write(')'))
         .toString();
   }
@@ -628,14 +573,14 @@ class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
     ),
   );
   @override
-  late final GeneratedColumnWithTypeConverter<EventBaseType?, int> baseTypeID =
+  late final GeneratedColumnWithTypeConverter<EventBaseType?, int> baseType =
       GeneratedColumn<int>(
-        'base_type_id',
+        'base_type',
         aliasedName,
         true,
         type: DriftSqlType.int,
         requiredDuringInsert: false,
-      ).withConverter<EventBaseType?>($EventsTable.$converterbaseTypeIDn);
+      ).withConverter<EventBaseType?>($EventsTable.$converterbaseTypen);
   static const VerificationMeta _typeIDMeta = const VerificationMeta('typeID');
   @override
   late final GeneratedColumn<int> typeID = GeneratedColumn<int>(
@@ -664,7 +609,7 @@ class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
     startTime,
     endTime,
     isCustom,
-    baseTypeID,
+    baseType,
     typeID,
     room,
   ];
@@ -761,10 +706,10 @@ class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
             DriftSqlType.bool,
             data['${effectivePrefix}is_custom'],
           )!,
-      baseTypeID: $EventsTable.$converterbaseTypeIDn.fromSql(
+      baseType: $EventsTable.$converterbaseTypen.fromSql(
         attachedDatabase.typeMapping.read(
           DriftSqlType.int,
-          data['${effectivePrefix}base_type_id'],
+          data['${effectivePrefix}base_type'],
         ),
       ),
       typeID: attachedDatabase.typeMapping.read(
@@ -783,10 +728,10 @@ class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
     return $EventsTable(attachedDatabase, alias);
   }
 
-  static JsonTypeConverter2<EventBaseType, int, int> $converterbaseTypeID =
+  static JsonTypeConverter2<EventBaseType, int, int> $converterbaseType =
       const EnumIndexConverter<EventBaseType>(EventBaseType.values);
-  static JsonTypeConverter2<EventBaseType?, int?, int?> $converterbaseTypeIDn =
-      JsonTypeConverter2.asNullable($converterbaseTypeID);
+  static JsonTypeConverter2<EventBaseType?, int?, int?> $converterbaseTypen =
+      JsonTypeConverter2.asNullable($converterbaseType);
 }
 
 class Event extends DataClass implements Insertable<Event> {
@@ -795,7 +740,7 @@ class Event extends DataClass implements Insertable<Event> {
   final DateTime startTime;
   final DateTime endTime;
   final bool isCustom;
-  final EventBaseType? baseTypeID;
+  final EventBaseType? baseType;
   final int? typeID;
   final String? room;
   const Event({
@@ -804,7 +749,7 @@ class Event extends DataClass implements Insertable<Event> {
     required this.startTime,
     required this.endTime,
     required this.isCustom,
-    this.baseTypeID,
+    this.baseType,
     this.typeID,
     this.room,
   });
@@ -816,9 +761,9 @@ class Event extends DataClass implements Insertable<Event> {
     map['start_time'] = Variable<DateTime>(startTime);
     map['end_time'] = Variable<DateTime>(endTime);
     map['is_custom'] = Variable<bool>(isCustom);
-    if (!nullToAbsent || baseTypeID != null) {
-      map['base_type_id'] = Variable<int>(
-        $EventsTable.$converterbaseTypeIDn.toSql(baseTypeID),
+    if (!nullToAbsent || baseType != null) {
+      map['base_type'] = Variable<int>(
+        $EventsTable.$converterbaseTypen.toSql(baseType),
       );
     }
     if (!nullToAbsent || typeID != null) {
@@ -837,10 +782,10 @@ class Event extends DataClass implements Insertable<Event> {
       startTime: Value(startTime),
       endTime: Value(endTime),
       isCustom: Value(isCustom),
-      baseTypeID:
-          baseTypeID == null && nullToAbsent
+      baseType:
+          baseType == null && nullToAbsent
               ? const Value.absent()
-              : Value(baseTypeID),
+              : Value(baseType),
       typeID:
           typeID == null && nullToAbsent ? const Value.absent() : Value(typeID),
       room: room == null && nullToAbsent ? const Value.absent() : Value(room),
@@ -858,8 +803,8 @@ class Event extends DataClass implements Insertable<Event> {
       startTime: serializer.fromJson<DateTime>(json['startTime']),
       endTime: serializer.fromJson<DateTime>(json['endTime']),
       isCustom: serializer.fromJson<bool>(json['isCustom']),
-      baseTypeID: $EventsTable.$converterbaseTypeIDn.fromJson(
-        serializer.fromJson<int?>(json['baseTypeID']),
+      baseType: $EventsTable.$converterbaseTypen.fromJson(
+        serializer.fromJson<int?>(json['baseType']),
       ),
       typeID: serializer.fromJson<int?>(json['typeID']),
       room: serializer.fromJson<String?>(json['room']),
@@ -874,8 +819,8 @@ class Event extends DataClass implements Insertable<Event> {
       'startTime': serializer.toJson<DateTime>(startTime),
       'endTime': serializer.toJson<DateTime>(endTime),
       'isCustom': serializer.toJson<bool>(isCustom),
-      'baseTypeID': serializer.toJson<int?>(
-        $EventsTable.$converterbaseTypeIDn.toJson(baseTypeID),
+      'baseType': serializer.toJson<int?>(
+        $EventsTable.$converterbaseTypen.toJson(baseType),
       ),
       'typeID': serializer.toJson<int?>(typeID),
       'room': serializer.toJson<String?>(room),
@@ -888,7 +833,7 @@ class Event extends DataClass implements Insertable<Event> {
     DateTime? startTime,
     DateTime? endTime,
     bool? isCustom,
-    Value<EventBaseType?> baseTypeID = const Value.absent(),
+    Value<EventBaseType?> baseType = const Value.absent(),
     Value<int?> typeID = const Value.absent(),
     Value<String?> room = const Value.absent(),
   }) => Event(
@@ -897,7 +842,7 @@ class Event extends DataClass implements Insertable<Event> {
     startTime: startTime ?? this.startTime,
     endTime: endTime ?? this.endTime,
     isCustom: isCustom ?? this.isCustom,
-    baseTypeID: baseTypeID.present ? baseTypeID.value : this.baseTypeID,
+    baseType: baseType.present ? baseType.value : this.baseType,
     typeID: typeID.present ? typeID.value : this.typeID,
     room: room.present ? room.value : this.room,
   );
@@ -908,8 +853,7 @@ class Event extends DataClass implements Insertable<Event> {
       startTime: data.startTime.present ? data.startTime.value : this.startTime,
       endTime: data.endTime.present ? data.endTime.value : this.endTime,
       isCustom: data.isCustom.present ? data.isCustom.value : this.isCustom,
-      baseTypeID:
-          data.baseTypeID.present ? data.baseTypeID.value : this.baseTypeID,
+      baseType: data.baseType.present ? data.baseType.value : this.baseType,
       typeID: data.typeID.present ? data.typeID.value : this.typeID,
       room: data.room.present ? data.room.value : this.room,
     );
@@ -923,7 +867,7 @@ class Event extends DataClass implements Insertable<Event> {
           ..write('startTime: $startTime, ')
           ..write('endTime: $endTime, ')
           ..write('isCustom: $isCustom, ')
-          ..write('baseTypeID: $baseTypeID, ')
+          ..write('baseType: $baseType, ')
           ..write('typeID: $typeID, ')
           ..write('room: $room')
           ..write(')'))
@@ -937,7 +881,7 @@ class Event extends DataClass implements Insertable<Event> {
     startTime,
     endTime,
     isCustom,
-    baseTypeID,
+    baseType,
     typeID,
     room,
   );
@@ -950,7 +894,7 @@ class Event extends DataClass implements Insertable<Event> {
           other.startTime == this.startTime &&
           other.endTime == this.endTime &&
           other.isCustom == this.isCustom &&
-          other.baseTypeID == this.baseTypeID &&
+          other.baseType == this.baseType &&
           other.typeID == this.typeID &&
           other.room == this.room);
 }
@@ -961,7 +905,7 @@ class EventsCompanion extends UpdateCompanion<Event> {
   final Value<DateTime> startTime;
   final Value<DateTime> endTime;
   final Value<bool> isCustom;
-  final Value<EventBaseType?> baseTypeID;
+  final Value<EventBaseType?> baseType;
   final Value<int?> typeID;
   final Value<String?> room;
   const EventsCompanion({
@@ -970,7 +914,7 @@ class EventsCompanion extends UpdateCompanion<Event> {
     this.startTime = const Value.absent(),
     this.endTime = const Value.absent(),
     this.isCustom = const Value.absent(),
-    this.baseTypeID = const Value.absent(),
+    this.baseType = const Value.absent(),
     this.typeID = const Value.absent(),
     this.room = const Value.absent(),
   });
@@ -980,7 +924,7 @@ class EventsCompanion extends UpdateCompanion<Event> {
     required DateTime startTime,
     required DateTime endTime,
     required bool isCustom,
-    this.baseTypeID = const Value.absent(),
+    this.baseType = const Value.absent(),
     this.typeID = const Value.absent(),
     this.room = const Value.absent(),
   }) : subjectID = Value(subjectID),
@@ -993,7 +937,7 @@ class EventsCompanion extends UpdateCompanion<Event> {
     Expression<DateTime>? startTime,
     Expression<DateTime>? endTime,
     Expression<bool>? isCustom,
-    Expression<int>? baseTypeID,
+    Expression<int>? baseType,
     Expression<int>? typeID,
     Expression<String>? room,
   }) {
@@ -1003,7 +947,7 @@ class EventsCompanion extends UpdateCompanion<Event> {
       if (startTime != null) 'start_time': startTime,
       if (endTime != null) 'end_time': endTime,
       if (isCustom != null) 'is_custom': isCustom,
-      if (baseTypeID != null) 'base_type_id': baseTypeID,
+      if (baseType != null) 'base_type': baseType,
       if (typeID != null) 'type_id': typeID,
       if (room != null) 'room': room,
     });
@@ -1015,7 +959,7 @@ class EventsCompanion extends UpdateCompanion<Event> {
     Value<DateTime>? startTime,
     Value<DateTime>? endTime,
     Value<bool>? isCustom,
-    Value<EventBaseType?>? baseTypeID,
+    Value<EventBaseType?>? baseType,
     Value<int?>? typeID,
     Value<String?>? room,
   }) {
@@ -1025,7 +969,7 @@ class EventsCompanion extends UpdateCompanion<Event> {
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
       isCustom: isCustom ?? this.isCustom,
-      baseTypeID: baseTypeID ?? this.baseTypeID,
+      baseType: baseType ?? this.baseType,
       typeID: typeID ?? this.typeID,
       room: room ?? this.room,
     );
@@ -1049,9 +993,9 @@ class EventsCompanion extends UpdateCompanion<Event> {
     if (isCustom.present) {
       map['is_custom'] = Variable<bool>(isCustom.value);
     }
-    if (baseTypeID.present) {
-      map['base_type_id'] = Variable<int>(
-        $EventsTable.$converterbaseTypeIDn.toSql(baseTypeID.value),
+    if (baseType.present) {
+      map['base_type'] = Variable<int>(
+        $EventsTable.$converterbaseTypen.toSql(baseType.value),
       );
     }
     if (typeID.present) {
@@ -1071,7 +1015,7 @@ class EventsCompanion extends UpdateCompanion<Event> {
           ..write('startTime: $startTime, ')
           ..write('endTime: $endTime, ')
           ..write('isCustom: $isCustom, ')
-          ..write('baseTypeID: $baseTypeID, ')
+          ..write('baseType: $baseType, ')
           ..write('typeID: $typeID, ')
           ..write('room: $room')
           ..write(')'))
@@ -2712,14 +2656,12 @@ typedef $$EventTypesTableCreateCompanionBuilder =
       Value<int> id,
       required String name,
       required String shortName,
-      required EventBaseType baseType,
     });
 typedef $$EventTypesTableUpdateCompanionBuilder =
     EventTypesCompanion Function({
       Value<int> id,
       Value<String> name,
       Value<String> shortName,
-      Value<EventBaseType> baseType,
     });
 
 final class $$EventTypesTableReferences
@@ -2768,12 +2710,6 @@ class $$EventTypesTableFilterComposer
   ColumnFilters<String> get shortName => $composableBuilder(
     column: $table.shortName,
     builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnWithTypeConverterFilters<EventBaseType, EventBaseType, int>
-  get baseType => $composableBuilder(
-    column: $table.baseType,
-    builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
   Expression<bool> eventsRefs(
@@ -2825,11 +2761,6 @@ class $$EventTypesTableOrderingComposer
     column: $table.shortName,
     builder: (column) => ColumnOrderings(column),
   );
-
-  ColumnOrderings<int> get baseType => $composableBuilder(
-    column: $table.baseType,
-    builder: (column) => ColumnOrderings(column),
-  );
 }
 
 class $$EventTypesTableAnnotationComposer
@@ -2849,9 +2780,6 @@ class $$EventTypesTableAnnotationComposer
 
   GeneratedColumn<String> get shortName =>
       $composableBuilder(column: $table.shortName, builder: (column) => column);
-
-  GeneratedColumnWithTypeConverter<EventBaseType, int> get baseType =>
-      $composableBuilder(column: $table.baseType, builder: (column) => column);
 
   Expression<T> eventsRefs<T extends Object>(
     Expression<T> Function($$EventsTableAnnotationComposer a) f,
@@ -2910,24 +2838,17 @@ class $$EventTypesTableTableManager
                 Value<int> id = const Value.absent(),
                 Value<String> name = const Value.absent(),
                 Value<String> shortName = const Value.absent(),
-                Value<EventBaseType> baseType = const Value.absent(),
-              }) => EventTypesCompanion(
-                id: id,
-                name: name,
-                shortName: shortName,
-                baseType: baseType,
-              ),
+              }) =>
+                  EventTypesCompanion(id: id, name: name, shortName: shortName),
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
                 required String name,
                 required String shortName,
-                required EventBaseType baseType,
               }) => EventTypesCompanion.insert(
                 id: id,
                 name: name,
                 shortName: shortName,
-                baseType: baseType,
               ),
           withReferenceMapper:
               (p0) =>
@@ -2996,7 +2917,7 @@ typedef $$EventsTableCreateCompanionBuilder =
       required DateTime startTime,
       required DateTime endTime,
       required bool isCustom,
-      Value<EventBaseType?> baseTypeID,
+      Value<EventBaseType?> baseType,
       Value<int?> typeID,
       Value<String?> room,
     });
@@ -3007,7 +2928,7 @@ typedef $$EventsTableUpdateCompanionBuilder =
       Value<DateTime> startTime,
       Value<DateTime> endTime,
       Value<bool> isCustom,
-      Value<EventBaseType?> baseTypeID,
+      Value<EventBaseType?> baseType,
       Value<int?> typeID,
       Value<String?> room,
     });
@@ -3117,8 +3038,8 @@ class $$EventsTableFilterComposer
   );
 
   ColumnWithTypeConverterFilters<EventBaseType?, EventBaseType, int>
-  get baseTypeID => $composableBuilder(
-    column: $table.baseTypeID,
+  get baseType => $composableBuilder(
+    column: $table.baseType,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
@@ -3253,8 +3174,8 @@ class $$EventsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get baseTypeID => $composableBuilder(
-    column: $table.baseTypeID,
+  ColumnOrderings<int> get baseType => $composableBuilder(
+    column: $table.baseType,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -3331,11 +3252,8 @@ class $$EventsTableAnnotationComposer
   GeneratedColumn<bool> get isCustom =>
       $composableBuilder(column: $table.isCustom, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<EventBaseType?, int> get baseTypeID =>
-      $composableBuilder(
-        column: $table.baseTypeID,
-        builder: (column) => column,
-      );
+  GeneratedColumnWithTypeConverter<EventBaseType?, int> get baseType =>
+      $composableBuilder(column: $table.baseType, builder: (column) => column);
 
   GeneratedColumn<String> get room =>
       $composableBuilder(column: $table.room, builder: (column) => column);
@@ -3475,7 +3393,7 @@ class $$EventsTableTableManager
                 Value<DateTime> startTime = const Value.absent(),
                 Value<DateTime> endTime = const Value.absent(),
                 Value<bool> isCustom = const Value.absent(),
-                Value<EventBaseType?> baseTypeID = const Value.absent(),
+                Value<EventBaseType?> baseType = const Value.absent(),
                 Value<int?> typeID = const Value.absent(),
                 Value<String?> room = const Value.absent(),
               }) => EventsCompanion(
@@ -3484,7 +3402,7 @@ class $$EventsTableTableManager
                 startTime: startTime,
                 endTime: endTime,
                 isCustom: isCustom,
-                baseTypeID: baseTypeID,
+                baseType: baseType,
                 typeID: typeID,
                 room: room,
               ),
@@ -3495,7 +3413,7 @@ class $$EventsTableTableManager
                 required DateTime startTime,
                 required DateTime endTime,
                 required bool isCustom,
-                Value<EventBaseType?> baseTypeID = const Value.absent(),
+                Value<EventBaseType?> baseType = const Value.absent(),
                 Value<int?> typeID = const Value.absent(),
                 Value<String?> room = const Value.absent(),
               }) => EventsCompanion.insert(
@@ -3504,7 +3422,7 @@ class $$EventsTableTableManager
                 startTime: startTime,
                 endTime: endTime,
                 isCustom: isCustom,
-                baseTypeID: baseTypeID,
+                baseType: baseType,
                 typeID: typeID,
                 room: room,
               ),
