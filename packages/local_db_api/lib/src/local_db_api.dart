@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 
+import 'models/models.dart';
 import 'database/database.dart';
 
 class LocalDBApi {
@@ -7,16 +8,44 @@ class LocalDBApi {
 
   final AppDatabase _database;
 
-  Stream<List<Event>> loadEvents() =>
-      _database.select(_database.events).watch();
+  Stream<List<EventData>> loadEvents() {
+    final query = _database.select(_database.events).join([
+      leftOuterJoin(
+        _database.eventTypes,
+        _database.eventTypes.id.equalsExp(_database.events.typeID),
+      ),
+      leftOuterJoin(
+        _database.groups,
+        _database.eventsGroups.eventID.equalsExp(_database.events.id) &
+            _database.eventsGroups.groupID.equalsExp(_database.groups.id),
+      ),
+      leftOuterJoin(
+        _database.eventsTeachers,
+        _database.eventsTeachers.eventID.equalsExp(_database.events.id) &
+            _database.eventsTeachers.teacherID.equalsExp(_database.teachers.id),
+      ),
+    ]);
+
+    return query.watch().map((rows) {
+      return rows
+          .map(
+            (row) => EventData(
+              event: row.readTable(_database.events),
+              type: row.readTable(_database.eventTypes),
+              group: row.readTable(_database.groups),
+              teacher: row.readTable(_database.teachers),
+            ),
+          )
+          .toList();
+    });
+  }
+
   Stream<List<Subject>> loadSubjects() =>
       _database.select(_database.subjects).watch();
   Stream<List<Group>> loadGroups() =>
       _database.select(_database.groups).watch();
   Stream<List<Teacher>> loadTeachers() =>
       _database.select(_database.teachers).watch();
-  Stream<List<EventType>> loadEventTypes() =>
-      _database.select(_database.eventTypes).watch();
 
   Future<void> saveEvent(
     EventsCompanion event,
@@ -26,16 +55,16 @@ class LocalDBApi {
     batch.insert(
       _database.events,
       event,
-      onConflict: DoUpdate(
-        (old) => event,
-        target: [
-          _database.events.startTime,
-          _database.events.endTime,
-          _database.events.baseType,
-          _database.events.room,
-          _database.events.subjectID,
-        ],
-      ),
+      // onConflict: DoUpdate(
+      //   (old) => event,
+      //   target: [
+      //     _database.events.startTime,
+      //     _database.events.endTime,
+      //     _database.events.baseType,
+      //     _database.events.room,
+      //     _database.events.subjectID,
+      //   ],
+      // ),
     );
     // TODO: Cleanup old records in relations tables
     batch.insertAllOnConflictUpdate(_database.eventsGroups, groups);
