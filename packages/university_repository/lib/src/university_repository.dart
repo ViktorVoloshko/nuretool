@@ -1,8 +1,9 @@
 import 'package:events_api/events_api.dart' show EventsApi;
 import 'package:groups_api/groups_api.dart' show GroupsApi;
 import 'package:teachers_api/teachers_api.dart' show TeachersApi;
-import 'package:local_db_api/local_db_api.dart' hide Event, Group, Teacher;
-import 'package:rxdart/rxdart.dart';
+import 'package:local_db_api/local_db_api.dart'
+    hide Event, Group, Teacher, Subject;
+import 'package:rxdart/rxdart.dart' hide Subject;
 
 import 'models/models.dart';
 
@@ -15,7 +16,9 @@ class UniversityRepository {
   }) : _eventsApi = eventsApi,
        _groupsApi = groupsApi,
        _teachersApi = teachersApi,
-       _localDBApi = localDBApi;
+       _localDBApi = localDBApi {
+    _init();
+  }
 
   final EventsApi _eventsApi;
   final GroupsApi _groupsApi;
@@ -31,11 +34,16 @@ class UniversityRepository {
   late final _teachersStreamController = BehaviorSubject<List<Teacher>>.seeded(
     const [],
   );
+  late final _subjectsStreamController = BehaviorSubject<List<Subject>>.seeded(
+    const [],
+  );
 
   Stream<List<Event>> get events => _eventsStreamController.asBroadcastStream();
   Stream<List<Group>> get groups => _groupsStreamController.asBroadcastStream();
   Stream<List<Teacher>> get teachers =>
       _teachersStreamController.asBroadcastStream();
+  Stream<List<Subject>> get subjects =>
+      _subjectsStreamController.asBroadcastStream();
 
   Future<void> fetchGroups() async {
     // Since one group may appear multiple times in a JSON, Set is used.
@@ -102,8 +110,11 @@ class UniversityRepository {
   // TODO: Delete event
 
   Future<dynamic> dispose() => Future.wait([
+    _subjectsStreamController.close(),
     _teachersStreamController.close(),
     _groupsStreamController.close(),
     _eventsStreamController.close(),
   ]);
+
+  Future<void> _init() async {}
 }
