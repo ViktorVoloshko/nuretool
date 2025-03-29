@@ -7,16 +7,16 @@ import '../../local_db_api.dart';
 class EventData extends Equatable {
   const EventData({
     required this.event,
-    required this.type,
-    required this.group,
-    required this.teacher,
+    this.type,
+    this.groupID,
+    this.teacherID,
   });
 
   final Event event;
-  final EventType type;
-  final Group group;
-  final Teacher teacher;
+  final EventType? type;
+  final int? groupID;
+  final int? teacherID;
 
   @override
-  List<Object?> get props => [event, type, group, teacher];
+  List<Object?> get props => [event, type, groupID, teacherID];
 }
