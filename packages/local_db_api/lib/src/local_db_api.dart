@@ -15,14 +15,12 @@ class LocalDBApi {
         _database.eventTypes.id.equalsExp(_database.events.typeID),
       ),
       leftOuterJoin(
-        _database.groups,
-        _database.eventsGroups.eventID.equalsExp(_database.events.id) &
-            _database.eventsGroups.groupID.equalsExp(_database.groups.id),
+        _database.eventsGroups,
+        _database.events.id.equalsExp(_database.eventsGroups.eventID),
       ),
       leftOuterJoin(
         _database.eventsTeachers,
-        _database.eventsTeachers.eventID.equalsExp(_database.events.id) &
-            _database.eventsTeachers.teacherID.equalsExp(_database.teachers.id),
+        _database.events.id.equalsExp(_database.eventsTeachers.eventID),
       ),
     ]);
 
@@ -31,9 +29,9 @@ class LocalDBApi {
           .map(
             (row) => EventData(
               event: row.readTable(_database.events),
-              type: row.readTable(_database.eventTypes),
-              group: row.readTable(_database.groups),
-              teacher: row.readTable(_database.teachers),
+              type: row.readTableOrNull(_database.eventTypes),
+              groupID: row.read(_database.eventsGroups.groupID),
+              teacherID: row.read(_database.eventsTeachers.teacherID),
             ),
           )
           .toList();
