@@ -15,10 +15,10 @@ class Event extends Equatable {
     required this.endTime,
     required this.isCustom,
     required this.baseType,
-    required this.type,
+    this.type,
     required this.groups,
     required this.teachers,
-    required this.room,
+    this.room,
   });
 
   Event.fromDBModel(
@@ -31,7 +31,7 @@ class Event extends Equatable {
       startTime = event.startTime,
       endTime = event.endTime,
       isCustom = event.isCustom,
-      baseType = event.baseType!.toDBModel(),
+      baseType = event.baseType!.fromDBModel(),
       room = event.room;
 
   final int id;
@@ -143,7 +143,7 @@ extension DomainToDBEventBaseType on EventBaseType {
 }
 
 extension DBToDomainEventBaseType on db.EventBaseType {
-  EventBaseType toDBModel() => switch (this) {
+  EventBaseType fromDBModel() => switch (this) {
     db.EventBaseType.lecture => EventBaseType.lecture,
     db.EventBaseType.practice => EventBaseType.practice,
     db.EventBaseType.laboratory => EventBaseType.laboratory,
