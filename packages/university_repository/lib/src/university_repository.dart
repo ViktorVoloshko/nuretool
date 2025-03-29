@@ -2,7 +2,7 @@ import 'package:events_api/events_api.dart' show EventsApi;
 import 'package:groups_api/groups_api.dart' show GroupsApi;
 import 'package:teachers_api/teachers_api.dart' show TeachersApi;
 import 'package:local_db_api/local_db_api.dart'
-    hide Event, Group, Teacher, Subject;
+    hide Event, EventType, Group, Teacher, Subject;
 import 'package:rxdart/rxdart.dart' hide Subject;
 
 import 'models/models.dart';
@@ -44,6 +44,54 @@ class UniversityRepository {
       _teachersStreamController.asBroadcastStream();
   Stream<List<Subject>> get subjects =>
       _subjectsStreamController.asBroadcastStream();
+
+  late final _eventsSubscription = _localDBApi.loadEvents().listen((
+    eventsData,
+  ) {
+    // TODO: Verify this with actual code, super error-prone.
+    final events = <Event>[];
+    final eventIDs = <int>{};
+    eventIDs.addAll(eventsData.map((e) => e.event.id));
+
+    for (final eventID in eventIDs) {
+      final eventDatas = eventsData.where((e) => e.event.id == eventID);
+
+      final groups = <Group>{};
+      final teachers = <Teacher>{};
+      for (final eventData in eventDatas) {
+        groups.add(
+          _groupsStreamController.value.firstWhere(
+            (e) => e.id == eventData.groupID,
+          ),
+        );
+        teachers.add(
+          _teachersStreamController.value.firstWhere(
+            (e) => e.id == eventData.teacherID,
+          ),
+        );
+      }
+
+      events.add(
+        Event.fromDBModel(
+          eventDatas.first.event,
+          _subjectsStreamController.value.firstWhere(
+            (subject) => subject.id == eventDatas.first.event.subjectID,
+          ),
+          (eventDatas.first.type == null)
+              ? null
+              : EventType.fromDBModel(eventDatas.first.type!),
+          groups.toList(),
+          teachers.toList(),
+        ),
+      );
+    }
+
+    _eventsStreamController.add(events);
+  });
+
+  late final _groupsSubscription;
+  late final _teachersSubscription;
+  late final _subjectsSubscription;
 
   Future<void> fetchGroups() async {
     // Since one group may appear multiple times in a JSON, Set is used.
