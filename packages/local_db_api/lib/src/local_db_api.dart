@@ -130,4 +130,6 @@ class LocalDBApi {
   Future<void> saveTasks(Iterable<TasksCompanion> tasks) => _database.batch(
     (batch) => batch.insertAllOnConflictUpdate(_database.tasks, tasks),
   );
+
+  Future<void> dispose() => _database.close();
 }
