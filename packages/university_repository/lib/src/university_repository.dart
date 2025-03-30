@@ -48,7 +48,7 @@ class UniversityRepository {
   late final _eventsSubscription = _localDBApi.loadEvents().listen((
     eventsData,
   ) {
-    // TODO: Verify this with actual code, super error-prone.
+    // TODO: Verify this with actual code, might be super slow and error-prone.
     final events = <Event>[];
     final eventIDs = <int>{};
     eventIDs.addAll(eventsData.map((e) => e.event.id));
@@ -149,6 +149,8 @@ class UniversityRepository {
       to.millisecondsSinceEpoch ~/ 1000,
     );
 
+    _eventsSubscription.pause();
+
     _localDBApi.saveSubjects(subjects.map((e) => e.toDBModel()));
     final eventIDs = await _localDBApi.saveApiEvents(
       events.map((e) => e.toDBModel()),
@@ -161,6 +163,8 @@ class UniversityRepository {
       relations.$1.addAll(eventRelations.$1);
       relations.$2.addAll(eventRelations.$2);
     }
+
+    _eventsSubscription.resume();
     return _localDBApi.saveEventsRelations(relations.$1, relations.$2);
   }
 
