@@ -89,9 +89,23 @@ class UniversityRepository {
     _eventsStreamController.add(events);
   });
 
-  late final _groupsSubscription;
-  late final _teachersSubscription;
-  late final _subjectsSubscription;
+  late final _groupsSubscription = _localDBApi.loadGroups().listen(
+    (groups) => _groupsStreamController.add(
+      groups.map((e) => Group.fromDBModel(e)).toList(),
+    ),
+  );
+
+  late final _teachersSubscription = _localDBApi.loadTeachers().listen(
+    (teachers) => _teachersStreamController.add(
+      teachers.map((e) => Teacher.fromDBModel(e)).toList(),
+    ),
+  );
+
+  late final _subjectsSubscription = _localDBApi.loadSubjects().listen(
+    (subjects) => _subjectsStreamController.add(
+      subjects.map((e) => Subject.fromDBModel(e)).toList(),
+    ),
+  );
 
   Future<void> fetchGroups() async {
     // Since one group may appear multiple times in a JSON, Set is used.
@@ -157,12 +171,20 @@ class UniversityRepository {
 
   // TODO: Delete event
 
-  Future<dynamic> dispose() => Future.wait([
-    _subjectsStreamController.close(),
-    _teachersStreamController.close(),
-    _groupsStreamController.close(),
-    _eventsStreamController.close(),
-  ]);
+  Future<dynamic> dispose() async {
+    await Future.wait([
+      _eventsSubscription.cancel(),
+      _subjectsSubscription.cancel(),
+      _teachersSubscription.cancel(),
+      _groupsSubscription.cancel(),
+    ]);
+    return Future.wait([
+      _subjectsStreamController.close(),
+      _teachersStreamController.close(),
+      _groupsStreamController.close(),
+      _eventsStreamController.close(),
+    ]);
+  }
 
   Future<void> _init() async {}
 }
