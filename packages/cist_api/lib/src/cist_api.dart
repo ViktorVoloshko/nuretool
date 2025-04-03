@@ -197,4 +197,43 @@ class CistApi
 
     return (events: events, subjects: subjects, types: types);
   }
+
+  @override
+  Future<({List<Event> events, List<Subject> subjects, List<EventType> types})>
+  fetchEventsForRoom(int roomID, int fromTimestamp, int toTimestamp) async {
+    final response = await _dio.getUri<String>(
+      Uri.https(_domain, '/ias/app/tt/P_API_EVEN_JSON', {
+        'type_id': const ['3'],
+        'timetable_id': [roomID.toString()],
+        'time_from': [fromTimestamp.toString()],
+        'time_to': [toTimestamp.toString()],
+        'idClient': const ['KNURESked'],
+      }),
+    );
+    if (response.statusCode != HttpStatus.ok) throw EventsRequestFailure();
+
+    final Map<String, dynamic> json;
+    try {
+      json = jsonDecode(response.data!) as Map<String, dynamic>;
+    } catch (_) {
+      throw EventsRequestFailure();
+    }
+
+    final List<Event> events = [];
+    for (final eventJson in json['events']) {
+      events.add(Event.fromJson(eventJson));
+    }
+
+    final List<Subject> subjects = [];
+    for (final subjectJson in json['subjects']) {
+      subjects.add(Subject.fromJson(subjectJson));
+    }
+
+    final List<EventType> types = [];
+    for (final typeJson in json['types']) {
+      types.add(EventType.fromJson(typeJson));
+    }
+
+    return (events: events, subjects: subjects, types: types);
+  }
 }

@@ -16,6 +16,13 @@ abstract interface class EventsApi {
   /// [fromTimestamp] and [toTimestamp] must be valid Unix timestamps.
   Future<({List<Event> events, List<Subject> subjects, List<EventType> types})>
   fetchEventsForTeacher(int teacherID, int fromTimestamp, int toTimestamp);
+
+  /// Fetches and returns [List]s of [Event]s, [Subject]s and [EventType]s for
+  /// specified [roomID] for specified period of time.
+  ///
+  /// [fromTimestamp] and [toTimestamp] must be valid Unix timestamps.
+  Future<({List<Event> events, List<Subject> subjects, List<EventType> types})>
+  fetchEventsForRoom(int roomID, int fromTimestamp, int toTimestamp);
 }
 
 /// Used to notify about failure during request or decoding the response.
