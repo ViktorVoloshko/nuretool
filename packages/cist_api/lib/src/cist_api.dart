@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:events_api/events_api.dart';
 import 'package:groups_api/groups_api.dart' as groups_api;
+import 'package:rooms_api/rooms_api.dart';
 import 'package:teachers_api/teachers_api.dart' as teachers_api;
 import 'package:enough_convert/enough_convert.dart';
 
@@ -11,7 +12,11 @@ import 'package:enough_convert/enough_convert.dart';
 ///
 /// It's API described in groups_api, teachers_api and events_api docs.
 class CistApi
-    implements groups_api.GroupsApi, teachers_api.TeachersApi, EventsApi {
+    implements
+        groups_api.GroupsApi,
+        teachers_api.TeachersApi,
+        RoomsApi,
+        EventsApi {
   CistApi({Dio? dio})
     : _dio =
           dio ??
@@ -26,7 +31,7 @@ class CistApi
           );
 
   final Dio _dio;
-  static const _domain = 'cist.nure.ua';
+  static const _domain = 'cist2.nure.ua';
 
   @override
   Future<List<groups_api.Faculty>> fetchGroups() async {
@@ -82,6 +87,31 @@ class CistApi
       result.add(teachers_api.Faculty.fromJson(facultyJson));
     }
     if (result.isEmpty) throw teachers_api.TeachersNotFoundFailure();
+
+    return result;
+  }
+
+  @override
+  Future<List<Building>> fetchRooms() async {
+    final response = await _dio.getUri<String>(
+      Uri.https(_domain, '/ias/app/tt/P_API_AUDITORIES_JSON'),
+    );
+    if (response.statusCode != HttpStatus.ok) {
+      throw RoomsRequestFailure();
+    }
+
+    final Map<String, dynamic> json;
+    try {
+      json = jsonDecode(response.data!) as Map<String, dynamic>;
+    } catch (_) {
+      throw RoomsRequestFailure();
+    }
+
+    final List<Building> result = [];
+    for (final buildingJson in json['university']['buildings']) {
+      result.add(Building.fromJson(buildingJson));
+    }
+    if (result.isEmpty) throw RoomsNotFoundFailure();
 
     return result;
   }
