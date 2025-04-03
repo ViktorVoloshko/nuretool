@@ -6,18 +6,22 @@ import 'package:local_db_api/local_db_api.dart' as db;
 
 @immutable
 class Group extends Equatable {
-  const Group({required this.id, required this.name});
+  const Group({required this.id, required this.name, required this.events});
 
-  Group.fromDBModel(db.Group group) : id = group.id, name = group.name;
+  Group.fromDBModel(db.Group group)
+    : id = group.id,
+      name = group.name,
+      events = [];
 
   final int id;
   final String name;
+  final List<int> events;
 
   db.GroupsCompanion toDBModel() =>
       db.GroupsCompanion.insert(id: Value(id), name: name);
 
   @override
-  List<Object?> get props => [id, name];
+  List<Object?> get props => [id, name, events];
 }
 
 extension ApiToDBGroup on api.Group {

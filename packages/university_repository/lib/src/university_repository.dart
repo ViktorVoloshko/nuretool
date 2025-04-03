@@ -50,38 +50,50 @@ class UniversityRepository {
   ) {
     // TODO: Verify this with actual code, might be super slow and error-prone.
     final events = <Event>[];
+
     final eventIDs = <int>{};
     eventIDs.addAll(eventsData.map((e) => e.event.id));
+
+    final subjects = _subjectsStreamController.value;
+    final groups = _groupsStreamController.value;
+    final teachers = _teachersStreamController.value;
 
     for (final eventID in eventIDs) {
       final eventDatas = eventsData.where((e) => e.event.id == eventID);
 
-      final groups = <Group>{};
-      final teachers = <Teacher>{};
+      final groupIDs = <int>{};
+      final teacherIDs = <int>{};
       for (final eventData in eventDatas) {
-        groups.add(
-          _groupsStreamController.value.firstWhere(
-            (e) => e.id == eventData.groupID,
-          ),
-        );
-        teachers.add(
-          _teachersStreamController.value.firstWhere(
-            (e) => e.id == eventData.teacherID,
-          ),
-        );
+        if (eventData.groupID != null) groupIDs.add(eventData.groupID!);
+        if (eventData.teacherID != null) teacherIDs.add(eventData.teacherID!);
+      }
+
+      subjects
+          .firstWhere(
+            (subject) => subject.id == eventDatas.first.event.subjectID,
+          )
+          .events
+          .add(eventID);
+
+      for (final groupID in groupIDs) {
+        groups.firstWhere((group) => group.id == groupID).events.add(eventID);
+      }
+
+      for (final teacherID in teacherIDs) {
+        teachers
+            .firstWhere((teacher) => teacher.id == teacherID)
+            .events
+            .add(eventID);
       }
 
       events.add(
         Event.fromDBModel(
           eventDatas.first.event,
-          _subjectsStreamController.value.firstWhere(
-            (subject) => subject.id == eventDatas.first.event.subjectID,
-          ),
           (eventDatas.first.type == null)
               ? null
               : EventType.fromDBModel(eventDatas.first.type!),
-          groups.toList(),
-          teachers.toList(),
+          groupIDs.toList(),
+          teacherIDs.toList(),
         ),
       );
     }

@@ -21,13 +21,9 @@ class Event extends Equatable {
     this.room,
   });
 
-  Event.fromDBModel(
-    db.Event event,
-    this.subject,
-    this.type,
-    this.groups,
-    this.teachers,
-  ) : id = event.id,
+  Event.fromDBModel(db.Event event, this.type, this.groups, this.teachers)
+    : id = event.id,
+      subject = event.subjectID,
       startTime = event.startTime,
       endTime = event.endTime,
       isCustom = event.isCustom,
@@ -35,14 +31,14 @@ class Event extends Equatable {
       room = event.room;
 
   final int id;
-  final Subject subject;
+  final int subject;
   final DateTime startTime;
   final DateTime endTime;
   final bool isCustom;
   final EventBaseType baseType;
   final EventType? type;
-  final List<Group> groups;
-  final List<Teacher> teachers;
+  final List<int> groups;
+  final List<int> teachers;
   final String? room;
 
   (
@@ -53,22 +49,20 @@ class Event extends Equatable {
   toDBModel() {
     final List<db.EventsGroupsCompanion> groups = [];
     for (final group in this.groups) {
-      groups.add(
-        db.EventsGroupsCompanion.insert(eventID: id, groupID: group.id),
-      );
+      groups.add(db.EventsGroupsCompanion.insert(eventID: id, groupID: group));
     }
 
     final List<db.EventsTeachersCompanion> teachers = [];
     for (final teacher in this.teachers) {
       teachers.add(
-        db.EventsTeachersCompanion.insert(eventID: id, teacherID: teacher.id),
+        db.EventsTeachersCompanion.insert(eventID: id, teacherID: teacher),
       );
     }
 
     return (
       db.EventsCompanion.insert(
         id: Value(id),
-        subjectID: subject.id,
+        subjectID: subject,
         startTime: startTime,
         endTime: endTime,
         isCustom: isCustom,
@@ -83,14 +77,14 @@ class Event extends Equatable {
 
   Event copyWith({
     int? id,
-    Subject? subject,
+    int? subject,
     DateTime? startTime,
     DateTime? endTime,
     bool? isCustom,
     EventBaseType? baseType,
     EventType? type,
-    List<Group>? groups,
-    List<Teacher>? teachers,
+    List<int>? groups,
+    List<int>? teachers,
     String? room,
   }) => Event(
     id: id ?? this.id,
@@ -181,16 +175,14 @@ extension ApiToDBEvent on api.Event {
   (List<db.EventsGroupsCompanion>, List<db.EventsTeachersCompanion>)
   generateRelations(int id) {
     final List<db.EventsGroupsCompanion> groups = [];
-    for (final groupID in this.groups) {
-      groups.add(
-        db.EventsGroupsCompanion.insert(eventID: id, groupID: groupID),
-      );
+    for (final group in this.groups) {
+      groups.add(db.EventsGroupsCompanion.insert(eventID: id, groupID: group));
     }
 
     final List<db.EventsTeachersCompanion> teachers = [];
-    for (final teacherID in this.teachers) {
+    for (final teacher in this.teachers) {
       teachers.add(
-        db.EventsTeachersCompanion.insert(eventID: id, teacherID: teacherID),
+        db.EventsTeachersCompanion.insert(eventID: id, teacherID: teacher),
       );
     }
 

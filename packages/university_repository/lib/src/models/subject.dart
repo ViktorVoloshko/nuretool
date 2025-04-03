@@ -10,16 +10,19 @@ class Subject extends Equatable {
     required this.id,
     required this.name,
     required this.shortName,
+    required this.events,
   });
 
   Subject.fromDBModel(db.Subject subject)
     : id = subject.id,
       name = subject.name,
-      shortName = subject.shortName;
+      shortName = subject.shortName,
+      events = [];
 
   final int id;
   final String name;
   final String shortName;
+  final List<int> events;
 
   db.SubjectsCompanion toDBModel() => db.SubjectsCompanion.insert(
     id: Value(id),
