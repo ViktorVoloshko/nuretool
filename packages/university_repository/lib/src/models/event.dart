@@ -28,7 +28,7 @@ class Event extends Equatable {
       endTime = event.endTime,
       isCustom = event.isCustom,
       baseType = event.baseType!.fromDBModel(),
-      room = event.room;
+      room = event.roomID;
 
   final int id;
   final int subject;
@@ -39,7 +39,7 @@ class Event extends Equatable {
   final EventType? type;
   final List<int> groups;
   final List<int> teachers;
-  final String? room;
+  final int? room;
 
   (
     db.EventsCompanion,
@@ -66,7 +66,7 @@ class Event extends Equatable {
         startTime: startTime,
         endTime: endTime,
         isCustom: isCustom,
-        room: Value(room),
+        roomID: Value(room),
         baseType: Value(baseType.toDBModel()),
         typeID: type != null ? Value(type!.id) : Value.absent(),
       ),
@@ -85,7 +85,7 @@ class Event extends Equatable {
     EventType? type,
     List<int>? groups,
     List<int>? teachers,
-    String? room,
+    int? room,
   }) => Event(
     id: id ?? this.id,
     subject: subject ?? this.subject,
@@ -162,12 +162,12 @@ extension ApiToDBEvent on api.Event {
   /// Since cist does not provide IDs for events, you have to retrive ID of
   /// inserted event later to add it
   /// to relations tables with [generateRelations].
-  db.EventsCompanion toDBModel() => db.EventsCompanion.insert(
+  db.EventsCompanion toDBModel(List<Room> rooms) => db.EventsCompanion.insert(
     subjectID: subjectID,
     startTime: DateTime.fromMillisecondsSinceEpoch(startTime ~/ 1000),
     endTime: DateTime.fromMillisecondsSinceEpoch(endTime ~/ 1000),
     isCustom: false,
-    room: Value(auditory),
+    roomID: Value(rooms.firstWhere((room) => room.name == auditory).id),
     baseType: Value(_fromIDBase(type ~/ 10)),
     typeID: Value(type),
   );

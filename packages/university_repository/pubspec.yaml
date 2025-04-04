@@ -15,6 +15,8 @@ dependencies:
     path: ../groups_api
   teachers_api:
     path: ../teachers_api
+  rooms_api:
+    path: ../rooms_api
   cist_api:
     path: ../cist_api
   local_db_api:

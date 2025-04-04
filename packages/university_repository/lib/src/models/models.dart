@@ -3,3 +3,4 @@ export 'subject.dart';
 export 'event_type.dart';
 export 'group.dart';
 export 'teacher.dart';
+export 'room.dart';
