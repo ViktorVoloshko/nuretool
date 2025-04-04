@@ -522,10 +522,10 @@ class $RoomsTable extends Rooms with TableInfo<$RoomsTable, Room> {
       'PRIMARY KEY AUTOINCREMENT',
     ),
   );
-  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
-  late final GeneratedColumn<String> title = GeneratedColumn<String>(
-    'title',
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
     aliasedName,
     false,
     type: DriftSqlType.string,
@@ -543,7 +543,7 @@ class $RoomsTable extends Rooms with TableInfo<$RoomsTable, Room> {
     requiredDuringInsert: true,
   );
   @override
-  List<GeneratedColumn> get $columns => [id, title, building];
+  List<GeneratedColumn> get $columns => [id, name, building];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -559,13 +559,13 @@ class $RoomsTable extends Rooms with TableInfo<$RoomsTable, Room> {
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('title')) {
+    if (data.containsKey('name')) {
       context.handle(
-        _titleMeta,
-        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
       );
     } else if (isInserting) {
-      context.missing(_titleMeta);
+      context.missing(_nameMeta);
     }
     if (data.containsKey('building')) {
       context.handle(
@@ -589,10 +589,10 @@ class $RoomsTable extends Rooms with TableInfo<$RoomsTable, Room> {
             DriftSqlType.int,
             data['${effectivePrefix}id'],
           )!,
-      title:
+      name:
           attachedDatabase.typeMapping.read(
             DriftSqlType.string,
-            data['${effectivePrefix}title'],
+            data['${effectivePrefix}name'],
           )!,
       building:
           attachedDatabase.typeMapping.read(
@@ -610,14 +610,14 @@ class $RoomsTable extends Rooms with TableInfo<$RoomsTable, Room> {
 
 class Room extends DataClass implements Insertable<Room> {
   final int id;
-  final String title;
+  final String name;
   final String building;
-  const Room({required this.id, required this.title, required this.building});
+  const Room({required this.id, required this.name, required this.building});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['title'] = Variable<String>(title);
+    map['name'] = Variable<String>(name);
     map['building'] = Variable<String>(building);
     return map;
   }
@@ -625,7 +625,7 @@ class Room extends DataClass implements Insertable<Room> {
   RoomsCompanion toCompanion(bool nullToAbsent) {
     return RoomsCompanion(
       id: Value(id),
-      title: Value(title),
+      name: Value(name),
       building: Value(building),
     );
   }
@@ -637,7 +637,7 @@ class Room extends DataClass implements Insertable<Room> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Room(
       id: serializer.fromJson<int>(json['id']),
-      title: serializer.fromJson<String>(json['title']),
+      name: serializer.fromJson<String>(json['name']),
       building: serializer.fromJson<String>(json['building']),
     );
   }
@@ -646,20 +646,20 @@ class Room extends DataClass implements Insertable<Room> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'title': serializer.toJson<String>(title),
+      'name': serializer.toJson<String>(name),
       'building': serializer.toJson<String>(building),
     };
   }
 
-  Room copyWith({int? id, String? title, String? building}) => Room(
+  Room copyWith({int? id, String? name, String? building}) => Room(
     id: id ?? this.id,
-    title: title ?? this.title,
+    name: name ?? this.name,
     building: building ?? this.building,
   );
   Room copyWithCompanion(RoomsCompanion data) {
     return Room(
       id: data.id.present ? data.id.value : this.id,
-      title: data.title.present ? data.title.value : this.title,
+      name: data.name.present ? data.name.value : this.name,
       building: data.building.present ? data.building.value : this.building,
     );
   }
@@ -668,58 +668,58 @@ class Room extends DataClass implements Insertable<Room> {
   String toString() {
     return (StringBuffer('Room(')
           ..write('id: $id, ')
-          ..write('title: $title, ')
+          ..write('name: $name, ')
           ..write('building: $building')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, title, building);
+  int get hashCode => Object.hash(id, name, building);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Room &&
           other.id == this.id &&
-          other.title == this.title &&
+          other.name == this.name &&
           other.building == this.building);
 }
 
 class RoomsCompanion extends UpdateCompanion<Room> {
   final Value<int> id;
-  final Value<String> title;
+  final Value<String> name;
   final Value<String> building;
   const RoomsCompanion({
     this.id = const Value.absent(),
-    this.title = const Value.absent(),
+    this.name = const Value.absent(),
     this.building = const Value.absent(),
   });
   RoomsCompanion.insert({
     this.id = const Value.absent(),
-    required String title,
+    required String name,
     required String building,
-  }) : title = Value(title),
+  }) : name = Value(name),
        building = Value(building);
   static Insertable<Room> custom({
     Expression<int>? id,
-    Expression<String>? title,
+    Expression<String>? name,
     Expression<String>? building,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (title != null) 'title': title,
+      if (name != null) 'name': name,
       if (building != null) 'building': building,
     });
   }
 
   RoomsCompanion copyWith({
     Value<int>? id,
-    Value<String>? title,
+    Value<String>? name,
     Value<String>? building,
   }) {
     return RoomsCompanion(
       id: id ?? this.id,
-      title: title ?? this.title,
+      name: name ?? this.name,
       building: building ?? this.building,
     );
   }
@@ -730,8 +730,8 @@ class RoomsCompanion extends UpdateCompanion<Room> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
-    if (title.present) {
-      map['title'] = Variable<String>(title.value);
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
     }
     if (building.present) {
       map['building'] = Variable<String>(building.value);
@@ -743,7 +743,7 @@ class RoomsCompanion extends UpdateCompanion<Room> {
   String toString() {
     return (StringBuffer('RoomsCompanion(')
           ..write('id: $id, ')
-          ..write('title: $title, ')
+          ..write('name: $name, ')
           ..write('building: $building')
           ..write(')'))
         .toString();
@@ -3166,13 +3166,13 @@ typedef $$EventTypesTableProcessedTableManager =
 typedef $$RoomsTableCreateCompanionBuilder =
     RoomsCompanion Function({
       Value<int> id,
-      required String title,
+      required String name,
       required String building,
     });
 typedef $$RoomsTableUpdateCompanionBuilder =
     RoomsCompanion Function({
       Value<int> id,
-      Value<String> title,
+      Value<String> name,
       Value<String> building,
     });
 
@@ -3213,8 +3213,8 @@ class $$RoomsTableFilterComposer extends Composer<_$AppDatabase, $RoomsTable> {
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get title => $composableBuilder(
-    column: $table.title,
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -3263,8 +3263,8 @@ class $$RoomsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get title => $composableBuilder(
-    column: $table.title,
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -3286,8 +3286,8 @@ class $$RoomsTableAnnotationComposer
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<String> get title =>
-      $composableBuilder(column: $table.title, builder: (column) => column);
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
 
   GeneratedColumn<String> get building =>
       $composableBuilder(column: $table.building, builder: (column) => column);
@@ -3347,19 +3347,16 @@ class $$RoomsTableTableManager
           updateCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
-                Value<String> title = const Value.absent(),
+                Value<String> name = const Value.absent(),
                 Value<String> building = const Value.absent(),
-              }) => RoomsCompanion(id: id, title: title, building: building),
+              }) => RoomsCompanion(id: id, name: name, building: building),
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
-                required String title,
+                required String name,
                 required String building,
-              }) => RoomsCompanion.insert(
-                id: id,
-                title: title,
-                building: building,
-              ),
+              }) =>
+                  RoomsCompanion.insert(id: id, name: name, building: building),
           withReferenceMapper:
               (p0) =>
                   p0
