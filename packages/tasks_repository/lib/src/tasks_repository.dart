@@ -8,11 +8,26 @@ class TasksRepository {
 
   final LocalDBApi _localDBApi;
 
-  late final _tasksStreamController = BehaviorSubject<List<Task>>.seeded(
+  late final _tasksStreamController = BehaviorSubject<List<SuperTask>>.seeded(
     const [],
   );
 
-  Stream<List<Task>> get tasks => _tasksStreamController.asBroadcastStream();
+  late final _tasksSubscription = _localDBApi.loadTasks().listen((tasks) {
+    final result = <SuperTask>[];
 
-  Future<dynamic> dispose() => _tasksStreamController.close();
+    final supertasks = tasks.where((task) => task.supertaskID == null);
+    final subtasks = tasks.where((task) => task.supertaskID != null);
+
+    result.addAll(supertasks.map((e) => SuperTask.fromDBModel(e, subtasks)));
+
+    _tasksStreamController.add(result);
+  });
+
+  Stream<List<SuperTask>> get tasks =>
+      _tasksStreamController.asBroadcastStream();
+
+  Future<dynamic> dispose() async {
+    await _tasksSubscription.cancel();
+    return _tasksStreamController.close();
+  }
 }
