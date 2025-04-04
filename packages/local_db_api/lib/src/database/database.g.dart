@@ -30,19 +30,19 @@ class $SubjectsTable extends Subjects with TableInfo<$SubjectsTable, Subject> {
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _shortNameMeta = const VerificationMeta(
-    'shortName',
+  static const VerificationMeta _shortTitleMeta = const VerificationMeta(
+    'shortTitle',
   );
   @override
-  late final GeneratedColumn<String> shortName = GeneratedColumn<String>(
-    'short_name',
+  late final GeneratedColumn<String> shortTitle = GeneratedColumn<String>(
+    'short_title',
     aliasedName,
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
   @override
-  List<GeneratedColumn> get $columns => [id, title, shortName];
+  List<GeneratedColumn> get $columns => [id, title, shortTitle];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -66,13 +66,13 @@ class $SubjectsTable extends Subjects with TableInfo<$SubjectsTable, Subject> {
     } else if (isInserting) {
       context.missing(_titleMeta);
     }
-    if (data.containsKey('short_name')) {
+    if (data.containsKey('short_title')) {
       context.handle(
-        _shortNameMeta,
-        shortName.isAcceptableOrUnknown(data['short_name']!, _shortNameMeta),
+        _shortTitleMeta,
+        shortTitle.isAcceptableOrUnknown(data['short_title']!, _shortTitleMeta),
       );
     } else if (isInserting) {
-      context.missing(_shortNameMeta);
+      context.missing(_shortTitleMeta);
     }
     return context;
   }
@@ -93,10 +93,10 @@ class $SubjectsTable extends Subjects with TableInfo<$SubjectsTable, Subject> {
             DriftSqlType.string,
             data['${effectivePrefix}title'],
           )!,
-      shortName:
+      shortTitle:
           attachedDatabase.typeMapping.read(
             DriftSqlType.string,
-            data['${effectivePrefix}short_name'],
+            data['${effectivePrefix}short_title'],
           )!,
     );
   }
@@ -110,18 +110,18 @@ class $SubjectsTable extends Subjects with TableInfo<$SubjectsTable, Subject> {
 class Subject extends DataClass implements Insertable<Subject> {
   final int id;
   final String title;
-  final String shortName;
+  final String shortTitle;
   const Subject({
     required this.id,
     required this.title,
-    required this.shortName,
+    required this.shortTitle,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['title'] = Variable<String>(title);
-    map['short_name'] = Variable<String>(shortName);
+    map['short_title'] = Variable<String>(shortTitle);
     return map;
   }
 
@@ -129,7 +129,7 @@ class Subject extends DataClass implements Insertable<Subject> {
     return SubjectsCompanion(
       id: Value(id),
       title: Value(title),
-      shortName: Value(shortName),
+      shortTitle: Value(shortTitle),
     );
   }
 
@@ -141,7 +141,7 @@ class Subject extends DataClass implements Insertable<Subject> {
     return Subject(
       id: serializer.fromJson<int>(json['id']),
       title: serializer.fromJson<String>(json['title']),
-      shortName: serializer.fromJson<String>(json['shortName']),
+      shortTitle: serializer.fromJson<String>(json['shortTitle']),
     );
   }
   @override
@@ -150,20 +150,21 @@ class Subject extends DataClass implements Insertable<Subject> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'title': serializer.toJson<String>(title),
-      'shortName': serializer.toJson<String>(shortName),
+      'shortTitle': serializer.toJson<String>(shortTitle),
     };
   }
 
-  Subject copyWith({int? id, String? title, String? shortName}) => Subject(
+  Subject copyWith({int? id, String? title, String? shortTitle}) => Subject(
     id: id ?? this.id,
     title: title ?? this.title,
-    shortName: shortName ?? this.shortName,
+    shortTitle: shortTitle ?? this.shortTitle,
   );
   Subject copyWithCompanion(SubjectsCompanion data) {
     return Subject(
       id: data.id.present ? data.id.value : this.id,
       title: data.title.present ? data.title.value : this.title,
-      shortName: data.shortName.present ? data.shortName.value : this.shortName,
+      shortTitle:
+          data.shortTitle.present ? data.shortTitle.value : this.shortTitle,
     );
   }
 
@@ -172,58 +173,58 @@ class Subject extends DataClass implements Insertable<Subject> {
     return (StringBuffer('Subject(')
           ..write('id: $id, ')
           ..write('title: $title, ')
-          ..write('shortName: $shortName')
+          ..write('shortTitle: $shortTitle')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, title, shortName);
+  int get hashCode => Object.hash(id, title, shortTitle);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Subject &&
           other.id == this.id &&
           other.title == this.title &&
-          other.shortName == this.shortName);
+          other.shortTitle == this.shortTitle);
 }
 
 class SubjectsCompanion extends UpdateCompanion<Subject> {
   final Value<int> id;
   final Value<String> title;
-  final Value<String> shortName;
+  final Value<String> shortTitle;
   const SubjectsCompanion({
     this.id = const Value.absent(),
     this.title = const Value.absent(),
-    this.shortName = const Value.absent(),
+    this.shortTitle = const Value.absent(),
   });
   SubjectsCompanion.insert({
     this.id = const Value.absent(),
     required String title,
-    required String shortName,
+    required String shortTitle,
   }) : title = Value(title),
-       shortName = Value(shortName);
+       shortTitle = Value(shortTitle);
   static Insertable<Subject> custom({
     Expression<int>? id,
     Expression<String>? title,
-    Expression<String>? shortName,
+    Expression<String>? shortTitle,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (title != null) 'title': title,
-      if (shortName != null) 'short_name': shortName,
+      if (shortTitle != null) 'short_title': shortTitle,
     });
   }
 
   SubjectsCompanion copyWith({
     Value<int>? id,
     Value<String>? title,
-    Value<String>? shortName,
+    Value<String>? shortTitle,
   }) {
     return SubjectsCompanion(
       id: id ?? this.id,
       title: title ?? this.title,
-      shortName: shortName ?? this.shortName,
+      shortTitle: shortTitle ?? this.shortTitle,
     );
   }
 
@@ -236,8 +237,8 @@ class SubjectsCompanion extends UpdateCompanion<Subject> {
     if (title.present) {
       map['title'] = Variable<String>(title.value);
     }
-    if (shortName.present) {
-      map['short_name'] = Variable<String>(shortName.value);
+    if (shortTitle.present) {
+      map['short_title'] = Variable<String>(shortTitle.value);
     }
     return map;
   }
@@ -247,7 +248,7 @@ class SubjectsCompanion extends UpdateCompanion<Subject> {
     return (StringBuffer('SubjectsCompanion(')
           ..write('id: $id, ')
           ..write('title: $title, ')
-          ..write('shortName: $shortName')
+          ..write('shortTitle: $shortTitle')
           ..write(')'))
         .toString();
   }
@@ -2652,13 +2653,13 @@ typedef $$SubjectsTableCreateCompanionBuilder =
     SubjectsCompanion Function({
       Value<int> id,
       required String title,
-      required String shortName,
+      required String shortTitle,
     });
 typedef $$SubjectsTableUpdateCompanionBuilder =
     SubjectsCompanion Function({
       Value<int> id,
       Value<String> title,
-      Value<String> shortName,
+      Value<String> shortTitle,
     });
 
 final class $$SubjectsTableReferences
@@ -2704,8 +2705,8 @@ class $$SubjectsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get shortName => $composableBuilder(
-    column: $table.shortName,
+  ColumnFilters<String> get shortTitle => $composableBuilder(
+    column: $table.shortTitle,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2754,8 +2755,8 @@ class $$SubjectsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get shortName => $composableBuilder(
-    column: $table.shortName,
+  ColumnOrderings<String> get shortTitle => $composableBuilder(
+    column: $table.shortTitle,
     builder: (column) => ColumnOrderings(column),
   );
 }
@@ -2775,8 +2776,10 @@ class $$SubjectsTableAnnotationComposer
   GeneratedColumn<String> get title =>
       $composableBuilder(column: $table.title, builder: (column) => column);
 
-  GeneratedColumn<String> get shortName =>
-      $composableBuilder(column: $table.shortName, builder: (column) => column);
+  GeneratedColumn<String> get shortTitle => $composableBuilder(
+    column: $table.shortTitle,
+    builder: (column) => column,
+  );
 
   Expression<T> eventsRefs<T extends Object>(
     Expression<T> Function($$EventsTableAnnotationComposer a) f,
@@ -2834,18 +2837,21 @@ class $$SubjectsTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 Value<String> title = const Value.absent(),
-                Value<String> shortName = const Value.absent(),
-              }) =>
-                  SubjectsCompanion(id: id, title: title, shortName: shortName),
+                Value<String> shortTitle = const Value.absent(),
+              }) => SubjectsCompanion(
+                id: id,
+                title: title,
+                shortTitle: shortTitle,
+              ),
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
                 required String title,
-                required String shortName,
+                required String shortTitle,
               }) => SubjectsCompanion.insert(
                 id: id,
                 title: title,
-                shortName: shortName,
+                shortTitle: shortTitle,
               ),
           withReferenceMapper:
               (p0) =>
