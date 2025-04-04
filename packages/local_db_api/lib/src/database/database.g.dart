@@ -21,10 +21,10 @@ class $SubjectsTable extends Subjects with TableInfo<$SubjectsTable, Subject> {
       'PRIMARY KEY AUTOINCREMENT',
     ),
   );
-  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
   @override
-  late final GeneratedColumn<String> name = GeneratedColumn<String>(
-    'name',
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+    'title',
     aliasedName,
     false,
     type: DriftSqlType.string,
@@ -42,7 +42,7 @@ class $SubjectsTable extends Subjects with TableInfo<$SubjectsTable, Subject> {
     requiredDuringInsert: true,
   );
   @override
-  List<GeneratedColumn> get $columns => [id, name, shortName];
+  List<GeneratedColumn> get $columns => [id, title, shortName];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -58,13 +58,13 @@ class $SubjectsTable extends Subjects with TableInfo<$SubjectsTable, Subject> {
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('name')) {
+    if (data.containsKey('title')) {
       context.handle(
-        _nameMeta,
-        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
       );
     } else if (isInserting) {
-      context.missing(_nameMeta);
+      context.missing(_titleMeta);
     }
     if (data.containsKey('short_name')) {
       context.handle(
@@ -88,10 +88,10 @@ class $SubjectsTable extends Subjects with TableInfo<$SubjectsTable, Subject> {
             DriftSqlType.int,
             data['${effectivePrefix}id'],
           )!,
-      name:
+      title:
           attachedDatabase.typeMapping.read(
             DriftSqlType.string,
-            data['${effectivePrefix}name'],
+            data['${effectivePrefix}title'],
           )!,
       shortName:
           attachedDatabase.typeMapping.read(
@@ -109,18 +109,18 @@ class $SubjectsTable extends Subjects with TableInfo<$SubjectsTable, Subject> {
 
 class Subject extends DataClass implements Insertable<Subject> {
   final int id;
-  final String name;
+  final String title;
   final String shortName;
   const Subject({
     required this.id,
-    required this.name,
+    required this.title,
     required this.shortName,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['name'] = Variable<String>(name);
+    map['title'] = Variable<String>(title);
     map['short_name'] = Variable<String>(shortName);
     return map;
   }
@@ -128,7 +128,7 @@ class Subject extends DataClass implements Insertable<Subject> {
   SubjectsCompanion toCompanion(bool nullToAbsent) {
     return SubjectsCompanion(
       id: Value(id),
-      name: Value(name),
+      title: Value(title),
       shortName: Value(shortName),
     );
   }
@@ -140,7 +140,7 @@ class Subject extends DataClass implements Insertable<Subject> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Subject(
       id: serializer.fromJson<int>(json['id']),
-      name: serializer.fromJson<String>(json['name']),
+      title: serializer.fromJson<String>(json['title']),
       shortName: serializer.fromJson<String>(json['shortName']),
     );
   }
@@ -149,20 +149,20 @@ class Subject extends DataClass implements Insertable<Subject> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'name': serializer.toJson<String>(name),
+      'title': serializer.toJson<String>(title),
       'shortName': serializer.toJson<String>(shortName),
     };
   }
 
-  Subject copyWith({int? id, String? name, String? shortName}) => Subject(
+  Subject copyWith({int? id, String? title, String? shortName}) => Subject(
     id: id ?? this.id,
-    name: name ?? this.name,
+    title: title ?? this.title,
     shortName: shortName ?? this.shortName,
   );
   Subject copyWithCompanion(SubjectsCompanion data) {
     return Subject(
       id: data.id.present ? data.id.value : this.id,
-      name: data.name.present ? data.name.value : this.name,
+      title: data.title.present ? data.title.value : this.title,
       shortName: data.shortName.present ? data.shortName.value : this.shortName,
     );
   }
@@ -171,58 +171,58 @@ class Subject extends DataClass implements Insertable<Subject> {
   String toString() {
     return (StringBuffer('Subject(')
           ..write('id: $id, ')
-          ..write('name: $name, ')
+          ..write('title: $title, ')
           ..write('shortName: $shortName')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, shortName);
+  int get hashCode => Object.hash(id, title, shortName);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Subject &&
           other.id == this.id &&
-          other.name == this.name &&
+          other.title == this.title &&
           other.shortName == this.shortName);
 }
 
 class SubjectsCompanion extends UpdateCompanion<Subject> {
   final Value<int> id;
-  final Value<String> name;
+  final Value<String> title;
   final Value<String> shortName;
   const SubjectsCompanion({
     this.id = const Value.absent(),
-    this.name = const Value.absent(),
+    this.title = const Value.absent(),
     this.shortName = const Value.absent(),
   });
   SubjectsCompanion.insert({
     this.id = const Value.absent(),
-    required String name,
+    required String title,
     required String shortName,
-  }) : name = Value(name),
+  }) : title = Value(title),
        shortName = Value(shortName);
   static Insertable<Subject> custom({
     Expression<int>? id,
-    Expression<String>? name,
+    Expression<String>? title,
     Expression<String>? shortName,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (name != null) 'name': name,
+      if (title != null) 'title': title,
       if (shortName != null) 'short_name': shortName,
     });
   }
 
   SubjectsCompanion copyWith({
     Value<int>? id,
-    Value<String>? name,
+    Value<String>? title,
     Value<String>? shortName,
   }) {
     return SubjectsCompanion(
       id: id ?? this.id,
-      name: name ?? this.name,
+      title: title ?? this.title,
       shortName: shortName ?? this.shortName,
     );
   }
@@ -233,8 +233,8 @@ class SubjectsCompanion extends UpdateCompanion<Subject> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
-    if (name.present) {
-      map['name'] = Variable<String>(name.value);
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
     }
     if (shortName.present) {
       map['short_name'] = Variable<String>(shortName.value);
@@ -246,7 +246,7 @@ class SubjectsCompanion extends UpdateCompanion<Subject> {
   String toString() {
     return (StringBuffer('SubjectsCompanion(')
           ..write('id: $id, ')
-          ..write('name: $name, ')
+          ..write('title: $title, ')
           ..write('shortName: $shortName')
           ..write(')'))
         .toString();
@@ -522,10 +522,10 @@ class $RoomsTable extends Rooms with TableInfo<$RoomsTable, Room> {
       'PRIMARY KEY AUTOINCREMENT',
     ),
   );
-  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
   @override
-  late final GeneratedColumn<String> name = GeneratedColumn<String>(
-    'name',
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+    'title',
     aliasedName,
     false,
     type: DriftSqlType.string,
@@ -543,7 +543,7 @@ class $RoomsTable extends Rooms with TableInfo<$RoomsTable, Room> {
     requiredDuringInsert: true,
   );
   @override
-  List<GeneratedColumn> get $columns => [id, name, building];
+  List<GeneratedColumn> get $columns => [id, title, building];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -559,13 +559,13 @@ class $RoomsTable extends Rooms with TableInfo<$RoomsTable, Room> {
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('name')) {
+    if (data.containsKey('title')) {
       context.handle(
-        _nameMeta,
-        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
       );
     } else if (isInserting) {
-      context.missing(_nameMeta);
+      context.missing(_titleMeta);
     }
     if (data.containsKey('building')) {
       context.handle(
@@ -589,10 +589,10 @@ class $RoomsTable extends Rooms with TableInfo<$RoomsTable, Room> {
             DriftSqlType.int,
             data['${effectivePrefix}id'],
           )!,
-      name:
+      title:
           attachedDatabase.typeMapping.read(
             DriftSqlType.string,
-            data['${effectivePrefix}name'],
+            data['${effectivePrefix}title'],
           )!,
       building:
           attachedDatabase.typeMapping.read(
@@ -610,14 +610,14 @@ class $RoomsTable extends Rooms with TableInfo<$RoomsTable, Room> {
 
 class Room extends DataClass implements Insertable<Room> {
   final int id;
-  final String name;
+  final String title;
   final String building;
-  const Room({required this.id, required this.name, required this.building});
+  const Room({required this.id, required this.title, required this.building});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['name'] = Variable<String>(name);
+    map['title'] = Variable<String>(title);
     map['building'] = Variable<String>(building);
     return map;
   }
@@ -625,7 +625,7 @@ class Room extends DataClass implements Insertable<Room> {
   RoomsCompanion toCompanion(bool nullToAbsent) {
     return RoomsCompanion(
       id: Value(id),
-      name: Value(name),
+      title: Value(title),
       building: Value(building),
     );
   }
@@ -637,7 +637,7 @@ class Room extends DataClass implements Insertable<Room> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Room(
       id: serializer.fromJson<int>(json['id']),
-      name: serializer.fromJson<String>(json['name']),
+      title: serializer.fromJson<String>(json['title']),
       building: serializer.fromJson<String>(json['building']),
     );
   }
@@ -646,20 +646,20 @@ class Room extends DataClass implements Insertable<Room> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'name': serializer.toJson<String>(name),
+      'title': serializer.toJson<String>(title),
       'building': serializer.toJson<String>(building),
     };
   }
 
-  Room copyWith({int? id, String? name, String? building}) => Room(
+  Room copyWith({int? id, String? title, String? building}) => Room(
     id: id ?? this.id,
-    name: name ?? this.name,
+    title: title ?? this.title,
     building: building ?? this.building,
   );
   Room copyWithCompanion(RoomsCompanion data) {
     return Room(
       id: data.id.present ? data.id.value : this.id,
-      name: data.name.present ? data.name.value : this.name,
+      title: data.title.present ? data.title.value : this.title,
       building: data.building.present ? data.building.value : this.building,
     );
   }
@@ -668,58 +668,58 @@ class Room extends DataClass implements Insertable<Room> {
   String toString() {
     return (StringBuffer('Room(')
           ..write('id: $id, ')
-          ..write('name: $name, ')
+          ..write('title: $title, ')
           ..write('building: $building')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, building);
+  int get hashCode => Object.hash(id, title, building);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Room &&
           other.id == this.id &&
-          other.name == this.name &&
+          other.title == this.title &&
           other.building == this.building);
 }
 
 class RoomsCompanion extends UpdateCompanion<Room> {
   final Value<int> id;
-  final Value<String> name;
+  final Value<String> title;
   final Value<String> building;
   const RoomsCompanion({
     this.id = const Value.absent(),
-    this.name = const Value.absent(),
+    this.title = const Value.absent(),
     this.building = const Value.absent(),
   });
   RoomsCompanion.insert({
     this.id = const Value.absent(),
-    required String name,
+    required String title,
     required String building,
-  }) : name = Value(name),
+  }) : title = Value(title),
        building = Value(building);
   static Insertable<Room> custom({
     Expression<int>? id,
-    Expression<String>? name,
+    Expression<String>? title,
     Expression<String>? building,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (name != null) 'name': name,
+      if (title != null) 'title': title,
       if (building != null) 'building': building,
     });
   }
 
   RoomsCompanion copyWith({
     Value<int>? id,
-    Value<String>? name,
+    Value<String>? title,
     Value<String>? building,
   }) {
     return RoomsCompanion(
       id: id ?? this.id,
-      name: name ?? this.name,
+      title: title ?? this.title,
       building: building ?? this.building,
     );
   }
@@ -730,8 +730,8 @@ class RoomsCompanion extends UpdateCompanion<Room> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
-    if (name.present) {
-      map['name'] = Variable<String>(name.value);
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
     }
     if (building.present) {
       map['building'] = Variable<String>(building.value);
@@ -743,7 +743,7 @@ class RoomsCompanion extends UpdateCompanion<Room> {
   String toString() {
     return (StringBuffer('RoomsCompanion(')
           ..write('id: $id, ')
-          ..write('name: $name, ')
+          ..write('title: $title, ')
           ..write('building: $building')
           ..write(')'))
         .toString();
@@ -1291,10 +1291,10 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
       'PRIMARY KEY AUTOINCREMENT',
     ),
   );
-  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
   @override
-  late final GeneratedColumn<String> name = GeneratedColumn<String>(
-    'name',
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+    'title',
     aliasedName,
     false,
     type: DriftSqlType.string,
@@ -1327,11 +1327,11 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
       'CHECK ("is_custom" IN (0, 1))',
     ),
   );
-  static const VerificationMeta _supertaskIdMeta = const VerificationMeta(
-    'supertaskId',
+  static const VerificationMeta _supertaskIDMeta = const VerificationMeta(
+    'supertaskID',
   );
   @override
-  late final GeneratedColumn<int> supertaskId = GeneratedColumn<int>(
+  late final GeneratedColumn<int> supertaskID = GeneratedColumn<int>(
     'supertask_id',
     aliasedName,
     true,
@@ -1361,10 +1361,10 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
   @override
   List<GeneratedColumn> get $columns => [
     id,
-    name,
+    title,
     isDone,
     isCustom,
-    supertaskId,
+    supertaskID,
     deadline,
     type,
   ];
@@ -1383,13 +1383,13 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('name')) {
+    if (data.containsKey('title')) {
       context.handle(
-        _nameMeta,
-        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
       );
     } else if (isInserting) {
-      context.missing(_nameMeta);
+      context.missing(_titleMeta);
     }
     if (data.containsKey('is_done')) {
       context.handle(
@@ -1407,10 +1407,10 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
     }
     if (data.containsKey('supertask_id')) {
       context.handle(
-        _supertaskIdMeta,
-        supertaskId.isAcceptableOrUnknown(
+        _supertaskIDMeta,
+        supertaskID.isAcceptableOrUnknown(
           data['supertask_id']!,
-          _supertaskIdMeta,
+          _supertaskIDMeta,
         ),
       );
     }
@@ -1434,10 +1434,10 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
             DriftSqlType.int,
             data['${effectivePrefix}id'],
           )!,
-      name:
+      title:
           attachedDatabase.typeMapping.read(
             DriftSqlType.string,
-            data['${effectivePrefix}name'],
+            data['${effectivePrefix}title'],
           )!,
       isDone:
           attachedDatabase.typeMapping.read(
@@ -1449,7 +1449,7 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
             DriftSqlType.bool,
             data['${effectivePrefix}is_custom'],
           )!,
-      supertaskId: attachedDatabase.typeMapping.read(
+      supertaskID: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}supertask_id'],
       ),
@@ -1479,18 +1479,18 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
 
 class Task extends DataClass implements Insertable<Task> {
   final int id;
-  final String name;
+  final String title;
   final bool isDone;
   final bool isCustom;
-  final int? supertaskId;
+  final int? supertaskID;
   final DateTime? deadline;
   final TaskType? type;
   const Task({
     required this.id,
-    required this.name,
+    required this.title,
     required this.isDone,
     required this.isCustom,
-    this.supertaskId,
+    this.supertaskID,
     this.deadline,
     this.type,
   });
@@ -1498,11 +1498,11 @@ class Task extends DataClass implements Insertable<Task> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['name'] = Variable<String>(name);
+    map['title'] = Variable<String>(title);
     map['is_done'] = Variable<bool>(isDone);
     map['is_custom'] = Variable<bool>(isCustom);
-    if (!nullToAbsent || supertaskId != null) {
-      map['supertask_id'] = Variable<int>(supertaskId);
+    if (!nullToAbsent || supertaskID != null) {
+      map['supertask_id'] = Variable<int>(supertaskID);
     }
     if (!nullToAbsent || deadline != null) {
       map['deadline'] = Variable<DateTime>(deadline);
@@ -1516,13 +1516,13 @@ class Task extends DataClass implements Insertable<Task> {
   TasksCompanion toCompanion(bool nullToAbsent) {
     return TasksCompanion(
       id: Value(id),
-      name: Value(name),
+      title: Value(title),
       isDone: Value(isDone),
       isCustom: Value(isCustom),
-      supertaskId:
-          supertaskId == null && nullToAbsent
+      supertaskID:
+          supertaskID == null && nullToAbsent
               ? const Value.absent()
-              : Value(supertaskId),
+              : Value(supertaskID),
       deadline:
           deadline == null && nullToAbsent
               ? const Value.absent()
@@ -1538,10 +1538,10 @@ class Task extends DataClass implements Insertable<Task> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Task(
       id: serializer.fromJson<int>(json['id']),
-      name: serializer.fromJson<String>(json['name']),
+      title: serializer.fromJson<String>(json['title']),
       isDone: serializer.fromJson<bool>(json['isDone']),
       isCustom: serializer.fromJson<bool>(json['isCustom']),
-      supertaskId: serializer.fromJson<int?>(json['supertaskId']),
+      supertaskID: serializer.fromJson<int?>(json['supertaskID']),
       deadline: serializer.fromJson<DateTime?>(json['deadline']),
       type: $TasksTable.$convertertypen.fromJson(
         serializer.fromJson<int?>(json['type']),
@@ -1553,10 +1553,10 @@ class Task extends DataClass implements Insertable<Task> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'name': serializer.toJson<String>(name),
+      'title': serializer.toJson<String>(title),
       'isDone': serializer.toJson<bool>(isDone),
       'isCustom': serializer.toJson<bool>(isCustom),
-      'supertaskId': serializer.toJson<int?>(supertaskId),
+      'supertaskID': serializer.toJson<int?>(supertaskID),
       'deadline': serializer.toJson<DateTime?>(deadline),
       'type': serializer.toJson<int?>($TasksTable.$convertertypen.toJson(type)),
     };
@@ -1564,29 +1564,29 @@ class Task extends DataClass implements Insertable<Task> {
 
   Task copyWith({
     int? id,
-    String? name,
+    String? title,
     bool? isDone,
     bool? isCustom,
-    Value<int?> supertaskId = const Value.absent(),
+    Value<int?> supertaskID = const Value.absent(),
     Value<DateTime?> deadline = const Value.absent(),
     Value<TaskType?> type = const Value.absent(),
   }) => Task(
     id: id ?? this.id,
-    name: name ?? this.name,
+    title: title ?? this.title,
     isDone: isDone ?? this.isDone,
     isCustom: isCustom ?? this.isCustom,
-    supertaskId: supertaskId.present ? supertaskId.value : this.supertaskId,
+    supertaskID: supertaskID.present ? supertaskID.value : this.supertaskID,
     deadline: deadline.present ? deadline.value : this.deadline,
     type: type.present ? type.value : this.type,
   );
   Task copyWithCompanion(TasksCompanion data) {
     return Task(
       id: data.id.present ? data.id.value : this.id,
-      name: data.name.present ? data.name.value : this.name,
+      title: data.title.present ? data.title.value : this.title,
       isDone: data.isDone.present ? data.isDone.value : this.isDone,
       isCustom: data.isCustom.present ? data.isCustom.value : this.isCustom,
-      supertaskId:
-          data.supertaskId.present ? data.supertaskId.value : this.supertaskId,
+      supertaskID:
+          data.supertaskID.present ? data.supertaskID.value : this.supertaskID,
       deadline: data.deadline.present ? data.deadline.value : this.deadline,
       type: data.type.present ? data.type.value : this.type,
     );
@@ -1596,10 +1596,10 @@ class Task extends DataClass implements Insertable<Task> {
   String toString() {
     return (StringBuffer('Task(')
           ..write('id: $id, ')
-          ..write('name: $name, ')
+          ..write('title: $title, ')
           ..write('isDone: $isDone, ')
           ..write('isCustom: $isCustom, ')
-          ..write('supertaskId: $supertaskId, ')
+          ..write('supertaskID: $supertaskID, ')
           ..write('deadline: $deadline, ')
           ..write('type: $type')
           ..write(')'))
@@ -1608,62 +1608,62 @@ class Task extends DataClass implements Insertable<Task> {
 
   @override
   int get hashCode =>
-      Object.hash(id, name, isDone, isCustom, supertaskId, deadline, type);
+      Object.hash(id, title, isDone, isCustom, supertaskID, deadline, type);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Task &&
           other.id == this.id &&
-          other.name == this.name &&
+          other.title == this.title &&
           other.isDone == this.isDone &&
           other.isCustom == this.isCustom &&
-          other.supertaskId == this.supertaskId &&
+          other.supertaskID == this.supertaskID &&
           other.deadline == this.deadline &&
           other.type == this.type);
 }
 
 class TasksCompanion extends UpdateCompanion<Task> {
   final Value<int> id;
-  final Value<String> name;
+  final Value<String> title;
   final Value<bool> isDone;
   final Value<bool> isCustom;
-  final Value<int?> supertaskId;
+  final Value<int?> supertaskID;
   final Value<DateTime?> deadline;
   final Value<TaskType?> type;
   const TasksCompanion({
     this.id = const Value.absent(),
-    this.name = const Value.absent(),
+    this.title = const Value.absent(),
     this.isDone = const Value.absent(),
     this.isCustom = const Value.absent(),
-    this.supertaskId = const Value.absent(),
+    this.supertaskID = const Value.absent(),
     this.deadline = const Value.absent(),
     this.type = const Value.absent(),
   });
   TasksCompanion.insert({
     this.id = const Value.absent(),
-    required String name,
+    required String title,
     this.isDone = const Value.absent(),
     required bool isCustom,
-    this.supertaskId = const Value.absent(),
+    this.supertaskID = const Value.absent(),
     this.deadline = const Value.absent(),
     this.type = const Value.absent(),
-  }) : name = Value(name),
+  }) : title = Value(title),
        isCustom = Value(isCustom);
   static Insertable<Task> custom({
     Expression<int>? id,
-    Expression<String>? name,
+    Expression<String>? title,
     Expression<bool>? isDone,
     Expression<bool>? isCustom,
-    Expression<int>? supertaskId,
+    Expression<int>? supertaskID,
     Expression<DateTime>? deadline,
     Expression<int>? type,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (name != null) 'name': name,
+      if (title != null) 'title': title,
       if (isDone != null) 'is_done': isDone,
       if (isCustom != null) 'is_custom': isCustom,
-      if (supertaskId != null) 'supertask_id': supertaskId,
+      if (supertaskID != null) 'supertask_id': supertaskID,
       if (deadline != null) 'deadline': deadline,
       if (type != null) 'type': type,
     });
@@ -1671,19 +1671,19 @@ class TasksCompanion extends UpdateCompanion<Task> {
 
   TasksCompanion copyWith({
     Value<int>? id,
-    Value<String>? name,
+    Value<String>? title,
     Value<bool>? isDone,
     Value<bool>? isCustom,
-    Value<int?>? supertaskId,
+    Value<int?>? supertaskID,
     Value<DateTime?>? deadline,
     Value<TaskType?>? type,
   }) {
     return TasksCompanion(
       id: id ?? this.id,
-      name: name ?? this.name,
+      title: title ?? this.title,
       isDone: isDone ?? this.isDone,
       isCustom: isCustom ?? this.isCustom,
-      supertaskId: supertaskId ?? this.supertaskId,
+      supertaskID: supertaskID ?? this.supertaskID,
       deadline: deadline ?? this.deadline,
       type: type ?? this.type,
     );
@@ -1695,8 +1695,8 @@ class TasksCompanion extends UpdateCompanion<Task> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
-    if (name.present) {
-      map['name'] = Variable<String>(name.value);
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
     }
     if (isDone.present) {
       map['is_done'] = Variable<bool>(isDone.value);
@@ -1704,8 +1704,8 @@ class TasksCompanion extends UpdateCompanion<Task> {
     if (isCustom.present) {
       map['is_custom'] = Variable<bool>(isCustom.value);
     }
-    if (supertaskId.present) {
-      map['supertask_id'] = Variable<int>(supertaskId.value);
+    if (supertaskID.present) {
+      map['supertask_id'] = Variable<int>(supertaskID.value);
     }
     if (deadline.present) {
       map['deadline'] = Variable<DateTime>(deadline.value);
@@ -1722,10 +1722,10 @@ class TasksCompanion extends UpdateCompanion<Task> {
   String toString() {
     return (StringBuffer('TasksCompanion(')
           ..write('id: $id, ')
-          ..write('name: $name, ')
+          ..write('title: $title, ')
           ..write('isDone: $isDone, ')
           ..write('isCustom: $isCustom, ')
-          ..write('supertaskId: $supertaskId, ')
+          ..write('supertaskID: $supertaskID, ')
           ..write('deadline: $deadline, ')
           ..write('type: $type')
           ..write(')'))
@@ -2651,13 +2651,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
 typedef $$SubjectsTableCreateCompanionBuilder =
     SubjectsCompanion Function({
       Value<int> id,
-      required String name,
+      required String title,
       required String shortName,
     });
 typedef $$SubjectsTableUpdateCompanionBuilder =
     SubjectsCompanion Function({
       Value<int> id,
-      Value<String> name,
+      Value<String> title,
       Value<String> shortName,
     });
 
@@ -2699,8 +2699,8 @@ class $$SubjectsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get name => $composableBuilder(
-    column: $table.name,
+  ColumnFilters<String> get title => $composableBuilder(
+    column: $table.title,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2749,8 +2749,8 @@ class $$SubjectsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get name => $composableBuilder(
-    column: $table.name,
+  ColumnOrderings<String> get title => $composableBuilder(
+    column: $table.title,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -2772,8 +2772,8 @@ class $$SubjectsTableAnnotationComposer
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<String> get name =>
-      $composableBuilder(column: $table.name, builder: (column) => column);
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
 
   GeneratedColumn<String> get shortName =>
       $composableBuilder(column: $table.shortName, builder: (column) => column);
@@ -2833,17 +2833,18 @@ class $$SubjectsTableTableManager
           updateCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
-                Value<String> name = const Value.absent(),
+                Value<String> title = const Value.absent(),
                 Value<String> shortName = const Value.absent(),
-              }) => SubjectsCompanion(id: id, name: name, shortName: shortName),
+              }) =>
+                  SubjectsCompanion(id: id, title: title, shortName: shortName),
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
-                required String name,
+                required String title,
                 required String shortName,
               }) => SubjectsCompanion.insert(
                 id: id,
-                name: name,
+                title: title,
                 shortName: shortName,
               ),
           withReferenceMapper:
@@ -3165,13 +3166,13 @@ typedef $$EventTypesTableProcessedTableManager =
 typedef $$RoomsTableCreateCompanionBuilder =
     RoomsCompanion Function({
       Value<int> id,
-      required String name,
+      required String title,
       required String building,
     });
 typedef $$RoomsTableUpdateCompanionBuilder =
     RoomsCompanion Function({
       Value<int> id,
-      Value<String> name,
+      Value<String> title,
       Value<String> building,
     });
 
@@ -3212,8 +3213,8 @@ class $$RoomsTableFilterComposer extends Composer<_$AppDatabase, $RoomsTable> {
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get name => $composableBuilder(
-    column: $table.name,
+  ColumnFilters<String> get title => $composableBuilder(
+    column: $table.title,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -3262,8 +3263,8 @@ class $$RoomsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get name => $composableBuilder(
-    column: $table.name,
+  ColumnOrderings<String> get title => $composableBuilder(
+    column: $table.title,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -3285,8 +3286,8 @@ class $$RoomsTableAnnotationComposer
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<String> get name =>
-      $composableBuilder(column: $table.name, builder: (column) => column);
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
 
   GeneratedColumn<String> get building =>
       $composableBuilder(column: $table.building, builder: (column) => column);
@@ -3346,16 +3347,19 @@ class $$RoomsTableTableManager
           updateCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
-                Value<String> name = const Value.absent(),
+                Value<String> title = const Value.absent(),
                 Value<String> building = const Value.absent(),
-              }) => RoomsCompanion(id: id, name: name, building: building),
+              }) => RoomsCompanion(id: id, title: title, building: building),
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
-                required String name,
+                required String title,
                 required String building,
-              }) =>
-                  RoomsCompanion.insert(id: id, name: name, building: building),
+              }) => RoomsCompanion.insert(
+                id: id,
+                title: title,
+                building: building,
+              ),
           withReferenceMapper:
               (p0) =>
                   p0
@@ -4149,20 +4153,20 @@ typedef $$EventsTableProcessedTableManager =
 typedef $$TasksTableCreateCompanionBuilder =
     TasksCompanion Function({
       Value<int> id,
-      required String name,
+      required String title,
       Value<bool> isDone,
       required bool isCustom,
-      Value<int?> supertaskId,
+      Value<int?> supertaskID,
       Value<DateTime?> deadline,
       Value<TaskType?> type,
     });
 typedef $$TasksTableUpdateCompanionBuilder =
     TasksCompanion Function({
       Value<int> id,
-      Value<String> name,
+      Value<String> title,
       Value<bool> isDone,
       Value<bool> isCustom,
-      Value<int?> supertaskId,
+      Value<int?> supertaskID,
       Value<DateTime?> deadline,
       Value<TaskType?> type,
     });
@@ -4180,8 +4184,8 @@ class $$TasksTableFilterComposer extends Composer<_$AppDatabase, $TasksTable> {
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get name => $composableBuilder(
-    column: $table.name,
+  ColumnFilters<String> get title => $composableBuilder(
+    column: $table.title,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -4195,8 +4199,8 @@ class $$TasksTableFilterComposer extends Composer<_$AppDatabase, $TasksTable> {
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<int> get supertaskId => $composableBuilder(
-    column: $table.supertaskId,
+  ColumnFilters<int> get supertaskID => $composableBuilder(
+    column: $table.supertaskID,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -4226,8 +4230,8 @@ class $$TasksTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get name => $composableBuilder(
-    column: $table.name,
+  ColumnOrderings<String> get title => $composableBuilder(
+    column: $table.title,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -4241,8 +4245,8 @@ class $$TasksTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get supertaskId => $composableBuilder(
-    column: $table.supertaskId,
+  ColumnOrderings<int> get supertaskID => $composableBuilder(
+    column: $table.supertaskID,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -4269,8 +4273,8 @@ class $$TasksTableAnnotationComposer
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<String> get name =>
-      $composableBuilder(column: $table.name, builder: (column) => column);
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
 
   GeneratedColumn<bool> get isDone =>
       $composableBuilder(column: $table.isDone, builder: (column) => column);
@@ -4278,8 +4282,8 @@ class $$TasksTableAnnotationComposer
   GeneratedColumn<bool> get isCustom =>
       $composableBuilder(column: $table.isCustom, builder: (column) => column);
 
-  GeneratedColumn<int> get supertaskId => $composableBuilder(
-    column: $table.supertaskId,
+  GeneratedColumn<int> get supertaskID => $composableBuilder(
+    column: $table.supertaskID,
     builder: (column) => column,
   );
 
@@ -4319,36 +4323,36 @@ class $$TasksTableTableManager
           updateCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
-                Value<String> name = const Value.absent(),
+                Value<String> title = const Value.absent(),
                 Value<bool> isDone = const Value.absent(),
                 Value<bool> isCustom = const Value.absent(),
-                Value<int?> supertaskId = const Value.absent(),
+                Value<int?> supertaskID = const Value.absent(),
                 Value<DateTime?> deadline = const Value.absent(),
                 Value<TaskType?> type = const Value.absent(),
               }) => TasksCompanion(
                 id: id,
-                name: name,
+                title: title,
                 isDone: isDone,
                 isCustom: isCustom,
-                supertaskId: supertaskId,
+                supertaskID: supertaskID,
                 deadline: deadline,
                 type: type,
               ),
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
-                required String name,
+                required String title,
                 Value<bool> isDone = const Value.absent(),
                 required bool isCustom,
-                Value<int?> supertaskId = const Value.absent(),
+                Value<int?> supertaskID = const Value.absent(),
                 Value<DateTime?> deadline = const Value.absent(),
                 Value<TaskType?> type = const Value.absent(),
               }) => TasksCompanion.insert(
                 id: id,
-                name: name,
+                title: title,
                 isDone: isDone,
                 isCustom: isCustom,
-                supertaskId: supertaskId,
+                supertaskID: supertaskID,
                 deadline: deadline,
                 type: type,
               ),
