@@ -44,6 +44,7 @@ class LocalDBApi {
       _database.select(_database.groups).watch();
   Stream<List<Teacher>> loadTeachers() =>
       _database.select(_database.teachers).watch();
+  Stream<List<Room>> loadRooms() => _database.select(_database.rooms).watch();
 
   Future<void> saveEvent(
     EventsCompanion event,
@@ -121,6 +122,10 @@ class LocalDBApi {
         (batch) =>
             batch.insertAllOnConflictUpdate(_database.teachers, teachers),
       );
+
+  Future<void> saveRooms(Iterable<RoomsCompanion> rooms) => _database.batch(
+    (batch) => batch.insertAllOnConflictUpdate(_database.rooms, rooms),
+  );
 
   Stream<List<Task>> loadTasks() => _database.select(_database.tasks).watch();
 
