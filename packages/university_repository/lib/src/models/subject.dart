@@ -8,33 +8,36 @@ import 'package:local_db_api/local_db_api.dart' as db;
 class Subject extends Equatable {
   const Subject({
     required this.id,
-    required this.name,
-    required this.shortName,
+    required this.title,
+    required this.shortTitle,
     required this.events,
   });
 
   Subject.fromDBModel(db.Subject subject)
     : id = subject.id,
-      name = subject.name,
-      shortName = subject.shortName,
+      title = subject.title,
+      shortTitle = subject.shortTitle,
       events = [];
 
   final int id;
-  final String name;
-  final String shortName;
+  final String title;
+  final String shortTitle;
   final List<int> events;
 
   db.SubjectsCompanion toDBModel() => db.SubjectsCompanion.insert(
     id: Value(id),
-    name: name,
-    shortName: shortName,
+    title: title,
+    shortTitle: shortTitle,
   );
 
   @override
-  List<Object?> get props => [id, name, shortName];
+  List<Object?> get props => [id, title, shortTitle];
 }
 
 extension ApiToDBSubject on api.Subject {
-  db.SubjectsCompanion toDBModel() =>
-      db.SubjectsCompanion.insert(id: Value(id), name: title, shortName: brief);
+  db.SubjectsCompanion toDBModel() => db.SubjectsCompanion.insert(
+    id: Value(id),
+    title: title,
+    shortTitle: brief,
+  );
 }
