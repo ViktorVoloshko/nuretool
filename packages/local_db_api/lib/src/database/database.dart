@@ -14,6 +14,7 @@ part 'database.g.dart';
     Tasks,
     Groups,
     Teachers,
+    Rooms,
     EventsGroups,
     EventsTeachers,
   ],

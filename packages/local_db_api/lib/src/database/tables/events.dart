@@ -12,5 +12,6 @@ class Events extends Table {
   IntColumn get baseType => intEnum<EventBaseType>().nullable()();
   IntColumn get typeID =>
       integer().nullable().named('type_id').references(EventTypes, #id)();
-  TextColumn get room => text().nullable()();
+  IntColumn get roomID =>
+      integer().nullable().named('room_id').references(Rooms, #id)();
 }

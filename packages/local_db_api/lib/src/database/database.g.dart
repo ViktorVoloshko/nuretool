@@ -504,6 +504,252 @@ class EventTypesCompanion extends UpdateCompanion<EventType> {
   }
 }
 
+class $RoomsTable extends Rooms with TableInfo<$RoomsTable, Room> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $RoomsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _buildingMeta = const VerificationMeta(
+    'building',
+  );
+  @override
+  late final GeneratedColumn<String> building = GeneratedColumn<String>(
+    'building',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, name, building];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'rooms';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<Room> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('building')) {
+      context.handle(
+        _buildingMeta,
+        building.isAcceptableOrUnknown(data['building']!, _buildingMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_buildingMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Room map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Room(
+      id:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}id'],
+          )!,
+      name:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}name'],
+          )!,
+      building:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}building'],
+          )!,
+    );
+  }
+
+  @override
+  $RoomsTable createAlias(String alias) {
+    return $RoomsTable(attachedDatabase, alias);
+  }
+}
+
+class Room extends DataClass implements Insertable<Room> {
+  final int id;
+  final String name;
+  final String building;
+  const Room({required this.id, required this.name, required this.building});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['name'] = Variable<String>(name);
+    map['building'] = Variable<String>(building);
+    return map;
+  }
+
+  RoomsCompanion toCompanion(bool nullToAbsent) {
+    return RoomsCompanion(
+      id: Value(id),
+      name: Value(name),
+      building: Value(building),
+    );
+  }
+
+  factory Room.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Room(
+      id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      building: serializer.fromJson<String>(json['building']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String>(name),
+      'building': serializer.toJson<String>(building),
+    };
+  }
+
+  Room copyWith({int? id, String? name, String? building}) => Room(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    building: building ?? this.building,
+  );
+  Room copyWithCompanion(RoomsCompanion data) {
+    return Room(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      building: data.building.present ? data.building.value : this.building,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Room(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('building: $building')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, name, building);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Room &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.building == this.building);
+}
+
+class RoomsCompanion extends UpdateCompanion<Room> {
+  final Value<int> id;
+  final Value<String> name;
+  final Value<String> building;
+  const RoomsCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.building = const Value.absent(),
+  });
+  RoomsCompanion.insert({
+    this.id = const Value.absent(),
+    required String name,
+    required String building,
+  }) : name = Value(name),
+       building = Value(building);
+  static Insertable<Room> custom({
+    Expression<int>? id,
+    Expression<String>? name,
+    Expression<String>? building,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (building != null) 'building': building,
+    });
+  }
+
+  RoomsCompanion copyWith({
+    Value<int>? id,
+    Value<String>? name,
+    Value<String>? building,
+  }) {
+    return RoomsCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      building: building ?? this.building,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (building.present) {
+      map['building'] = Variable<String>(building.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RoomsCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('building: $building')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
   @override
   final GeneratedDatabase attachedDatabase;
@@ -593,14 +839,17 @@ class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
       'REFERENCES event_types (id)',
     ),
   );
-  static const VerificationMeta _roomMeta = const VerificationMeta('room');
+  static const VerificationMeta _roomIDMeta = const VerificationMeta('roomID');
   @override
-  late final GeneratedColumn<String> room = GeneratedColumn<String>(
-    'room',
+  late final GeneratedColumn<int> roomID = GeneratedColumn<int>(
+    'room_id',
     aliasedName,
     true,
-    type: DriftSqlType.string,
+    type: DriftSqlType.int,
     requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES rooms (id)',
+    ),
   );
   @override
   List<GeneratedColumn> get $columns => [
@@ -611,7 +860,7 @@ class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
     isCustom,
     baseType,
     typeID,
-    room,
+    roomID,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -666,10 +915,10 @@ class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
         typeID.isAcceptableOrUnknown(data['type_id']!, _typeIDMeta),
       );
     }
-    if (data.containsKey('room')) {
+    if (data.containsKey('room_id')) {
       context.handle(
-        _roomMeta,
-        room.isAcceptableOrUnknown(data['room']!, _roomMeta),
+        _roomIDMeta,
+        roomID.isAcceptableOrUnknown(data['room_id']!, _roomIDMeta),
       );
     }
     return context;
@@ -716,9 +965,9 @@ class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
         DriftSqlType.int,
         data['${effectivePrefix}type_id'],
       ),
-      room: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}room'],
+      roomID: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}room_id'],
       ),
     );
   }
@@ -742,7 +991,7 @@ class Event extends DataClass implements Insertable<Event> {
   final bool isCustom;
   final EventBaseType? baseType;
   final int? typeID;
-  final String? room;
+  final int? roomID;
   const Event({
     required this.id,
     required this.subjectID,
@@ -751,7 +1000,7 @@ class Event extends DataClass implements Insertable<Event> {
     required this.isCustom,
     this.baseType,
     this.typeID,
-    this.room,
+    this.roomID,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -769,8 +1018,8 @@ class Event extends DataClass implements Insertable<Event> {
     if (!nullToAbsent || typeID != null) {
       map['type_id'] = Variable<int>(typeID);
     }
-    if (!nullToAbsent || room != null) {
-      map['room'] = Variable<String>(room);
+    if (!nullToAbsent || roomID != null) {
+      map['room_id'] = Variable<int>(roomID);
     }
     return map;
   }
@@ -788,7 +1037,8 @@ class Event extends DataClass implements Insertable<Event> {
               : Value(baseType),
       typeID:
           typeID == null && nullToAbsent ? const Value.absent() : Value(typeID),
-      room: room == null && nullToAbsent ? const Value.absent() : Value(room),
+      roomID:
+          roomID == null && nullToAbsent ? const Value.absent() : Value(roomID),
     );
   }
 
@@ -807,7 +1057,7 @@ class Event extends DataClass implements Insertable<Event> {
         serializer.fromJson<int?>(json['baseType']),
       ),
       typeID: serializer.fromJson<int?>(json['typeID']),
-      room: serializer.fromJson<String?>(json['room']),
+      roomID: serializer.fromJson<int?>(json['roomID']),
     );
   }
   @override
@@ -823,7 +1073,7 @@ class Event extends DataClass implements Insertable<Event> {
         $EventsTable.$converterbaseTypen.toJson(baseType),
       ),
       'typeID': serializer.toJson<int?>(typeID),
-      'room': serializer.toJson<String?>(room),
+      'roomID': serializer.toJson<int?>(roomID),
     };
   }
 
@@ -835,7 +1085,7 @@ class Event extends DataClass implements Insertable<Event> {
     bool? isCustom,
     Value<EventBaseType?> baseType = const Value.absent(),
     Value<int?> typeID = const Value.absent(),
-    Value<String?> room = const Value.absent(),
+    Value<int?> roomID = const Value.absent(),
   }) => Event(
     id: id ?? this.id,
     subjectID: subjectID ?? this.subjectID,
@@ -844,7 +1094,7 @@ class Event extends DataClass implements Insertable<Event> {
     isCustom: isCustom ?? this.isCustom,
     baseType: baseType.present ? baseType.value : this.baseType,
     typeID: typeID.present ? typeID.value : this.typeID,
-    room: room.present ? room.value : this.room,
+    roomID: roomID.present ? roomID.value : this.roomID,
   );
   Event copyWithCompanion(EventsCompanion data) {
     return Event(
@@ -855,7 +1105,7 @@ class Event extends DataClass implements Insertable<Event> {
       isCustom: data.isCustom.present ? data.isCustom.value : this.isCustom,
       baseType: data.baseType.present ? data.baseType.value : this.baseType,
       typeID: data.typeID.present ? data.typeID.value : this.typeID,
-      room: data.room.present ? data.room.value : this.room,
+      roomID: data.roomID.present ? data.roomID.value : this.roomID,
     );
   }
 
@@ -869,7 +1119,7 @@ class Event extends DataClass implements Insertable<Event> {
           ..write('isCustom: $isCustom, ')
           ..write('baseType: $baseType, ')
           ..write('typeID: $typeID, ')
-          ..write('room: $room')
+          ..write('roomID: $roomID')
           ..write(')'))
         .toString();
   }
@@ -883,7 +1133,7 @@ class Event extends DataClass implements Insertable<Event> {
     isCustom,
     baseType,
     typeID,
-    room,
+    roomID,
   );
   @override
   bool operator ==(Object other) =>
@@ -896,7 +1146,7 @@ class Event extends DataClass implements Insertable<Event> {
           other.isCustom == this.isCustom &&
           other.baseType == this.baseType &&
           other.typeID == this.typeID &&
-          other.room == this.room);
+          other.roomID == this.roomID);
 }
 
 class EventsCompanion extends UpdateCompanion<Event> {
@@ -907,7 +1157,7 @@ class EventsCompanion extends UpdateCompanion<Event> {
   final Value<bool> isCustom;
   final Value<EventBaseType?> baseType;
   final Value<int?> typeID;
-  final Value<String?> room;
+  final Value<int?> roomID;
   const EventsCompanion({
     this.id = const Value.absent(),
     this.subjectID = const Value.absent(),
@@ -916,7 +1166,7 @@ class EventsCompanion extends UpdateCompanion<Event> {
     this.isCustom = const Value.absent(),
     this.baseType = const Value.absent(),
     this.typeID = const Value.absent(),
-    this.room = const Value.absent(),
+    this.roomID = const Value.absent(),
   });
   EventsCompanion.insert({
     this.id = const Value.absent(),
@@ -926,7 +1176,7 @@ class EventsCompanion extends UpdateCompanion<Event> {
     required bool isCustom,
     this.baseType = const Value.absent(),
     this.typeID = const Value.absent(),
-    this.room = const Value.absent(),
+    this.roomID = const Value.absent(),
   }) : subjectID = Value(subjectID),
        startTime = Value(startTime),
        endTime = Value(endTime),
@@ -939,7 +1189,7 @@ class EventsCompanion extends UpdateCompanion<Event> {
     Expression<bool>? isCustom,
     Expression<int>? baseType,
     Expression<int>? typeID,
-    Expression<String>? room,
+    Expression<int>? roomID,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -949,7 +1199,7 @@ class EventsCompanion extends UpdateCompanion<Event> {
       if (isCustom != null) 'is_custom': isCustom,
       if (baseType != null) 'base_type': baseType,
       if (typeID != null) 'type_id': typeID,
-      if (room != null) 'room': room,
+      if (roomID != null) 'room_id': roomID,
     });
   }
 
@@ -961,7 +1211,7 @@ class EventsCompanion extends UpdateCompanion<Event> {
     Value<bool>? isCustom,
     Value<EventBaseType?>? baseType,
     Value<int?>? typeID,
-    Value<String?>? room,
+    Value<int?>? roomID,
   }) {
     return EventsCompanion(
       id: id ?? this.id,
@@ -971,7 +1221,7 @@ class EventsCompanion extends UpdateCompanion<Event> {
       isCustom: isCustom ?? this.isCustom,
       baseType: baseType ?? this.baseType,
       typeID: typeID ?? this.typeID,
-      room: room ?? this.room,
+      roomID: roomID ?? this.roomID,
     );
   }
 
@@ -1001,8 +1251,8 @@ class EventsCompanion extends UpdateCompanion<Event> {
     if (typeID.present) {
       map['type_id'] = Variable<int>(typeID.value);
     }
-    if (room.present) {
-      map['room'] = Variable<String>(room.value);
+    if (roomID.present) {
+      map['room_id'] = Variable<int>(roomID.value);
     }
     return map;
   }
@@ -1017,7 +1267,7 @@ class EventsCompanion extends UpdateCompanion<Event> {
           ..write('isCustom: $isCustom, ')
           ..write('baseType: $baseType, ')
           ..write('typeID: $typeID, ')
-          ..write('room: $room')
+          ..write('roomID: $roomID')
           ..write(')'))
         .toString();
   }
@@ -2374,6 +2624,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $SubjectsTable subjects = $SubjectsTable(this);
   late final $EventTypesTable eventTypes = $EventTypesTable(this);
+  late final $RoomsTable rooms = $RoomsTable(this);
   late final $EventsTable events = $EventsTable(this);
   late final $TasksTable tasks = $TasksTable(this);
   late final $GroupsTable groups = $GroupsTable(this);
@@ -2387,6 +2638,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [
     subjects,
     eventTypes,
+    rooms,
     events,
     tasks,
     groups,
@@ -2910,6 +3162,253 @@ typedef $$EventTypesTableProcessedTableManager =
       EventType,
       PrefetchHooks Function({bool eventsRefs})
     >;
+typedef $$RoomsTableCreateCompanionBuilder =
+    RoomsCompanion Function({
+      Value<int> id,
+      required String name,
+      required String building,
+    });
+typedef $$RoomsTableUpdateCompanionBuilder =
+    RoomsCompanion Function({
+      Value<int> id,
+      Value<String> name,
+      Value<String> building,
+    });
+
+final class $$RoomsTableReferences
+    extends BaseReferences<_$AppDatabase, $RoomsTable, Room> {
+  $$RoomsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$EventsTable, List<Event>> _eventsRefsTable(
+    _$AppDatabase db,
+  ) => MultiTypedResultKey.fromTable(
+    db.events,
+    aliasName: $_aliasNameGenerator(db.rooms.id, db.events.roomID),
+  );
+
+  $$EventsTableProcessedTableManager get eventsRefs {
+    final manager = $$EventsTableTableManager(
+      $_db,
+      $_db.events,
+    ).filter((f) => f.roomID.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_eventsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$RoomsTableFilterComposer extends Composer<_$AppDatabase, $RoomsTable> {
+  $$RoomsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get building => $composableBuilder(
+    column: $table.building,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  Expression<bool> eventsRefs(
+    Expression<bool> Function($$EventsTableFilterComposer f) f,
+  ) {
+    final $$EventsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.events,
+      getReferencedColumn: (t) => t.roomID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$EventsTableFilterComposer(
+            $db: $db,
+            $table: $db.events,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$RoomsTableOrderingComposer
+    extends Composer<_$AppDatabase, $RoomsTable> {
+  $$RoomsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get building => $composableBuilder(
+    column: $table.building,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$RoomsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $RoomsTable> {
+  $$RoomsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get building =>
+      $composableBuilder(column: $table.building, builder: (column) => column);
+
+  Expression<T> eventsRefs<T extends Object>(
+    Expression<T> Function($$EventsTableAnnotationComposer a) f,
+  ) {
+    final $$EventsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.events,
+      getReferencedColumn: (t) => t.roomID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$EventsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.events,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$RoomsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $RoomsTable,
+          Room,
+          $$RoomsTableFilterComposer,
+          $$RoomsTableOrderingComposer,
+          $$RoomsTableAnnotationComposer,
+          $$RoomsTableCreateCompanionBuilder,
+          $$RoomsTableUpdateCompanionBuilder,
+          (Room, $$RoomsTableReferences),
+          Room,
+          PrefetchHooks Function({bool eventsRefs})
+        > {
+  $$RoomsTableTableManager(_$AppDatabase db, $RoomsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer:
+              () => $$RoomsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer:
+              () => $$RoomsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer:
+              () => $$RoomsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String> building = const Value.absent(),
+              }) => RoomsCompanion(id: id, name: name, building: building),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String name,
+                required String building,
+              }) =>
+                  RoomsCompanion.insert(id: id, name: name, building: building),
+          withReferenceMapper:
+              (p0) =>
+                  p0
+                      .map(
+                        (e) => (
+                          e.readTable(table),
+                          $$RoomsTableReferences(db, table, e),
+                        ),
+                      )
+                      .toList(),
+          prefetchHooksCallback: ({eventsRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [if (eventsRefs) db.events],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (eventsRefs)
+                    await $_getPrefetchedData<Room, $RoomsTable, Event>(
+                      currentTable: table,
+                      referencedTable: $$RoomsTableReferences._eventsRefsTable(
+                        db,
+                      ),
+                      managerFromTypedResult:
+                          (p0) =>
+                              $$RoomsTableReferences(db, table, p0).eventsRefs,
+                      referencedItemsForCurrentItem:
+                          (item, referencedItems) =>
+                              referencedItems.where((e) => e.roomID == item.id),
+                      typedResults: items,
+                    ),
+                ];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$RoomsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $RoomsTable,
+      Room,
+      $$RoomsTableFilterComposer,
+      $$RoomsTableOrderingComposer,
+      $$RoomsTableAnnotationComposer,
+      $$RoomsTableCreateCompanionBuilder,
+      $$RoomsTableUpdateCompanionBuilder,
+      (Room, $$RoomsTableReferences),
+      Room,
+      PrefetchHooks Function({bool eventsRefs})
+    >;
 typedef $$EventsTableCreateCompanionBuilder =
     EventsCompanion Function({
       Value<int> id,
@@ -2919,7 +3418,7 @@ typedef $$EventsTableCreateCompanionBuilder =
       required bool isCustom,
       Value<EventBaseType?> baseType,
       Value<int?> typeID,
-      Value<String?> room,
+      Value<int?> roomID,
     });
 typedef $$EventsTableUpdateCompanionBuilder =
     EventsCompanion Function({
@@ -2930,7 +3429,7 @@ typedef $$EventsTableUpdateCompanionBuilder =
       Value<bool> isCustom,
       Value<EventBaseType?> baseType,
       Value<int?> typeID,
-      Value<String?> room,
+      Value<int?> roomID,
     });
 
 final class $$EventsTableReferences
@@ -2965,6 +3464,23 @@ final class $$EventsTableReferences
       $_db.eventTypes,
     ).filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_typeIDTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $RoomsTable _roomIDTable(_$AppDatabase db) =>
+      db.rooms.createAlias($_aliasNameGenerator(db.events.roomID, db.rooms.id));
+
+  $$RoomsTableProcessedTableManager? get roomID {
+    final $_column = $_itemColumn<int>('room_id');
+    if ($_column == null) return null;
+    final manager = $$RoomsTableTableManager(
+      $_db,
+      $_db.rooms,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_roomIDTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: [item]),
@@ -3043,11 +3559,6 @@ class $$EventsTableFilterComposer
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnFilters<String> get room => $composableBuilder(
-    column: $table.room,
-    builder: (column) => ColumnFilters(column),
-  );
-
   $$SubjectsTableFilterComposer get subjectID {
     final $$SubjectsTableFilterComposer composer = $composerBuilder(
       composer: this,
@@ -3085,6 +3596,29 @@ class $$EventsTableFilterComposer
           }) => $$EventTypesTableFilterComposer(
             $db: $db,
             $table: $db.eventTypes,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$RoomsTableFilterComposer get roomID {
+    final $$RoomsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.roomID,
+      referencedTable: $db.rooms,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RoomsTableFilterComposer(
+            $db: $db,
+            $table: $db.rooms,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -3179,11 +3713,6 @@ class $$EventsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get room => $composableBuilder(
-    column: $table.room,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   $$SubjectsTableOrderingComposer get subjectID {
     final $$SubjectsTableOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -3229,6 +3758,29 @@ class $$EventsTableOrderingComposer
     );
     return composer;
   }
+
+  $$RoomsTableOrderingComposer get roomID {
+    final $$RoomsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.roomID,
+      referencedTable: $db.rooms,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RoomsTableOrderingComposer(
+            $db: $db,
+            $table: $db.rooms,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$EventsTableAnnotationComposer
@@ -3254,9 +3806,6 @@ class $$EventsTableAnnotationComposer
 
   GeneratedColumnWithTypeConverter<EventBaseType?, int> get baseType =>
       $composableBuilder(column: $table.baseType, builder: (column) => column);
-
-  GeneratedColumn<String> get room =>
-      $composableBuilder(column: $table.room, builder: (column) => column);
 
   $$SubjectsTableAnnotationComposer get subjectID {
     final $$SubjectsTableAnnotationComposer composer = $composerBuilder(
@@ -3295,6 +3844,29 @@ class $$EventsTableAnnotationComposer
           }) => $$EventTypesTableAnnotationComposer(
             $db: $db,
             $table: $db.eventTypes,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$RoomsTableAnnotationComposer get roomID {
+    final $$RoomsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.roomID,
+      referencedTable: $db.rooms,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RoomsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.rooms,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -3371,6 +3943,7 @@ class $$EventsTableTableManager
           PrefetchHooks Function({
             bool subjectID,
             bool typeID,
+            bool roomID,
             bool eventsGroupsRefs,
             bool eventsTeachersRefs,
           })
@@ -3395,7 +3968,7 @@ class $$EventsTableTableManager
                 Value<bool> isCustom = const Value.absent(),
                 Value<EventBaseType?> baseType = const Value.absent(),
                 Value<int?> typeID = const Value.absent(),
-                Value<String?> room = const Value.absent(),
+                Value<int?> roomID = const Value.absent(),
               }) => EventsCompanion(
                 id: id,
                 subjectID: subjectID,
@@ -3404,7 +3977,7 @@ class $$EventsTableTableManager
                 isCustom: isCustom,
                 baseType: baseType,
                 typeID: typeID,
-                room: room,
+                roomID: roomID,
               ),
           createCompanionCallback:
               ({
@@ -3415,7 +3988,7 @@ class $$EventsTableTableManager
                 required bool isCustom,
                 Value<EventBaseType?> baseType = const Value.absent(),
                 Value<int?> typeID = const Value.absent(),
-                Value<String?> room = const Value.absent(),
+                Value<int?> roomID = const Value.absent(),
               }) => EventsCompanion.insert(
                 id: id,
                 subjectID: subjectID,
@@ -3424,7 +3997,7 @@ class $$EventsTableTableManager
                 isCustom: isCustom,
                 baseType: baseType,
                 typeID: typeID,
-                room: room,
+                roomID: roomID,
               ),
           withReferenceMapper:
               (p0) =>
@@ -3439,6 +4012,7 @@ class $$EventsTableTableManager
           prefetchHooksCallback: ({
             subjectID = false,
             typeID = false,
+            roomID = false,
             eventsGroupsRefs = false,
             eventsTeachersRefs = false,
           }) {
@@ -3484,6 +4058,18 @@ class $$EventsTableTableManager
                                 ._typeIDTable(db),
                             referencedColumn:
                                 $$EventsTableReferences._typeIDTable(db).id,
+                          )
+                          as T;
+                }
+                if (roomID) {
+                  state =
+                      state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.roomID,
+                            referencedTable: $$EventsTableReferences
+                                ._roomIDTable(db),
+                            referencedColumn:
+                                $$EventsTableReferences._roomIDTable(db).id,
                           )
                           as T;
                 }
@@ -3555,6 +4141,7 @@ typedef $$EventsTableProcessedTableManager =
       PrefetchHooks Function({
         bool subjectID,
         bool typeID,
+        bool roomID,
         bool eventsGroupsRefs,
         bool eventsTeachersRefs,
       })
@@ -5004,6 +5591,8 @@ class $AppDatabaseManager {
       $$SubjectsTableTableManager(_db, _db.subjects);
   $$EventTypesTableTableManager get eventTypes =>
       $$EventTypesTableTableManager(_db, _db.eventTypes);
+  $$RoomsTableTableManager get rooms =>
+      $$RoomsTableTableManager(_db, _db.rooms);
   $$EventsTableTableManager get events =>
       $$EventsTableTableManager(_db, _db.events);
   $$TasksTableTableManager get tasks =>
