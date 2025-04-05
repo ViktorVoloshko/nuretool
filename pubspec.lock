@@ -289,7 +289,7 @@ packages:
     source: hosted
     version: "5.1.1"
   local_db_api:
-    dependency: transitive
+    dependency: "direct main"
     description:
       path: "packages/local_db_api"
       relative: true
