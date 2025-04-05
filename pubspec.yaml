@@ -17,6 +17,7 @@ dependencies:
     path: ./packages/cist_api
   local_db_api:
     path: ./packages/local_db_api
+  flutter_bloc: ^9.1.0
 
 dev_dependencies:
   flutter_test:
