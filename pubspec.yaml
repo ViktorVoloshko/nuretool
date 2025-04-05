@@ -17,7 +17,21 @@ dependencies:
     path: ./packages/cist_api
   local_db_api:
     path: ./packages/local_db_api
+  events_api:
+    path: ./packages/events_api
+  groups_api:
+    path: ./packages/groups_api
+  teachers_api:
+    path: ./packages/teachers_api
+  rooms_api:
+    path: ./packages/rooms_api
   flutter_bloc: ^9.1.0
+  flutter_localizations:
+    sdk: flutter
+  intl: any
+  bloc: ^9.0.0
+  meta: ^1.16.0
+  equatable: ^2.0.7
 
 dev_dependencies:
   flutter_test:
@@ -26,3 +40,4 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
