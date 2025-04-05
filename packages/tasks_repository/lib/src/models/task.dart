@@ -48,7 +48,7 @@ class Task extends Equatable {
     deadline: deadline ?? this.deadline,
   );
 
-  db.TasksCompanion _toDBModel([int? supertaskID]) => db.TasksCompanion.insert(
+  db.TasksCompanion toDBModel([int? supertaskID]) => db.TasksCompanion.insert(
     id: Value(id),
     title: title,
     supertaskID: Value(supertaskID),
@@ -87,11 +87,11 @@ class SuperTask extends Task {
 
   final List<Task> subtasks;
 
-  List<db.TasksCompanion> toDBModel() {
+  List<db.TasksCompanion> toDBModels() {
     final result = <db.TasksCompanion>[];
 
-    result.add(super._toDBModel());
-    result.addAll(subtasks.map((e) => e._toDBModel(id)));
+    result.add(super.toDBModel());
+    result.addAll(subtasks.map((e) => e.toDBModel(id)));
 
     return result;
   }
