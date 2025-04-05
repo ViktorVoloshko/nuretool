@@ -18,7 +18,14 @@ class TasksRepository {
     final supertasks = tasks.where((task) => task.supertaskID == null);
     final subtasks = tasks.where((task) => task.supertaskID != null);
 
-    result.addAll(supertasks.map((e) => SuperTask.fromDBModel(e, subtasks)));
+    result.addAll(
+      supertasks.map(
+        (e) => SuperTask.fromDBModel(
+          e,
+          subtasks.where((task) => task.supertaskID == e.id),
+        ),
+      ),
+    );
 
     _tasksStreamController.add(result);
   });

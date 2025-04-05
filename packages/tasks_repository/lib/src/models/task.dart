@@ -90,7 +90,7 @@ class SuperTask extends Task {
   List<db.TasksCompanion> toDBModel() {
     final result = <db.TasksCompanion>[];
 
-    result.add(super._toDBModel(null));
+    result.add(super._toDBModel());
     result.addAll(subtasks.map((e) => e._toDBModel(id)));
 
     return result;
