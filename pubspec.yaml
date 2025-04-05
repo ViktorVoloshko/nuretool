@@ -9,6 +9,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  university_repository:
+    path: ./packages/university_repository
+  tasks_repository:
+    path: ./packages/tasks_repository
+  cist_api:
+    path: ./packages/cist_api
 
 dev_dependencies:
   flutter_test:
