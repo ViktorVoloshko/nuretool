@@ -1,5 +1,9 @@
 {
     "@@locale": "en",
     "calendar": "Calendar",
-    "@calendar": {}
+    "@calendar": {},
+    "tasks": "Tasks",
+    "@tasks": {},
+    "more": "More",
+    "@more": {}
 }

@@ -10,4 +10,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get calendar => 'Calendar';
+
+  @override
+  String get tasks => 'Tasks';
+
+  @override
+  String get more => 'More';
 }
