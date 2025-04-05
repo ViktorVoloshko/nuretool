@@ -1,20 +1,28 @@
-import 'package:flutter/material.dart';
+import 'package:cist_api/cist_api.dart';
+import 'package:flutter/widgets.dart';
+import 'package:local_db_api/local_db_api.dart';
+import 'package:tasks_repository/tasks_repository.dart';
+import 'package:university_repository/university_repository.dart';
 
-void main() {
-  runApp(const MainApp());
-}
+import 'app/app.dart';
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
-    );
-  }
+  final localDBApi = LocalDBApi(database: AppDatabase());
+  final cistApi = CistApi();
+
+  runApp(
+    App(
+      createUniversityRepository: UniversityRepository.new,
+      createTasksRepository: TasksRepository.new,
+      localDBApi: localDBApi,
+      eventsApi: cistApi,
+      groupsApi: cistApi,
+      teachersApi: cistApi,
+      roomsApi: cistApi,
+    ),
+  );
+
+  await localDBApi.dispose();
 }

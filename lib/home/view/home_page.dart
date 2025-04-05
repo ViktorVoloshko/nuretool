@@ -1,0 +1,56 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../cubit/home_cubit.dart';
+import '../../l10n/app_localizations.dart';
+
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(create: (_) => HomeCubit(), child: HomeView());
+  }
+}
+
+class HomeView extends StatelessWidget {
+  const HomeView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final selectedTab = context.select<HomeCubit, HomeTab>(
+      (cubit) => cubit.state.tab,
+    );
+
+    return Scaffold(
+      body: SafeArea(
+        child: IndexedStack(
+          index: selectedTab.index,
+          children: const [Placeholder(), Placeholder(), Placeholder()],
+        ),
+      ),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: selectedTab.index,
+        onDestinationSelected:
+            (value) => context.read<HomeCubit>().setTab(HomeTab.values[value]),
+        destinations: [
+          NavigationDestination(
+            icon: Icon(Icons.calendar_month_outlined),
+            selectedIcon: Icon(Icons.calendar_month),
+            label: AppLocalizations.of(context)!.calendar,
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.task_alt),
+            selectedIcon: Icon(Icons.task_alt_outlined),
+            label: AppLocalizations.of(context)!.tasks,
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.more_horiz),
+            selectedIcon: Icon(Icons.more_horiz_outlined),
+            label: AppLocalizations.of(context)!.more,
+          ),
+        ],
+      ),
+    );
+  }
+}
