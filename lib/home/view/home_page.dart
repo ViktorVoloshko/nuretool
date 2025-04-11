@@ -35,18 +35,18 @@ class HomeView extends StatelessWidget {
             (value) => context.read<HomeCubit>().setTab(HomeTab.values[value]),
         destinations: [
           NavigationDestination(
-            icon: Icon(Icons.calendar_month_outlined),
-            selectedIcon: Icon(Icons.calendar_month),
+            icon: Icon(Icons.calendar_today_outlined),
+            selectedIcon: Icon(Icons.calendar_today),
             label: AppLocalizations.of(context)!.calendar,
           ),
           NavigationDestination(
-            icon: Icon(Icons.task_alt),
-            selectedIcon: Icon(Icons.task_alt_outlined),
+            icon: Icon(Icons.task_alt_outlined),
+            selectedIcon: Icon(Icons.task_alt),
             label: AppLocalizations.of(context)!.tasks,
           ),
           NavigationDestination(
-            icon: Icon(Icons.more_horiz),
-            selectedIcon: Icon(Icons.more_horiz_outlined),
+            icon: Icon(Icons.more_horiz_outlined),
+            selectedIcon: Icon(Icons.more_horiz),
             label: AppLocalizations.of(context)!.more,
           ),
         ],
