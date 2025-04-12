@@ -63,8 +63,8 @@ class Task extends Equatable {
 }
 
 @immutable
-class SuperTask extends Task {
-  const SuperTask({
+class Supertask extends Task {
+  const Supertask({
     required super.id,
     required super.title,
     required super.isDone,
@@ -74,8 +74,8 @@ class SuperTask extends Task {
     required this.subtasks,
   });
 
-  factory SuperTask.fromDBModel(db.Task task, Iterable<db.Task> subtasks) =>
-      SuperTask(
+  factory Supertask.fromDBModel(db.Task task, Iterable<db.Task> subtasks) =>
+      Supertask(
         id: task.id,
         title: task.title,
         isDone: task.isDone,

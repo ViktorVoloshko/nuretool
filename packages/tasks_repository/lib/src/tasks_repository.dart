@@ -8,19 +8,19 @@ class TasksRepository {
 
   final LocalDBApi _localDBApi;
 
-  late final _tasksStreamController = BehaviorSubject<List<SuperTask>>.seeded(
+  late final _tasksStreamController = BehaviorSubject<List<Supertask>>.seeded(
     const [],
   );
 
   late final _tasksSubscription = _localDBApi.loadTasks().listen((tasks) {
-    final result = <SuperTask>[];
+    final result = <Supertask>[];
 
     final supertasks = tasks.where((task) => task.supertaskID == null);
     final subtasks = tasks.where((task) => task.supertaskID != null);
 
     result.addAll(
       supertasks.map(
-        (e) => SuperTask.fromDBModel(
+        (e) => Supertask.fromDBModel(
           e,
           subtasks.where((task) => task.supertaskID == e.id),
         ),
@@ -30,16 +30,16 @@ class TasksRepository {
     _tasksStreamController.add(result);
   });
 
-  Stream<List<SuperTask>> get tasks =>
+  Stream<List<Supertask>> get tasks =>
       _tasksStreamController.asBroadcastStream();
 
   Future<void> saveTask(Task task, int supertaskID) =>
       _localDBApi.saveTask(task.toDBModel(supertaskID));
 
-  Future<void> saveSuperTask(SuperTask task) =>
+  Future<void> saveSuperTask(Supertask task) =>
       _localDBApi.saveTasks(task.toDBModels());
 
-  Future<void> saveTasks(Iterable<SuperTask> tasks) {
+  Future<void> saveTasks(Iterable<Supertask> tasks) {
     final result = <TasksCompanion>[];
 
     for (final supertask in tasks) {
