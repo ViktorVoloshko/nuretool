@@ -33,7 +33,7 @@ class TasksRepository {
   Stream<List<Supertask>> get tasks =>
       _tasksStreamController.asBroadcastStream();
 
-  Future<void> saveTask(Task task, int supertaskID) =>
+  Future<int> saveTask(Task task, int supertaskID) =>
       _localDBApi.saveTask(task.toDBModel(supertaskID));
 
   Future<void> saveSuperTask(Supertask task) =>
