@@ -8,7 +8,7 @@ enum TaskType { subject, project, practice, laboratory, test, exam }
 @immutable
 class Task extends Equatable {
   const Task({
-    required this.id,
+    this.id,
     required this.title,
     required this.isDone,
     required this.isCustom,
@@ -25,7 +25,7 @@ class Task extends Equatable {
     deadline: task.deadline,
   );
 
-  final int id;
+  final int? id;
   final String title;
   final bool isDone;
   final bool isCustom;
@@ -49,7 +49,7 @@ class Task extends Equatable {
   );
 
   db.TasksCompanion toDBModel([int? supertaskID]) => db.TasksCompanion.insert(
-    id: Value(id),
+    id: id == null ? Value.absent() : Value(id!),
     title: title,
     supertaskID: Value(supertaskID),
     isDone: Value(isDone),
@@ -65,7 +65,7 @@ class Task extends Equatable {
 @immutable
 class Supertask extends Task {
   const Supertask({
-    required super.id,
+    super.id,
     required super.title,
     required super.isDone,
     required super.isCustom,
