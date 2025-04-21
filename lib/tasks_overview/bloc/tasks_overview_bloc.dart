@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:nuretool/l10n/app_localizations.dart';
 import 'package:tasks_repository/tasks_repository.dart' as repo;
 import 'package:university_repository/university_repository.dart';
 
@@ -35,7 +36,7 @@ class TasksOverviewBloc extends Bloc<TasksOverviewEvent, TasksOverviewState> {
         result.addAll(
           supertasks.map(
             (e) => Supertask(
-              id: e.id,
+              id: e.id!,
               title: e.title,
               isDone: e.isDone,
               subtasksTotal: e.subtasks.length,
@@ -73,6 +74,76 @@ class TasksOverviewBloc extends Bloc<TasksOverviewEvent, TasksOverviewState> {
             .where((subject) => subjectIDs.contains(subject.id))
             .toList();
 
-    for (final subject in subjects) {}
+    for (final subject in subjects) {
+      final subjectTasks = <repo.Task>[
+        ..._createSubjectTasks(subject, events, EventBaseType.practice, 1),
+        ..._createSubjectTasks(subject, events, EventBaseType.laboratory, 2),
+        ..._createSubjectTasks(subject, events, EventBaseType.exam),
+      ];
+      result.add(
+        repo.Supertask(
+          title: subject.title,
+          isDone: false,
+          isCustom: false,
+          type: repo.TaskType.subject,
+          deadline: null,
+          subtasks: subjectTasks,
+        ),
+      );
+    }
   }
+
+  List<repo.Task> _createSubjectTasks(
+    Subject subject,
+    Iterable<Event> events,
+    EventBaseType type, [
+    int? eventsPerTask,
+  ]) {
+    if (type == EventBaseType.exam) {
+      return [
+        repo.Task(
+          title: 'Exam',
+          isDone: false,
+          isCustom: false,
+          type: type.toTaskType(),
+          deadline:
+              events
+                  .where((event) => event.baseType == EventBaseType.exam)
+                  .last
+                  .endTime,
+        ),
+      ];
+    }
+
+    final result = <repo.Task>[];
+    final eventsOfType =
+        events.where((event) => event.baseType == type).toList();
+
+    for (int index = 0; index < eventsOfType.length; index += eventsPerTask) {
+      result.add(
+        repo.Task(
+          title: '#${(index + eventsPerTask!) ~/ eventsPerTask}',
+          isDone: false,
+          isCustom: false,
+          type: type.toTaskType(),
+          deadline:
+              ((index + eventsPerTask) < eventsOfType.length)
+                  ? eventsOfType[index + eventsPerTask].startTime
+                  : eventsOfType[index + eventsPerTask - 1].endTime,
+        ),
+      );
+    }
+
+    return result;
+  }
+}
+
+extension EventBaseTypeToTaskType on EventBaseType {
+  repo.TaskType toTaskType() => switch (this) {
+    EventBaseType.practice => repo.TaskType.practice,
+    EventBaseType.laboratory => repo.TaskType.laboratory,
+    EventBaseType.test => repo.TaskType.test,
+    EventBaseType.exam => repo.TaskType.exam,
+    _ => throw Exception("It shouldn't be possible to generate task for $this"),
+  };
 }
