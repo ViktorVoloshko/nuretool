@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:nuretool/l10n/app_localizations.dart';
 import 'package:tasks_repository/tasks_repository.dart' as repo;
 import 'package:university_repository/university_repository.dart';
 
@@ -62,23 +61,25 @@ class TasksOverviewBloc extends Bloc<TasksOverviewEvent, TasksOverviewState> {
   ) async {
     final result = <repo.Supertask>[];
 
-    // TODO: Group from settings
-    final events =
-        (await _universityRepository.events.last)
-            .where((event) => event.groups.contains(9311133))
+    final groupEvents =
+        (await _universityRepository.events.first)
+            .where((e) => e.groups.contains(event.groupID))
             .toList();
     final subjectIDs = <int>{};
-    subjectIDs.addAll(events.map((e) => e.subject));
+    subjectIDs.addAll(groupEvents.map((e) => e.subject));
     final subjects =
-        (await _universityRepository.subjects.last)
+        (await _universityRepository.subjects.first)
             .where((subject) => subjectIDs.contains(subject.id))
             .toList();
 
     for (final subject in subjects) {
+      final subjectEvents = groupEvents.where(
+        (event) => event.subject == subject.id,
+      );
       final subjectTasks = <repo.Task>[
-        ..._createSubjectTasks(subject, events, EventBaseType.practice, 1),
-        ..._createSubjectTasks(subject, events, EventBaseType.laboratory, 2),
-        ..._createSubjectTasks(subject, events, EventBaseType.exam),
+        ..._createTasksForType(subjectEvents, EventBaseType.practice, 1),
+        ..._createTasksForType(subjectEvents, EventBaseType.laboratory, 2),
+        ..._createTasksForType(subjectEvents, EventBaseType.exam),
       ];
       result.add(
         repo.Supertask(
@@ -91,33 +92,38 @@ class TasksOverviewBloc extends Bloc<TasksOverviewEvent, TasksOverviewState> {
         ),
       );
     }
+
+    _tasksRepository.saveSupertasks(result);
   }
 
-  List<repo.Task> _createSubjectTasks(
-    Subject subject,
-    Iterable<Event> events,
+  List<repo.Task> _createTasksForType(
+    Iterable<Event> subjectEvents,
     EventBaseType type, [
     int? eventsPerTask,
   ]) {
+    if (subjectEvents.isEmpty) return const [];
     if (type == EventBaseType.exam) {
+      final examEvents = subjectEvents.where(
+        (event) => event.baseType == EventBaseType.exam,
+      );
+
+      if (examEvents.isEmpty) return const [];
+
       return [
         repo.Task(
-          title: 'Exam',
+          title: '#1',
           isDone: false,
           isCustom: false,
           type: type.toTaskType(),
-          deadline:
-              events
-                  .where((event) => event.baseType == EventBaseType.exam)
-                  .last
-                  .endTime,
+          deadline: examEvents.last.endTime,
         ),
       ];
     }
 
     final result = <repo.Task>[];
     final eventsOfType =
-        events.where((event) => event.baseType == type).toList();
+        subjectEvents.where((event) => event.baseType == type).toList();
+    if (eventsOfType.isEmpty) return const [];
 
     for (int index = 0; index < eventsOfType.length; index += eventsPerTask) {
       result.add(

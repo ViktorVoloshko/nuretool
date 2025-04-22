@@ -49,13 +49,13 @@ class Task extends Equatable {
   );
 
   db.TasksCompanion toDBModel([int? supertaskID]) => db.TasksCompanion.insert(
-    id: id == null ? Value.absent() : Value(id!),
+    id: Value.absentIfNull(id),
     title: title,
-    supertaskID: Value(supertaskID),
+    supertaskID: Value.absentIfNull(supertaskID),
     isDone: Value(isDone),
     isCustom: isCustom,
-    deadline: Value(deadline),
-    type: Value(type?.toDBModel()),
+    deadline: Value.absentIfNull(deadline),
+    type: Value.absentIfNull(type?.toDBModel()),
   );
 
   @override
@@ -87,12 +87,11 @@ class Supertask extends Task {
 
   final List<Task> subtasks;
 
-  List<db.TasksCompanion> toDBModels() {
+  List<db.TasksCompanion> subtasksToDBModels([int? supertaskID]) {
+    assert(supertaskID != null || id != null);
+
     final result = <db.TasksCompanion>[];
-
-    result.add(super.toDBModel());
-    result.addAll(subtasks.map((e) => e.toDBModel(id)));
-
+    result.addAll(subtasks.map((e) => e.toDBModel(supertaskID ?? id)));
     return result;
   }
 

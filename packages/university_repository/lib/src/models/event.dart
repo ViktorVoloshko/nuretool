@@ -162,15 +162,24 @@ extension ApiToDBEvent on api.Event {
   /// Since cist does not provide IDs for events, you have to retrive ID of
   /// inserted event later to add it
   /// to relations tables with [generateRelations].
-  db.EventsCompanion toDBModel(int roomID) => db.EventsCompanion.insert(
+  db.EventsCompanion toDBModel() => db.EventsCompanion.insert(
     subjectID: subjectID,
     startTime: DateTime.fromMillisecondsSinceEpoch(startTime ~/ 1000),
     endTime: DateTime.fromMillisecondsSinceEpoch(endTime ~/ 1000),
     isCustom: false,
-    roomID: Value(roomID),
     baseType: Value(_fromIDBase(type ~/ 10)),
     typeID: Value(type),
   );
+
+  // db.EventsCompanion toDBModel(int roomID) => db.EventsCompanion.insert(
+  //   subjectID: subjectID,
+  //   startTime: DateTime.fromMillisecondsSinceEpoch(startTime ~/ 1000),
+  //   endTime: DateTime.fromMillisecondsSinceEpoch(endTime ~/ 1000),
+  //   isCustom: false,
+  //   roomID: Value(roomID),
+  //   baseType: Value(_fromIDBase(type ~/ 10)),
+  //   typeID: Value(type),
+  // );
 
   (List<db.EventsGroupsCompanion>, List<db.EventsTeachersCompanion>)
   generateRelations(int id) {

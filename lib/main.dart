@@ -23,6 +23,4 @@ void main() async {
       roomsApi: cistApi,
     ),
   );
-
-  await localDBApi.dispose();
 }

@@ -7,9 +7,15 @@ sealed class TasksOverviewEvent extends Equatable {
   List<Object> get props => [];
 }
 
-final class TasksOverviewSubscriptionRequested extends TasksOverviewEvent {}
+final class TasksOverviewSubscriptionRequested extends TasksOverviewEvent {
+  const TasksOverviewSubscriptionRequested();
+}
 
-final class TasksOverviewGenerationRequested extends TasksOverviewEvent {}
+final class TasksOverviewGenerationRequested extends TasksOverviewEvent {
+  const TasksOverviewGenerationRequested({required this.groupID});
+
+  final int groupID;
+}
 
 final class TasksOverviewSupertaskCompletionToggled extends TasksOverviewEvent {
   const TasksOverviewSupertaskCompletionToggled({

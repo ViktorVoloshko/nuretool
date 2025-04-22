@@ -1,9 +1,10 @@
+import 'dart:async';
+
 import 'package:events_api/events_api.dart' show EventsApi;
 import 'package:groups_api/groups_api.dart' show GroupsApi;
 import 'package:rooms_api/rooms_api.dart' show RoomsApi;
 import 'package:teachers_api/teachers_api.dart' show TeachersApi;
-import 'package:local_db_api/local_db_api.dart'
-    hide Event, EventType, Group, Teacher, Room, Subject;
+import 'package:local_db_api/local_db_api.dart' as db;
 import 'package:rxdart/rxdart.dart' hide Subject;
 
 import 'models/models.dart';
@@ -14,7 +15,7 @@ class UniversityRepository {
     required GroupsApi groupsApi,
     required TeachersApi teachersApi,
     required RoomsApi roomsApi,
-    required LocalDBApi localDBApi,
+    required db.LocalDBApi localDBApi,
   }) : _eventsApi = eventsApi,
        _groupsApi = groupsApi,
        _teachersApi = teachersApi,
@@ -27,23 +28,18 @@ class UniversityRepository {
   final GroupsApi _groupsApi;
   final TeachersApi _teachersApi;
   final RoomsApi _roomsApi;
-  final LocalDBApi _localDBApi;
+  final db.LocalDBApi _localDBApi;
 
-  late final _eventsStreamController = BehaviorSubject<List<Event>>.seeded(
-    const [],
-  );
-  late final _groupsStreamController = BehaviorSubject<List<Group>>.seeded(
-    const [],
-  );
-  late final _teachersStreamController = BehaviorSubject<List<Teacher>>.seeded(
-    const [],
-  );
-  late final _roomsStreamController = BehaviorSubject<List<Room>>.seeded(
-    const [],
-  );
-  late final _subjectsStreamController = BehaviorSubject<List<Subject>>.seeded(
-    const [],
-  );
+  final BehaviorSubject<List<Event>> _eventsStreamController =
+      BehaviorSubject<List<Event>>.seeded(const []);
+  final BehaviorSubject<List<Group>> _groupsStreamController =
+      BehaviorSubject<List<Group>>.seeded(const []);
+  final BehaviorSubject<List<Teacher>> _teachersStreamController =
+      BehaviorSubject<List<Teacher>>.seeded(const []);
+  final BehaviorSubject<List<Room>> _roomsStreamController =
+      BehaviorSubject<List<Room>>.seeded(const []);
+  final BehaviorSubject<List<Subject>> _subjectsStreamController =
+      BehaviorSubject<List<Subject>>.seeded(const []);
 
   Stream<List<Event>> get events => _eventsStreamController.asBroadcastStream();
   Stream<List<Group>> get groups => _groupsStreamController.asBroadcastStream();
@@ -53,95 +49,15 @@ class UniversityRepository {
   Stream<List<Subject>> get subjects =>
       _subjectsStreamController.asBroadcastStream();
 
-  late final _eventsSubscription = _localDBApi.loadEvents().listen((
-    eventsData,
-  ) {
-    // TODO: Verify this with actual code, might be super slow and error-prone.
-    final events = <Event>[];
-
-    final eventIDs = <int>{};
-    eventIDs.addAll(eventsData.map((e) => e.event.id));
-
-    final subjects = _subjectsStreamController.value;
-    final groups = _groupsStreamController.value;
-    final teachers = _teachersStreamController.value;
-    final rooms = _roomsStreamController.value;
-
-    for (final eventID in eventIDs) {
-      final eventDatas = eventsData.where((e) => e.event.id == eventID);
-
-      final groupIDs = <int>{};
-      final teacherIDs = <int>{};
-      for (final eventData in eventDatas) {
-        if (eventData.groupID != null) groupIDs.add(eventData.groupID!);
-        if (eventData.teacherID != null) teacherIDs.add(eventData.teacherID!);
-      }
-
-      subjects
-          .firstWhere(
-            (subject) => subject.id == eventDatas.first.event.subjectID,
-          )
-          .events
-          .add(eventID);
-
-      for (final groupID in groupIDs) {
-        groups.firstWhere((group) => group.id == groupID).events.add(eventID);
-      }
-
-      for (final teacherID in teacherIDs) {
-        teachers
-            .firstWhere((teacher) => teacher.id == teacherID)
-            .events
-            .add(eventID);
-      }
-
-      rooms
-          .firstWhere((room) => room.id == eventDatas.first.event.roomID)
-          .events
-          .add(eventID);
-
-      events.add(
-        Event.fromDBModel(
-          eventDatas.first.event,
-          (eventDatas.first.type == null)
-              ? null
-              : EventType.fromDBModel(eventDatas.first.type!),
-          groupIDs.toList(),
-          teacherIDs.toList(),
-        ),
-      );
-    }
-
-    _eventsStreamController.add(events);
-  });
-
-  late final _groupsSubscription = _localDBApi.loadGroups().listen(
-    (groups) => _groupsStreamController.add(
-      groups.map((e) => Group.fromDBModel(e)).toList(),
-    ),
-  );
-
-  late final _teachersSubscription = _localDBApi.loadTeachers().listen(
-    (teachers) => _teachersStreamController.add(
-      teachers.map((e) => Teacher.fromDBModel(e)).toList(),
-    ),
-  );
-
-  late final _roomsSubscription = _localDBApi.loadRooms().listen(
-    (rooms) => _roomsStreamController.add(
-      rooms.map((e) => Room.fromDBModel(e)).toList(),
-    ),
-  );
-
-  late final _subjectsSubscription = _localDBApi.loadSubjects().listen(
-    (subjects) => _subjectsStreamController.add(
-      subjects.map((e) => Subject.fromDBModel(e)).toList(),
-    ),
-  );
+  late final StreamSubscription<List<db.EventData>> _eventsSubscription;
+  late final StreamSubscription<List<db.Group>> _groupsSubscription;
+  late final StreamSubscription<List<db.Teacher>> _teachersSubscription;
+  late final StreamSubscription<List<db.Room>> _roomsSubscription;
+  late final StreamSubscription<List<db.Subject>> _subjectsSubscription;
 
   Future<void> fetchGroups() async {
     // Since one group may appear multiple times in a JSON, Set is used.
-    final groups = <GroupsCompanion>{};
+    final groups = <db.GroupsCompanion>{};
 
     final response = await _groupsApi.fetchGroups();
 
@@ -158,7 +74,7 @@ class UniversityRepository {
   }
 
   Future<void> fetchTeachers() async {
-    final teachers = <TeachersCompanion>[];
+    final teachers = <db.TeachersCompanion>[];
 
     final response = await _teachersApi.fetchTeachers();
 
@@ -175,7 +91,7 @@ class UniversityRepository {
   }
 
   Future<void> fetchRooms() async {
-    final rooms = <RoomsCompanion>[];
+    final rooms = <db.RoomsCompanion>[];
 
     final response = await _roomsApi.fetchRooms();
 
@@ -199,20 +115,18 @@ class UniversityRepository {
       to.millisecondsSinceEpoch ~/ 1000,
     );
 
-    final rooms = _roomsStreamController.value;
-
     _eventsSubscription.pause();
 
     _localDBApi.saveSubjects(subjects.map((e) => e.toDBModel()));
     final eventIDs = await _localDBApi.saveApiEvents(
-      events.map(
-        (e) =>
-            e.toDBModel(rooms.firstWhere((room) => room.name == e.auditory).id),
-      ),
+      events.map((e) => e.toDBModel()),
       types.map((e) => e.toDBModel()),
     );
 
-    final relations = (<EventsGroupsCompanion>[], <EventsTeachersCompanion>[]);
+    final relations = (
+      <db.EventsGroupsCompanion>[],
+      <db.EventsTeachersCompanion>[],
+    );
     for (int i = 0; i < events.length; i++) {
       final eventRelations = events[i].generateRelations(eventIDs[i]);
       relations.$1.addAll(eventRelations.$1);
@@ -247,5 +161,97 @@ class UniversityRepository {
     ]);
   }
 
-  Future<void> _init() async {}
+  Future<void> _init() async {
+    _subjectsSubscription = _localDBApi
+        .loadSubjects()
+        .asBroadcastStream()
+        .listen(
+          (subjects) => _subjectsStreamController.add(
+            subjects.map((e) => Subject.fromDBModel(e)).toList(),
+          ),
+        );
+
+    _groupsSubscription = _localDBApi.loadGroups().asBroadcastStream().listen(
+      (groups) => _groupsStreamController.add(
+        groups.map((e) => Group.fromDBModel(e)).toList(),
+      ),
+    );
+
+    _teachersSubscription = _localDBApi
+        .loadTeachers()
+        .asBroadcastStream()
+        .listen(
+          (teachers) => _teachersStreamController.add(
+            teachers.map((e) => Teacher.fromDBModel(e)).toList(),
+          ),
+        );
+
+    _roomsSubscription = _localDBApi.loadRooms().asBroadcastStream().listen(
+      (rooms) => _roomsStreamController.add(
+        rooms.map((e) => Room.fromDBModel(e)).toList(),
+      ),
+    );
+
+    _eventsSubscription = _localDBApi.loadEvents().asBroadcastStream().listen((
+      eventsData,
+    ) {
+      // TODO: Verify this with actual code, might be super slow and error-prone.
+      final events = <Event>[];
+
+      final eventIDs = <int>{};
+      eventIDs.addAll(eventsData.map((e) => e.event.id));
+
+      final subjects = _subjectsStreamController.value;
+      final groups = _groupsStreamController.value;
+      final teachers = _teachersStreamController.value;
+      // final rooms = _roomsStreamController.value;
+
+      for (final eventID in eventIDs) {
+        final eventDatas = eventsData.where((e) => e.event.id == eventID);
+
+        final groupIDs = <int>{};
+        final teacherIDs = <int>{};
+        for (final eventData in eventDatas) {
+          if (eventData.groupID != null) groupIDs.add(eventData.groupID!);
+          if (eventData.teacherID != null) teacherIDs.add(eventData.teacherID!);
+        }
+
+        subjects
+            .firstWhere(
+              (subject) => subject.id == eventDatas.first.event.subjectID,
+            )
+            .events
+            .add(eventID);
+
+        for (final groupID in groupIDs) {
+          groups.firstWhere((group) => group.id == groupID).events.add(eventID);
+        }
+
+        for (final teacherID in teacherIDs) {
+          teachers
+              .firstWhere((teacher) => teacher.id == teacherID)
+              .events
+              .add(eventID);
+        }
+
+        // rooms
+        //     .firstWhere((room) => room.id == eventDatas.first.event.roomID)
+        //     .events
+        //     .add(eventID);
+
+        events.add(
+          Event.fromDBModel(
+            eventDatas.first.event,
+            (eventDatas.first.type == null)
+                ? null
+                : EventType.fromDBModel(eventDatas.first.type!),
+            groupIDs.toList(),
+            teacherIDs.toList(),
+          ),
+        );
+      }
+
+      _eventsStreamController.add(events);
+    });
+  }
 }

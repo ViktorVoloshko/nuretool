@@ -16,11 +16,11 @@ class LocalDBApi {
       ),
       leftOuterJoin(
         _database.eventsGroups,
-        _database.events.id.equalsExp(_database.eventsGroups.eventID),
+        _database.eventsGroups.eventID.equalsExp(_database.events.id),
       ),
       leftOuterJoin(
         _database.eventsTeachers,
-        _database.events.id.equalsExp(_database.eventsTeachers.eventID),
+        _database.eventsTeachers.eventID.equalsExp(_database.events.id),
       ),
     ]);
 
@@ -91,8 +91,8 @@ class LocalDBApi {
     Iterable<EventsGroupsCompanion> groups,
     Iterable<EventsTeachersCompanion> teachers,
   ) => _database.batch((batch) {
-    batch.insertAllOnConflictUpdate(_database.eventsGroups, groups);
-    batch.insertAllOnConflictUpdate(_database.eventsTeachers, teachers);
+    batch.insertAll(_database.eventsGroups, groups);
+    batch.insertAll(_database.eventsTeachers, teachers);
   });
 
   Future<void> saveEvents(
