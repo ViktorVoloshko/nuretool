@@ -41,22 +41,20 @@ class Event extends Equatable {
   final List<int> teachers;
   final int? room;
 
-  db.EventsCompanion toDBModel() {
-    return db.EventsCompanion.insert(
-      id: Value(id),
-      subjectID: subject,
-      startTime: startTime,
-      endTime: endTime,
-      isCustom: isCustom,
-      baseType: Value(baseType.toDBModel()),
-      typeID: Value.absentIfNull(type?.id),
-      relations: db.EventRelations(
-        groups: groups,
-        teachers: teachers,
-        room: room,
-      ),
-    );
-  }
+  db.EventsCompanion toDBModel() => db.EventsCompanion.insert(
+    id: Value(id),
+    subjectID: subject,
+    startTime: startTime,
+    endTime: endTime,
+    isCustom: isCustom,
+    baseType: Value(baseType.toDBModel()),
+    typeID: Value.absentIfNull(type?.id),
+    relations: db.EventRelations(
+      groups: groups,
+      teachers: teachers,
+      room: room,
+    ),
+  );
 
   Event copyWith({
     int? id,
@@ -145,39 +143,17 @@ extension ApiToDBEvent on api.Event {
   /// Since cist does not provide IDs for events, you have to retrive ID of
   /// inserted event later to add it
   /// to relations tables with [generateRelations].
-  db.EventsCompanion toDBModel() => db.EventsCompanion.insert(
+  db.EventsCompanion toDBModel([int? roomID]) => db.EventsCompanion.insert(
     subjectID: subjectID,
-    startTime: DateTime.fromMillisecondsSinceEpoch(startTime ~/ 1000),
-    endTime: DateTime.fromMillisecondsSinceEpoch(endTime ~/ 1000),
+    startTime: DateTime.fromMillisecondsSinceEpoch(startTime * 1000),
+    endTime: DateTime.fromMillisecondsSinceEpoch(endTime * 1000),
     isCustom: false,
     baseType: Value(_fromIDBase(type ~/ 10)),
     typeID: Value(type),
+    relations: db.EventRelations(
+      groups: groups,
+      teachers: teachers,
+      room: roomID,
+    ),
   );
-
-  // db.EventsCompanion toDBModel(int roomID) => db.EventsCompanion.insert(
-  //   subjectID: subjectID,
-  //   startTime: DateTime.fromMillisecondsSinceEpoch(startTime ~/ 1000),
-  //   endTime: DateTime.fromMillisecondsSinceEpoch(endTime ~/ 1000),
-  //   isCustom: false,
-  //   roomID: Value(roomID),
-  //   baseType: Value(_fromIDBase(type ~/ 10)),
-  //   typeID: Value(type),
-  // );
-
-  (List<db.EventsGroupsCompanion>, List<db.EventsTeachersCompanion>)
-  generateRelations(int id) {
-    final List<db.EventsGroupsCompanion> groups = [];
-    for (final group in this.groups) {
-      groups.add(db.EventsGroupsCompanion.insert(eventID: id, groupID: group));
-    }
-
-    final List<db.EventsTeachersCompanion> teachers = [];
-    for (final teacher in this.teachers) {
-      teachers.add(
-        db.EventsTeachersCompanion.insert(eventID: id, teacherID: teacher),
-      );
-    }
-
-    return (groups, teachers);
-  }
 }
