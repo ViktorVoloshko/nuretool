@@ -110,6 +110,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'More'**
   String get more;
+
+  /// No description provided for @no_supertasks.
+  ///
+  /// In en, this message translates to:
+  /// **'No tasks'**
+  String get no_supertasks;
+
+  /// No description provided for @project.
+  ///
+  /// In en, this message translates to:
+  /// **'Project'**
+  String get project;
+
+  /// No description provided for @subject.
+  ///
+  /// In en, this message translates to:
+  /// **'Subject'**
+  String get subject;
+
+  /// No description provided for @subtasksDoneTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} out of {total}'**
+  String subtasksDoneTotal(Object done, Object total);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

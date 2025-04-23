@@ -1,9 +1,10 @@
 {
     "@@locale": "en",
     "calendar": "Calendar",
-    "@calendar": {},
     "tasks": "Tasks",
-    "@tasks": {},
     "more": "More",
-    "@more": {}
+    "no_supertasks": "No tasks",
+    "project": "Project",
+    "subject": "Subject",
+    "subtasksDoneTotal": "{done} out of {total}"
 }

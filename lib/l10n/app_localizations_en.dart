@@ -16,4 +16,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get more => 'More';
+
+  @override
+  String get no_supertasks => 'No tasks';
+
+  @override
+  String get project => 'Project';
+
+  @override
+  String get subject => 'Subject';
+
+  @override
+  String subtasksDoneTotal(Object done, Object total) {
+    return '$done out of $total';
+  }
 }
