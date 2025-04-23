@@ -53,30 +53,17 @@ class LocalDBApi {
     );
   });
 
-  Future<List<int>> saveApiEvents(
+  Future<void> saveApiEvents(
     Iterable<EventsCompanion> events,
     Iterable<EventTypesCompanion> types,
-  ) async {
-    await _database.batch(
-      (batch) => batch.insertAllOnConflictUpdate(_database.eventTypes, types),
-    );
-
-    final eventIDs = <int>[];
-    for (final event in events) {
-      eventIDs.add(
-        await _database.into(_database.events).insertOnConflictUpdate(event),
-      );
-    }
-    return eventIDs;
-  }
-
-  Future<void> saveEvents(
-    Iterable<EventsCompanion> events,
-    Iterable<EventType> types,
-  ) => _database.batch((batch) {
-    batch.insertAllOnConflictUpdate(_database.events, events);
+  ) async => _database.batch((batch) {
     batch.insertAllOnConflictUpdate(_database.eventTypes, types);
+    batch.insertAllOnConflictUpdate(_database.events, events);
   });
+
+  Future<void> saveEvents(Iterable<EventsCompanion> events) => _database.batch(
+    (batch) => batch.insertAllOnConflictUpdate(_database.events, events),
+  );
 
   Future<void> saveSubjects(Iterable<SubjectsCompanion> subjects) =>
       _database.batch(

@@ -3,6 +3,7 @@ import 'package:drift_flutter/drift_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'tables/tables.dart';
+import '../models/models.dart';
 
 part 'database.g.dart';
 
