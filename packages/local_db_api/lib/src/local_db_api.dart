@@ -14,14 +14,6 @@ class LocalDBApi {
         _database.eventTypes,
         _database.eventTypes.id.equalsExp(_database.events.typeID),
       ),
-      leftOuterJoin(
-        _database.eventsGroups,
-        _database.eventsGroups.eventID.equalsExp(_database.events.id),
-      ),
-      leftOuterJoin(
-        _database.eventsTeachers,
-        _database.eventsTeachers.eventID.equalsExp(_database.events.id),
-      ),
     ]);
 
     return query.watch().map((rows) {
@@ -30,8 +22,6 @@ class LocalDBApi {
             (row) => EventData(
               event: row.readTable(_database.events),
               type: row.readTableOrNull(_database.eventTypes),
-              groupID: row.read(_database.eventsGroups.groupID),
-              teacherID: row.read(_database.eventsTeachers.teacherID),
             ),
           )
           .toList();
@@ -46,11 +36,7 @@ class LocalDBApi {
       _database.select(_database.teachers).watch();
   Stream<List<Room>> loadRooms() => _database.select(_database.rooms).watch();
 
-  Future<void> saveEvent(
-    EventsCompanion event,
-    Iterable<EventsGroupsCompanion> groups,
-    Iterable<EventsTeachersCompanion> teachers,
-  ) => _database.batch((batch) {
+  Future<void> saveEvent(EventsCompanion event) => _database.batch((batch) {
     batch.insert(
       _database.events,
       event,
@@ -65,9 +51,6 @@ class LocalDBApi {
       //   ],
       // ),
     );
-    // TODO: Cleanup old records in relations tables
-    batch.insertAllOnConflictUpdate(_database.eventsGroups, groups);
-    batch.insertAllOnConflictUpdate(_database.eventsTeachers, teachers);
   });
 
   Future<List<int>> saveApiEvents(
@@ -87,24 +70,12 @@ class LocalDBApi {
     return eventIDs;
   }
 
-  Future<void> saveEventsRelations(
-    Iterable<EventsGroupsCompanion> groups,
-    Iterable<EventsTeachersCompanion> teachers,
-  ) => _database.batch((batch) {
-    batch.insertAll(_database.eventsGroups, groups);
-    batch.insertAll(_database.eventsTeachers, teachers);
-  });
-
   Future<void> saveEvents(
     Iterable<EventsCompanion> events,
     Iterable<EventType> types,
-    Iterable<EventsGroupsCompanion> groups,
-    Iterable<EventsTeachersCompanion> teachers,
   ) => _database.batch((batch) {
     batch.insertAllOnConflictUpdate(_database.events, events);
     batch.insertAllOnConflictUpdate(_database.eventTypes, types);
-    batch.insertAllOnConflictUpdate(_database.eventsGroups, groups);
-    batch.insertAllOnConflictUpdate(_database.eventsTeachers, teachers);
   });
 
   Future<void> saveSubjects(Iterable<SubjectsCompanion> subjects) =>

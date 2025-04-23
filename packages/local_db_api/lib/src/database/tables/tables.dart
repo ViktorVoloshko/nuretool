@@ -5,5 +5,3 @@ export 'tasks.dart';
 export 'groups.dart';
 export 'teachers.dart';
 export 'rooms.dart';
-export 'events_groups.dart';
-export 'events_teachers.dart';
