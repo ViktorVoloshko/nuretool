@@ -28,7 +28,7 @@ class Event extends Equatable {
       endTime = event.endTime,
       isCustom = event.isCustom,
       baseType = event.baseType!.fromDBModel(),
-      room = event.roomID;
+      room = event.relations.room;
 
   final int id;
   final int subject;
@@ -41,37 +41,20 @@ class Event extends Equatable {
   final List<int> teachers;
   final int? room;
 
-  (
-    db.EventsCompanion,
-    List<db.EventsGroupsCompanion>,
-    List<db.EventsTeachersCompanion>,
-  )
-  toDBModel() {
-    final List<db.EventsGroupsCompanion> groups = [];
-    for (final group in this.groups) {
-      groups.add(db.EventsGroupsCompanion.insert(eventID: id, groupID: group));
-    }
-
-    final List<db.EventsTeachersCompanion> teachers = [];
-    for (final teacher in this.teachers) {
-      teachers.add(
-        db.EventsTeachersCompanion.insert(eventID: id, teacherID: teacher),
-      );
-    }
-
-    return (
-      db.EventsCompanion.insert(
-        id: Value(id),
-        subjectID: subject,
-        startTime: startTime,
-        endTime: endTime,
-        isCustom: isCustom,
-        roomID: Value(room),
-        baseType: Value(baseType.toDBModel()),
-        typeID: type != null ? Value(type!.id) : Value.absent(),
+  db.EventsCompanion toDBModel() {
+    return db.EventsCompanion.insert(
+      id: Value(id),
+      subjectID: subject,
+      startTime: startTime,
+      endTime: endTime,
+      isCustom: isCustom,
+      baseType: Value(baseType.toDBModel()),
+      typeID: Value.absentIfNull(type?.id),
+      relations: db.EventRelations(
+        groups: groups,
+        teachers: teachers,
+        room: room,
       ),
-      groups,
-      teachers,
     );
   }
 
