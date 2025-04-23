@@ -212,6 +212,9 @@ class UniversityRepository {
         ),
       ];
       _eventsStreamController.add(events);
+      // _subjectsStreamController.add(subjects);
+      // _groupsStreamController.add(groups);
+      // _teachersStreamController.add(teachers);
     });
   }
 }

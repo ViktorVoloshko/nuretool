@@ -36,11 +36,10 @@ class TasksOverviewView extends StatelessWidget {
               title: Text(AppLocalizations.of(context)!.tasks),
               actions: [
                 IconButton(
-                  onPressed: () {
-                    context.read<TasksOverviewBloc>().add(
-                      TasksOverviewGenerationRequested(groupID: 9311133),
-                    );
-                  },
+                  onPressed:
+                      () => context.read<TasksOverviewBloc>().add(
+                        TasksOverviewGenerationRequested(groupID: 9311133),
+                      ),
                   icon: Icon(Icons.refresh),
                 ),
               ],
