@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nuretool/l10n/app_localizations.dart';
 import 'package:tasks_repository/tasks_repository.dart';
 import 'package:university_repository/university_repository.dart';
 
 import '../bloc/tasks_overview_bloc.dart';
+import '../widgets/widgets.dart';
 
 class TasksOverviewPage extends StatelessWidget {
   const TasksOverviewPage({super.key});
@@ -31,10 +33,10 @@ class TasksOverviewView extends StatelessWidget {
         return CustomScrollView(
           slivers: [
             SliverAppBar.large(
-              title: Text('Tasks'),
+              title: Text(AppLocalizations.of(context)!.tasks),
               actions: [
                 IconButton(
-                  onPressed: () async {
+                  onPressed: () {
                     context.read<TasksOverviewBloc>().add(
                       TasksOverviewGenerationRequested(groupID: 9311133),
                     );
@@ -44,36 +46,31 @@ class TasksOverviewView extends StatelessWidget {
               ],
             ),
             switch (state) {
-              TasksOverviewInitial() => SliverToBoxAdapter(
+              TasksOverviewInitial() => const SliverFillRemaining(
+                hasScrollBody: false,
                 child: Center(child: CircularProgressIndicator()),
               ),
-              TasksOverviewLoading() => SliverToBoxAdapter(
+              TasksOverviewLoading() => const SliverFillRemaining(
+                hasScrollBody: false,
                 child: Center(child: CircularProgressIndicator()),
               ),
               TasksOverviewFailure() => throw UnimplementedError(),
               TasksOverviewNoSupertasksPresent() => SliverFillRemaining(
                 hasScrollBody: false,
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.indeterminate_check_box,
-                        color: Theme.of(context).disabledColor,
-                        size: 100,
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        'No tasks',
-                        style: TextStyle(
-                          color: Theme.of(context).disabledColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                child: NoSupertasksWidget(),
               ),
-              TasksOverviewSupertasksPresent() => throw UnimplementedError(),
+              TasksOverviewSupertasksPresent() => SliverList.builder(
+                itemCount: state.tasks.length,
+                itemBuilder:
+                    (_, index) => Padding(
+                      padding: const EdgeInsets.only(left: 4.0, right: 4.0),
+                      child: SupertasksListItem(
+                        supertask: state.tasks[index],
+                        onClicked: () {},
+                        onCheckboxClicked: (_) {},
+                      ),
+                    ),
+              ),
             },
           ],
         );
