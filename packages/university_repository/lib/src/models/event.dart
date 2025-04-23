@@ -21,14 +21,16 @@ class Event extends Equatable {
     this.room,
   });
 
-  Event.fromDBModel(db.Event event, this.type, this.groups, this.teachers)
+  Event.fromDBModel(db.Event event, this.type)
     : id = event.id,
-      subject = event.subjectID,
+      subject = event.subject,
       startTime = event.startTime,
       endTime = event.endTime,
       isCustom = event.isCustom,
       baseType = event.baseType!.fromDBModel(),
-      room = event.relations.room;
+      room = event.relations.room,
+      groups = event.relations.groups,
+      teachers = event.relations.teachers;
 
   final int id;
   final int subject;
@@ -43,12 +45,12 @@ class Event extends Equatable {
 
   db.EventsCompanion toDBModel() => db.EventsCompanion.insert(
     id: Value(id),
-    subjectID: subject,
+    subject: subject,
     startTime: startTime,
     endTime: endTime,
     isCustom: isCustom,
     baseType: Value(baseType.toDBModel()),
-    typeID: Value.absentIfNull(type?.id),
+    type: Value.absentIfNull(type?.id),
     relations: db.EventRelations(
       groups: groups,
       teachers: teachers,
@@ -144,12 +146,12 @@ extension ApiToDBEvent on api.Event {
   /// inserted event later to add it
   /// to relations tables with [generateRelations].
   db.EventsCompanion toDBModel([int? roomID]) => db.EventsCompanion.insert(
-    subjectID: subjectID,
+    subject: subjectID,
     startTime: DateTime.fromMillisecondsSinceEpoch(startTime * 1000),
     endTime: DateTime.fromMillisecondsSinceEpoch(endTime * 1000),
     isCustom: false,
     baseType: Value(_fromIDBase(type ~/ 10)),
-    typeID: Value(type),
+    type: Value(type),
     relations: db.EventRelations(
       groups: groups,
       teachers: teachers,

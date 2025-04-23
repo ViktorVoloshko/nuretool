@@ -4,32 +4,21 @@ import 'package:rooms_api/rooms_api.dart' as api;
 import 'package:local_db_api/local_db_api.dart' as db;
 
 class Room extends Equatable {
-  const Room({
-    required this.id,
-    required this.name,
-    required this.building,
-    required this.events,
-  });
+  const Room({required this.id, required this.name, required this.events});
 
-  Room.fromDBModel(db.Room room)
-    : id = room.id,
-      name = room.name,
-      building = room.building,
-      events = [];
+  Room.fromDBModel(db.Room room) : id = room.id, name = room.name, events = [];
 
   final int id;
   final String name;
-  final String building;
   final List<int> events;
 
   db.RoomsCompanion toDBModel() =>
-      db.RoomsCompanion.insert(id: Value(id), name: name, building: building);
+      db.RoomsCompanion.insert(id: Value(id), name: name);
 
   @override
-  List<Object?> get props => [id, name, building];
+  List<Object?> get props => [id, name];
 }
 
 extension ApiToDBRoom on api.Room {
-  db.RoomsCompanion toDBModel(String building) =>
-      db.RoomsCompanion.insert(name: shortName, building: building);
+  db.RoomsCompanion toDBModel() => db.RoomsCompanion.insert(name: shortName);
 }

@@ -96,9 +96,7 @@ class UniversityRepository {
     final response = await _roomsApi.fetchRooms();
 
     for (final building in response) {
-      rooms.addAll(
-        building.auditories.map((e) => e.toDBModel(building.shortName)),
-      );
+      rooms.addAll(building.auditories.map((e) => e.toDBModel()));
     }
 
     return _localDBApi.saveRooms(rooms);
@@ -115,32 +113,15 @@ class UniversityRepository {
       to.millisecondsSinceEpoch ~/ 1000,
     );
 
-    _eventsSubscription.pause();
-
     _localDBApi.saveSubjects(subjects.map((e) => e.toDBModel()));
-    final eventIDs = await _localDBApi.saveApiEvents(
+    return _localDBApi.saveApiEvents(
       events.map((e) => e.toDBModel()),
       types.map((e) => e.toDBModel()),
     );
-
-    final relations = (
-      <db.EventsGroupsCompanion>[],
-      <db.EventsTeachersCompanion>[],
-    );
-    for (int i = 0; i < events.length; i++) {
-      final eventRelations = events[i].generateRelations(eventIDs[i]);
-      relations.$1.addAll(eventRelations.$1);
-      relations.$2.addAll(eventRelations.$2);
-    }
-
-    _eventsSubscription.resume();
-    return _localDBApi.saveEventsRelations(relations.$1, relations.$2);
   }
 
-  Future<void> saveEvent(Event event) {
-    final (eventDB, groups, teachers) = event.toDBModel();
-    return _localDBApi.saveEvent(eventDB, groups, teachers);
-  }
+  Future<void> saveEvent(Event event) =>
+      _localDBApi.saveEvent(event.toDBModel());
 
   // TODO: Delete event
 
@@ -195,62 +176,41 @@ class UniversityRepository {
     _eventsSubscription = _localDBApi.loadEvents().asBroadcastStream().listen((
       eventsData,
     ) {
-      // TODO: Verify this with actual code, might be super slow and error-prone.
-      final events = <Event>[];
-
-      final eventIDs = <int>{};
-      eventIDs.addAll(eventsData.map((e) => e.event.id));
-
       final subjects = _subjectsStreamController.value;
       final groups = _groupsStreamController.value;
       final teachers = _teachersStreamController.value;
+
+      // TODO: Fix issues with rooms
       // final rooms = _roomsStreamController.value;
 
-      for (final eventID in eventIDs) {
-        final eventDatas = eventsData.where((e) => e.event.id == eventID);
-
-        final groupIDs = <int>{};
-        final teacherIDs = <int>{};
-        for (final eventData in eventDatas) {
-          if (eventData.groupID != null) groupIDs.add(eventData.groupID!);
-          if (eventData.teacherID != null) teacherIDs.add(eventData.teacherID!);
-        }
-
+      for (final eventData in eventsData) {
         subjects
-            .firstWhere(
-              (subject) => subject.id == eventDatas.first.event.subjectID,
-            )
+            .firstWhere((subject) => subject.id == eventData.event.subject)
             .events
-            .add(eventID);
+            .add(eventData.event.id);
 
-        for (final groupID in groupIDs) {
-          groups.firstWhere((group) => group.id == groupID).events.add(eventID);
-        }
+        groups
+            .where(
+              (group) => eventData.event.relations.groups.contains(group.id),
+            )
+            .forEach((group) => group.events.add(eventData.event.id));
 
-        for (final teacherID in teacherIDs) {
-          teachers
-              .firstWhere((teacher) => teacher.id == teacherID)
-              .events
-              .add(eventID);
-        }
-
-        // rooms
-        //     .firstWhere((room) => room.id == eventDatas.first.event.roomID)
-        //     .events
-        //     .add(eventID);
-
-        events.add(
-          Event.fromDBModel(
-            eventDatas.first.event,
-            (eventDatas.first.type == null)
-                ? null
-                : EventType.fromDBModel(eventDatas.first.type!),
-            groupIDs.toList(),
-            teacherIDs.toList(),
-          ),
-        );
+        teachers
+            .where(
+              (teacher) =>
+                  eventData.event.relations.teachers.contains(teacher.id),
+            )
+            .forEach((teacher) => teacher.events.add(eventData.event.id));
       }
 
+      final events = <Event>[
+        ...eventsData.map(
+          (e) => Event.fromDBModel(
+            e.event,
+            (e.type == null) ? null : EventType.fromDBModel(e.type!),
+          ),
+        ),
+      ];
       _eventsStreamController.add(events);
     });
   }

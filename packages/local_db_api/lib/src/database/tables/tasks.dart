@@ -7,7 +7,7 @@ class Tasks extends Table {
   TextColumn get title => text()();
   BoolColumn get isDone => boolean().clientDefault(() => false)();
   BoolColumn get isCustom => boolean()();
-  IntColumn get supertaskID => integer().named('supertask_id').nullable()();
+  IntColumn get supertask => integer().nullable()();
   DateTimeColumn get deadline => dateTime().nullable()();
   IntColumn get type => intEnum<TaskType>().nullable()();
 }

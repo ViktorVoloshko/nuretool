@@ -12,7 +12,7 @@ class LocalDBApi {
     final query = _database.select(_database.events).join([
       leftOuterJoin(
         _database.eventTypes,
-        _database.eventTypes.id.equalsExp(_database.events.typeID),
+        _database.eventTypes.id.equalsExp(_database.events.type),
       ),
     ]);
 
