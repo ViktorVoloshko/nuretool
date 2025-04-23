@@ -31,7 +31,7 @@ class Subject extends Equatable {
   );
 
   @override
-  List<Object?> get props => [id, title, shortTitle];
+  List<Object?> get props => [id, title, shortTitle, events];
 }
 
 extension ApiToDBSubject on api.Subject {
