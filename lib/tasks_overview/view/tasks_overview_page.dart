@@ -65,8 +65,8 @@ class TasksOverviewView extends StatelessWidget {
                       padding: const EdgeInsets.only(left: 4.0, right: 4.0),
                       child: SupertasksListItem(
                         supertask: state.tasks[index],
-                        onClicked: () {},
-                        onCheckboxClicked:
+                        onTap: () {},
+                        onCheckboxTapped:
                             (value) => context.read<TasksOverviewBloc>().add(
                               TasksOverviewSupertaskCheckboxToggled(
                                 task: state.tasks[index],

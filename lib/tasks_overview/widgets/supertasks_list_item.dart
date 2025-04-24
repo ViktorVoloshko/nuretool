@@ -7,19 +7,21 @@ class SupertasksListItem extends StatelessWidget {
   const SupertasksListItem({
     super.key,
     required this.supertask,
-    required this.onClicked,
-    required this.onCheckboxClicked,
+    required this.onTap,
+    required this.onCheckboxTapped,
   });
 
   final Supertask supertask;
-  final GestureTapCallback onClicked;
-  final ValueChanged<bool?> onCheckboxClicked;
+  final GestureTapCallback onTap;
+  final ValueChanged<bool?> onCheckboxTapped;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onClicked,
-      child: Card.filled(
+    return Card.filled(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12.0),
+        onTap: onTap,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -27,7 +29,7 @@ class SupertasksListItem extends StatelessWidget {
               padding: const EdgeInsets.all(12.0),
               child: Checkbox(
                 value: supertask.isDone,
-                onChanged: onCheckboxClicked,
+                onChanged: onCheckboxTapped,
               ),
             ),
             Expanded(
