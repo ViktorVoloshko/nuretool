@@ -66,7 +66,13 @@ class TasksOverviewView extends StatelessWidget {
                       child: SupertasksListItem(
                         supertask: state.tasks[index],
                         onClicked: () {},
-                        onCheckboxClicked: (_) {},
+                        onCheckboxClicked:
+                            (value) => context.read<TasksOverviewBloc>().add(
+                              TasksOverviewSupertaskCheckboxToggled(
+                                task: state.tasks[index],
+                                isDone: value!,
+                              ),
+                            ),
                       ),
                     ),
               ),

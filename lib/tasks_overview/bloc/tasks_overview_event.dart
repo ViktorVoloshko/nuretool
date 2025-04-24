@@ -17,17 +17,17 @@ final class TasksOverviewGenerationRequested extends TasksOverviewEvent {
   final int groupID;
 }
 
-final class TasksOverviewSupertaskCompletionToggled extends TasksOverviewEvent {
-  const TasksOverviewSupertaskCompletionToggled({
+final class TasksOverviewSupertaskCheckboxToggled extends TasksOverviewEvent {
+  const TasksOverviewSupertaskCheckboxToggled({
     required this.task,
-    required this.isCompleted,
+    required this.isDone,
   });
 
   final Supertask task;
-  final bool isCompleted;
+  final bool isDone;
 
   @override
-  List<Object> get props => [task, isCompleted];
+  List<Object> get props => [task, isDone];
 }
 
 final class TasksOverviewSupertaskDeleted extends TasksOverviewEvent {
