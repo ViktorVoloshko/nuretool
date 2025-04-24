@@ -22,11 +22,13 @@ class TasksRepository {
   Stream<List<Supertask>> get tasks =>
       _tasksStreamController.asBroadcastStream();
 
-  Future<int> saveTask(Task task, int supertaskID) =>
+  Future<int> saveTask(Task task, [int? supertaskID]) =>
       _localDBApi.saveTask(task.toDBModel(supertaskID));
 
-  Future<void> saveSupertask(Supertask task) =>
-      _localDBApi.saveTasks(task.subtasksToDBModels());
+  Future<int> saveSupertask(Supertask task) async {
+    _localDBApi.saveTasks(task.subtasksToDBModels());
+    return _localDBApi.saveTask(task.toDBModel());
+  }
 
   Future<void> saveSupertasks(Iterable<Supertask> tasks) async {
     final subtasks = <db.TasksCompanion>[];

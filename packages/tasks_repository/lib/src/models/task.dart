@@ -96,6 +96,25 @@ class Supertask extends Task {
   }
 
   @override
+  Supertask copyWith({
+    int? id,
+    String? title,
+    bool? isDone,
+    bool? isCustom,
+    TaskType? type,
+    DateTime? deadline,
+    List<Task>? subtasks,
+  }) => Supertask(
+    id: id ?? this.id,
+    title: title ?? this.title,
+    isDone: isDone ?? this.isDone,
+    isCustom: isCustom ?? this.isCustom,
+    type: type ?? this.type,
+    deadline: deadline ?? this.deadline,
+    subtasks: subtasks ?? this.subtasks,
+  );
+
+  @override
   List<Object?> get props => [...super.props, subtasks];
 }
 
