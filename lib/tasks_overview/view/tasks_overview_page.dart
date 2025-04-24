@@ -53,7 +53,10 @@ class TasksOverviewView extends StatelessWidget {
                 hasScrollBody: false,
                 child: Center(child: CircularProgressIndicator()),
               ),
-              TasksOverviewFailure() => throw UnimplementedError(),
+              TasksOverviewFailure() => SliverFillRemaining(
+                hasScrollBody: false,
+                child: ErrorSupertasksWidget(message: state.message),
+              ),
               TasksOverviewNoSupertasksPresent() => SliverFillRemaining(
                 hasScrollBody: false,
                 child: NoSupertasksWidget(),
