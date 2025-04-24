@@ -117,6 +117,12 @@ abstract class AppLocalizations {
   /// **'No tasks'**
   String get no_supertasks;
 
+  /// No description provided for @error_supertasks.
+  ///
+  /// In en, this message translates to:
+  /// **'Error retrieving tasks'**
+  String get error_supertasks;
+
   /// No description provided for @project.
   ///
   /// In en, this message translates to:
@@ -129,11 +135,53 @@ abstract class AppLocalizations {
   /// **'Subject'**
   String get subject;
 
+  /// No description provided for @lecture.
+  ///
+  /// In en, this message translates to:
+  /// **'Lecture'**
+  String get lecture;
+
+  /// No description provided for @practice.
+  ///
+  /// In en, this message translates to:
+  /// **'Practice'**
+  String get practice;
+
+  /// No description provided for @laboratory.
+  ///
+  /// In en, this message translates to:
+  /// **'Laboratory'**
+  String get laboratory;
+
+  /// No description provided for @test.
+  ///
+  /// In en, this message translates to:
+  /// **'Test'**
+  String get test;
+
+  /// No description provided for @exam.
+  ///
+  /// In en, this message translates to:
+  /// **'Exam'**
+  String get exam;
+
   /// No description provided for @subtasksDoneTotal.
   ///
   /// In en, this message translates to:
   /// **'{done} out of {total}'**
   String subtasksDoneTotal(Object done, Object total);
+
+  /// No description provided for @addDeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'Add deadline'**
+  String get addDeadline;
+
+  /// No description provided for @addSubtasks.
+  ///
+  /// In en, this message translates to:
+  /// **'Add subtasks'**
+  String get addSubtasks;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

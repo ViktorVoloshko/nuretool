@@ -21,13 +21,37 @@ class AppLocalizationsEn extends AppLocalizations {
   String get no_supertasks => 'No tasks';
 
   @override
+  String get error_supertasks => 'Error retrieving tasks';
+
+  @override
   String get project => 'Project';
 
   @override
   String get subject => 'Subject';
 
   @override
+  String get lecture => 'Lecture';
+
+  @override
+  String get practice => 'Practice';
+
+  @override
+  String get laboratory => 'Laboratory';
+
+  @override
+  String get test => 'Test';
+
+  @override
+  String get exam => 'Exam';
+
+  @override
   String subtasksDoneTotal(Object done, Object total) {
     return '$done out of $total';
   }
+
+  @override
+  String get addDeadline => 'Add deadline';
+
+  @override
+  String get addSubtasks => 'Add subtasks';
 }

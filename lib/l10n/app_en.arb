@@ -4,7 +4,15 @@
     "tasks": "Tasks",
     "more": "More",
     "no_supertasks": "No tasks",
+    "error_supertasks": "Error retrieving tasks",
     "project": "Project",
     "subject": "Subject",
-    "subtasksDoneTotal": "{done} out of {total}"
+    "lecture": "Lecture",
+    "practice": "Practice",
+    "laboratory": "Laboratory",
+    "test": "Test",
+    "exam": "Exam",
+    "subtasksDoneTotal": "{done} out of {total}",
+    "addDeadline": "Add deadline",
+    "addSubtasks": "Add subtasks"
 }
