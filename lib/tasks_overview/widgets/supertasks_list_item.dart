@@ -18,7 +18,6 @@ class SupertasksListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card.filled(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       child: InkWell(
         borderRadius: BorderRadius.circular(12.0),
         onTap: onTap,
