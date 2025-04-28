@@ -48,6 +48,19 @@ class Task extends Equatable {
     deadline: deadline ?? this.deadline,
   );
 
+  Task rewriteWith({
+    required String title,
+    required TaskType? type,
+    required DateTime? deadline,
+  }) => Task(
+    id: id,
+    title: title,
+    isDone: isDone,
+    isCustom: isCustom,
+    type: type,
+    deadline: deadline,
+  );
+
   db.TasksCompanion toDBModel([int? supertaskID]) => db.TasksCompanion.insert(
     id: Value.absentIfNull(id),
     title: title,
@@ -112,6 +125,20 @@ class Supertask extends Task {
     type: type ?? this.type,
     deadline: deadline ?? this.deadline,
     subtasks: subtasks ?? this.subtasks,
+  );
+
+  @override
+  Supertask rewriteWith({
+    required String title,
+    required TaskType? type,
+    required DateTime? deadline,
+  }) => Supertask(
+    title: title,
+    isDone: isDone,
+    isCustom: isCustom,
+    type: type,
+    deadline: deadline,
+    subtasks: subtasks,
   );
 
   @override

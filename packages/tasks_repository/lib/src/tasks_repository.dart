@@ -25,7 +25,10 @@ class TasksRepository {
   Future<int> saveTask(Task task, [int? supertaskID]) =>
       _localDBApi.saveTask(task.toDBModel(supertaskID));
 
-  Future<int> saveSupertask(Supertask task) async {
+  Future<int> saveSupertask(Supertask task) =>
+      _localDBApi.saveTask(task.toDBModel());
+
+  Future<int> saveSupertaskWithSubtasks(Supertask task) async {
     _localDBApi.saveTasks(task.subtasksToDBModels());
     return _localDBApi.saveTask(task.toDBModel());
   }
