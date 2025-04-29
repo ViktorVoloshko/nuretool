@@ -5,6 +5,8 @@
     "more": "More",
     "no_supertasks": "No tasks",
     "error_supertasks": "Error retrieving tasks",
+    "no_subtasks": "No subtasks",
+    "error_subtasks": "Error retrieving subtasks",
     "project": "Project",
     "subject": "Subject",
     "lecture": "Lecture",
@@ -13,6 +15,8 @@
     "test": "Test",
     "exam": "Exam",
     "subtasksDoneTotal": "{done} out of {total}",
+    "title": "Title",
+    "title_error": "Title shouldn't be empty or contain only whitespace",
     "addDeadline": "Add deadline",
     "addSubtasks": "Add subtasks"
 }

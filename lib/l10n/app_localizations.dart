@@ -123,6 +123,18 @@ abstract class AppLocalizations {
   /// **'Error retrieving tasks'**
   String get error_supertasks;
 
+  /// No description provided for @no_subtasks.
+  ///
+  /// In en, this message translates to:
+  /// **'No subtasks'**
+  String get no_subtasks;
+
+  /// No description provided for @error_subtasks.
+  ///
+  /// In en, this message translates to:
+  /// **'Error retrieving subtasks'**
+  String get error_subtasks;
+
   /// No description provided for @project.
   ///
   /// In en, this message translates to:
@@ -170,6 +182,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{done} out of {total}'**
   String subtasksDoneTotal(Object done, Object total);
+
+  /// No description provided for @title.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get title;
+
+  /// No description provided for @title_error.
+  ///
+  /// In en, this message translates to:
+  /// **'Title shouldn\'t be empty or contain only whitespace'**
+  String get title_error;
 
   /// No description provided for @addDeadline.
   ///

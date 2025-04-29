@@ -24,6 +24,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get error_supertasks => 'Error retrieving tasks';
 
   @override
+  String get no_subtasks => 'No subtasks';
+
+  @override
+  String get error_subtasks => 'Error retrieving subtasks';
+
+  @override
   String get project => 'Project';
 
   @override
@@ -48,6 +54,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String subtasksDoneTotal(Object done, Object total) {
     return '$done out of $total';
   }
+
+  @override
+  String get title => 'Title';
+
+  @override
+  String get title_error => 'Title shouldn\'t be empty or contain only whitespace';
 
   @override
   String get addDeadline => 'Add deadline';
