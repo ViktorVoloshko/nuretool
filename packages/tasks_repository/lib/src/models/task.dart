@@ -64,11 +64,11 @@ class Task extends Equatable {
   db.TasksCompanion toDBModel([int? supertaskID]) => db.TasksCompanion.insert(
     id: Value.absentIfNull(id),
     title: title,
-    supertask: Value.absentIfNull(supertaskID),
+    supertask: Value(supertaskID),
     isDone: Value(isDone),
     isCustom: isCustom,
-    deadline: Value.absentIfNull(deadline),
-    type: Value.absentIfNull(type?.toDBModel()),
+    deadline: Value(deadline),
+    type: Value(type?.toDBModel()),
   );
 
   @override

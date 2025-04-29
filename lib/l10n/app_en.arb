@@ -1,5 +1,6 @@
 {
     "@@locale": "en",
+    "none": "None",
     "calendar": "Calendar",
     "tasks": "Tasks",
     "more": "More",
