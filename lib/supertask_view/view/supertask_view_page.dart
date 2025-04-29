@@ -54,7 +54,7 @@ class SupertaskViewView extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         TaskTitleField(
                           initialValue: state.task.title,
@@ -85,8 +85,20 @@ class SupertaskViewView extends StatelessWidget {
                                 ),
                               ),
                         ),
+                        SupertaskTypeSelectionWidget(
+                          selected: state.task.type,
+                          onSelectionChanged:
+                              (selection) =>
+                                  context.read<SupertaskViewBloc>().add(
+                                    SupertaskViewDataChanged(
+                                      title: state.task.title,
+                                      type: selection.first,
+                                      deadline: state.task.deadline,
+                                    ),
+                                  ),
+                        ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 4.0, left: 8.0),
+                          padding: const EdgeInsets.only(top: 12.0, left: 8.0),
                           child: Text(
                             AppLocalizations.of(context)!.subtasks,
                             style: Theme.of(context).textTheme.labelMedium,
