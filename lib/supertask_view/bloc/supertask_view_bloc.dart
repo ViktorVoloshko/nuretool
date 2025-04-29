@@ -6,117 +6,79 @@ part 'supertask_view_event.dart';
 part 'supertask_view_state.dart';
 
 class SupertaskViewBloc extends Bloc<SupertaskViewEvent, SupertaskViewState> {
-  SupertaskViewBloc({required tasksRepository, required Supertask? initialTask})
+  SupertaskViewBloc({required TasksRepository tasksRepository})
     : _tasksRepository = tasksRepository,
-      super(
-        initialTask == null
-            ? SupertaskViewFailure(
-              subtasks: [],
-              error: SupertaskViewError.emptyTitle,
-            )
-            : SupertaskViewSuccess(
-              initialTask: initialTask,
-              title: initialTask.title,
-              type: initialTask.type,
-              deadline: initialTask.deadline,
-              subtasks: initialTask.subtasks,
-            ),
-      ) {
-    on<SupertaskViewTitleChanged>(_onTitleChanged);
-    on<SupertaskViewTypeChanged>(_onTypeChanged);
-    on<SupertaskViewDeadlineChanged>(_onDeadlineChanged);
-    on<SupertaskViewSubtasksChanged>(_onSubtaskChanged);
-    on<SupertaskViewChangesSubmitted>(_onChangesSubmitted);
-    on<SupertaskViewDeleteRequested>(_onDeleteRequested);
+      super(const SupertaskViewInitial()) {
+    on<SupertaskViewSubscriptionRequested>(_onSubscriptionRequested);
+    on<SupertaskViewDataChanged>(_onDataChanged);
+    on<SupertaskViewSubtaskCheckboxToggled>(_onSubtaskCheckboxToggled);
   }
 
   final TasksRepository _tasksRepository;
 
-  void _onTitleChanged(
-    SupertaskViewTitleChanged event,
+  Future<void> _onSubscriptionRequested(
+    SupertaskViewSubscriptionRequested event,
     Emitter<SupertaskViewState> emit,
-  ) =>
-      event.title.isEmpty
-          ? emit(
-            SupertaskViewFailure(
-              initialTask: state.initialTask,
-              title: event.title,
-              type: state.type,
-              deadline: state.deadline,
-              subtasks: state.subtasks,
-              error: SupertaskViewError.emptyTitle,
-            ),
-          )
-          : emit(
-            SupertaskViewSuccess(
-              initialTask: state.initialTask,
-              title: event.title,
-              type: state.type,
-              deadline: state.deadline,
-              subtasks: state.subtasks,
-            ),
-          );
+  ) async {
+    emit(const SupertaskViewLoading());
 
-  void _onTypeChanged(
-    SupertaskViewTypeChanged event,
-    Emitter<SupertaskViewState> emit,
-  ) =>
-      event.type == null
-          ? emit(state.copyWithoutType())
-          : emit(state.copyWith(type: event.type));
+    int? taskID = event.taskID;
 
-  void _onDeadlineChanged(
-    SupertaskViewDeadlineChanged event,
-    Emitter<SupertaskViewState> emit,
-  ) =>
-      event.deadline == null
-          ? emit(state.copyWithoutDeadline())
-          : emit(state.copyWith(deadline: event.deadline));
+    taskID ??= await _tasksRepository.saveSupertaskWithSubtasks(
+      Supertask(
+        title: '',
+        isDone: false,
+        isCustom: true,
+        type: null,
+        deadline: null,
+        subtasks: [],
+      ),
+    );
 
-  void _onSubtaskChanged(
-    SupertaskViewSubtasksChanged event,
-    Emitter<SupertaskViewState> emit,
-  ) => emit(state.copyWith(subtasks: event.subtasks));
+    final task = (await _tasksRepository.tasks.first).firstWhere(
+      (task) => task.id == taskID,
+    );
 
-  void _onChangesSubmitted(
-    SupertaskViewChangesSubmitted event,
+    await emit.forEach(
+      _tasksRepository.tasks,
+      onData:
+          (supertasks) => SupertaskViewSuccess(
+            task: task,
+            titleError:
+                _isTitleValid(task.title) ? null : TitleError.emptyOrWhitespace,
+          ),
+    );
+  }
+
+  void _onDataChanged(
+    SupertaskViewDataChanged event,
     Emitter<SupertaskViewState> emit,
   ) {
-    if (state is SupertaskViewSuccess) {
-      _tasksRepository.saveSupertask(
-        state.initialTask != null
-            ? state.initialTask!.copyWith(
-              title: state.title,
-              type: state.type,
-              deadline: state.deadline,
-              subtasks: state.subtasks,
-            )
-            : Supertask(
-              title: state.title,
-              isDone: false,
-              isCustom: true,
-              type: state.type,
-              deadline: state.deadline,
-              subtasks: state.subtasks,
-            ),
-      );
+    if (!_isTitleValid(event.title)) {
       emit(
-        SupertaskViewChangesSuccessful(
-          initialTask: state.initialTask,
-          title: state.title,
-          type: state.type,
-          deadline: state.deadline,
-          subtasks: state.subtasks,
+        SupertaskViewSuccess(
+          task: (state as SupertaskViewSuccess).task,
+          titleError: TitleError.emptyOrWhitespace,
+        ),
+      );
+    } else {
+      _tasksRepository.saveSupertask(
+        (state as SupertaskViewSuccess).task.rewriteWith(
+          title: event.title,
+          type: event.type,
+          deadline: event.deadline,
         ),
       );
     }
   }
 
-  void _onDeleteRequested(
-    SupertaskViewDeleteRequested event,
+  void _onSubtaskCheckboxToggled(
+    SupertaskViewSubtaskCheckboxToggled event,
     Emitter<SupertaskViewState> emit,
-  ) {
-    // TODO: Implement task deletion
-    throw UnimplementedError('delete not yet implemented');
-  }
+  ) => _tasksRepository.saveTask(
+    event.task.copyWith(isDone: event.isDone),
+    (state as SupertaskViewSuccess).task.id!,
+  );
+
+  bool _isTitleValid(String title) => title.trim().isEmpty ? false : true;
 }

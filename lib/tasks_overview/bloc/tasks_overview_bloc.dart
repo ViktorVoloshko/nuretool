@@ -82,8 +82,9 @@ class TasksOverviewBloc extends Bloc<TasksOverviewEvent, TasksOverviewState> {
   Future<void> _onCheckboxToggled(
     TasksOverviewSupertaskCheckboxToggled event,
     Emitter<TasksOverviewState> emit,
-  ) =>
-      _tasksRepository.saveSupertask(event.task.copyWith(isDone: event.isDone));
+  ) => _tasksRepository.saveSupertaskWithSubtasks(
+    event.task.copyWith(isDone: event.isDone),
+  );
 
   List<Task> _createTasksForType(
     Iterable<Event> subjectEvents,

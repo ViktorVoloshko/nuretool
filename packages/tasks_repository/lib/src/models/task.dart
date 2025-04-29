@@ -133,6 +133,7 @@ class Supertask extends Task {
     required TaskType? type,
     required DateTime? deadline,
   }) => Supertask(
+    id: id,
     title: title,
     isDone: isDone,
     isCustom: isCustom,

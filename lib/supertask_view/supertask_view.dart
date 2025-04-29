@@ -1,3 +1,3 @@
-export 'bloc/tasks_overview_bloc.dart';
 export 'view/view.dart';
+export 'bloc/supertask_view_bloc.dart';
 export 'widgets/widgets.dart';

@@ -4,8 +4,8 @@ import 'package:nuretool/l10n/app_localizations.dart';
 import 'package:tasks_repository/tasks_repository.dart';
 import 'package:university_repository/university_repository.dart';
 
-import '../bloc/tasks_overview_bloc.dart';
-import '../widgets/widgets.dart';
+import '../tasks_overview.dart';
+import '../../supertask_view/supertask_view.dart';
 
 class TasksOverviewPage extends StatelessWidget {
   const TasksOverviewPage({super.key});
@@ -68,7 +68,12 @@ class TasksOverviewView extends StatelessWidget {
                       padding: const EdgeInsets.only(left: 4.0, right: 4.0),
                       child: SupertasksListItem(
                         supertask: state.tasks[index],
-                        onTap: () {},
+                        onTap:
+                            () => Navigator.of(context).push(
+                              SupertaskViewPage.route(
+                                initialTaskID: state.tasks[index].id,
+                              ),
+                            ),
                         onCheckboxTapped:
                             (value) => context.read<TasksOverviewBloc>().add(
                               TasksOverviewSupertaskCheckboxToggled(

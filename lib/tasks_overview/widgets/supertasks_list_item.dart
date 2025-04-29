@@ -40,6 +40,7 @@ class SupertasksListItem extends StatelessWidget {
                 ),
                 child: Column(
                   spacing: 2.0,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (supertask.type != null)

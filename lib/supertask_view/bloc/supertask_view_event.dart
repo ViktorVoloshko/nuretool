@@ -7,46 +7,39 @@ sealed class SupertaskViewEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-final class SupertaskViewTitleChanged extends SupertaskViewEvent {
-  const SupertaskViewTitleChanged({required this.title});
+final class SupertaskViewSubscriptionRequested extends SupertaskViewEvent {
+  const SupertaskViewSubscriptionRequested({this.taskID});
+
+  final int? taskID;
+
+  @override
+  List<Object?> get props => [taskID];
+}
+
+final class SupertaskViewDataChanged extends SupertaskViewEvent {
+  const SupertaskViewDataChanged({
+    required this.title,
+    required this.type,
+    required this.deadline,
+  });
 
   final String title;
-
-  @override
-  List<Object> get props => [title];
-}
-
-final class SupertaskViewTypeChanged extends SupertaskViewEvent {
-  const SupertaskViewTypeChanged({required this.type});
-
   final TaskType? type;
-
-  @override
-  List<Object?> get props => [type];
-}
-
-final class SupertaskViewDeadlineChanged extends SupertaskViewEvent {
-  const SupertaskViewDeadlineChanged({required this.deadline});
-
   final DateTime? deadline;
 
   @override
-  List<Object?> get props => [deadline];
+  List<Object?> get props => [title, type, deadline];
 }
 
-final class SupertaskViewSubtasksChanged extends SupertaskViewEvent {
-  const SupertaskViewSubtasksChanged({required this.subtasks});
+final class SupertaskViewSubtaskCheckboxToggled extends SupertaskViewEvent {
+  const SupertaskViewSubtaskCheckboxToggled({
+    required this.task,
+    required this.isDone,
+  });
 
-  final List<Task> subtasks;
+  final Task task;
+  final bool isDone;
 
   @override
-  List<Object?> get props => [subtasks];
-}
-
-final class SupertaskViewChangesSubmitted extends SupertaskViewEvent {
-  const SupertaskViewChangesSubmitted();
-}
-
-final class SupertaskViewDeleteRequested extends SupertaskViewEvent {
-  const SupertaskViewDeleteRequested();
+  List<Object?> get props => [task, isDone];
 }

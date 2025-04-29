@@ -1,201 +1,36 @@
 part of 'supertask_view_bloc.dart';
 
 sealed class SupertaskViewState extends Equatable {
-  /// As Dart prohibits non-const default fields, [subtasks] has to be set
-  /// manually to empty [List] when creating new [Supertask].
-  const SupertaskViewState({
-    this.initialTask,
-    this.title = '',
-    this.type,
-    this.deadline,
-    required this.subtasks,
-  });
-
-  final Supertask? initialTask;
-  final String title;
-  final TaskType? type;
-  final DateTime? deadline;
-  final List<Task> subtasks;
-
-  SupertaskViewState copyWith({
-    String? title,
-    TaskType? type,
-    DateTime? deadline,
-    List<Task>? subtasks,
-  });
-
-  SupertaskViewState copyWithoutType();
-  SupertaskViewState copyWithoutDeadline();
+  const SupertaskViewState();
 
   @override
-  List<Object?> get props => [initialTask, title, type, deadline, subtasks];
+  List<Object?> get props => [];
 }
 
-final class SupertaskViewSuccess extends SupertaskViewState {
-  const SupertaskViewSuccess({
-    super.initialTask,
-    super.title,
-    super.type,
-    super.deadline,
-    required super.subtasks,
-  });
+final class SupertaskViewInitial extends SupertaskViewState {
+  const SupertaskViewInitial();
+}
 
-  SupertaskViewFailure copyAsFailure({
-    String? title,
-    TaskType? type,
-    DateTime? deadline,
-    List<Task>? subtasks,
-    required SupertaskViewError error,
-  }) => SupertaskViewFailure(
-    initialTask: initialTask,
-    title: title ?? this.title,
-    type: type ?? this.type,
-    deadline: deadline ?? this.deadline,
-    subtasks: subtasks ?? this.subtasks,
-    error: error,
-  );
-
-  @override
-  SupertaskViewSuccess copyWith({
-    String? title,
-    TaskType? type,
-    DateTime? deadline,
-    List<Task>? subtasks,
-  }) => SupertaskViewSuccess(
-    initialTask: initialTask,
-    title: title ?? this.title,
-    type: type ?? this.type,
-    deadline: deadline ?? this.deadline,
-    subtasks: subtasks ?? this.subtasks,
-  );
-
-  @override
-  SupertaskViewSuccess copyWithoutType() => SupertaskViewSuccess(
-    initialTask: initialTask,
-    title: title,
-    type: null,
-    deadline: deadline,
-    subtasks: subtasks,
-  );
-
-  @override
-  SupertaskViewSuccess copyWithoutDeadline() => SupertaskViewSuccess(
-    initialTask: initialTask,
-    title: title,
-    type: type,
-    deadline: null,
-    subtasks: subtasks,
-  );
+final class SupertaskViewLoading extends SupertaskViewState {
+  const SupertaskViewLoading();
 }
 
 final class SupertaskViewFailure extends SupertaskViewState {
-  const SupertaskViewFailure({
-    super.initialTask,
-    super.title,
-    super.type,
-    super.deadline,
-    required super.subtasks,
-    required this.error,
-  });
-
-  final SupertaskViewError error;
-
-  SupertaskViewSuccess copyAsSuccess({
-    String? title,
-    TaskType? type,
-    DateTime? deadline,
-    List<Task>? subtasks,
-  }) => SupertaskViewSuccess(
-    initialTask: initialTask,
-    title: title ?? this.title,
-    type: type ?? this.type,
-    deadline: deadline ?? this.deadline,
-    subtasks: subtasks ?? this.subtasks,
-  );
-
-  @override
-  SupertaskViewFailure copyWith({
-    String? title,
-    TaskType? type,
-    DateTime? deadline,
-    List<Task>? subtasks,
-    SupertaskViewError? error,
-  }) => SupertaskViewFailure(
-    initialTask: initialTask,
-    title: title ?? this.title,
-    type: type ?? this.type,
-    deadline: deadline ?? this.deadline,
-    subtasks: subtasks ?? this.subtasks,
-    error: error ?? this.error,
-  );
-
-  @override
-  SupertaskViewFailure copyWithoutType() => SupertaskViewFailure(
-    initialTask: initialTask,
-    title: title,
-    type: null,
-    deadline: deadline,
-    subtasks: subtasks,
-    error: error,
-  );
-
-  @override
-  SupertaskViewFailure copyWithoutDeadline() => SupertaskViewFailure(
-    initialTask: initialTask,
-    title: title,
-    type: type,
-    deadline: null,
-    subtasks: subtasks,
-    error: error,
-  );
-
-  @override
-  List<Object?> get props => [super.props, error];
+  const SupertaskViewFailure();
 }
 
-final class SupertaskViewChangesSuccessful extends SupertaskViewState {
-  const SupertaskViewChangesSuccessful({
-    super.initialTask,
-    required super.title,
-    required super.type,
-    required super.deadline,
-    required super.subtasks,
-  });
+final class SupertaskViewSuccess extends SupertaskViewState {
+  const SupertaskViewSuccess({required this.task, this.titleError});
+
+  final Supertask task;
+  final TitleError? titleError;
 
   @override
-  SupertaskViewChangesSuccessful copyWith({
-    String? title,
-    TaskType? type,
-    DateTime? deadline,
-    List<Task>? subtasks,
-    SupertaskViewError? error,
-  }) => SupertaskViewChangesSuccessful(
-    initialTask: initialTask,
-    title: title ?? this.title,
-    type: type ?? this.type,
-    deadline: deadline ?? this.deadline,
-    subtasks: subtasks ?? this.subtasks,
-  );
-
-  @override
-  SupertaskViewChangesSuccessful copyWithoutType() =>
-      SupertaskViewChangesSuccessful(
-        initialTask: initialTask,
-        title: title,
-        type: null,
-        deadline: deadline,
-        subtasks: subtasks,
-      );
-
-  @override
-  SupertaskViewChangesSuccessful copyWithoutDeadline() =>
-      SupertaskViewChangesSuccessful(
-        initialTask: initialTask,
-        title: title,
-        type: type,
-        deadline: null,
-        subtasks: subtasks,
-      );
+  List<Object?> get props => [task, titleError];
 }
 
-enum SupertaskViewError { emptyTitle }
+final class SupertaskViewExited extends SupertaskViewState {
+  const SupertaskViewExited();
+}
+
+enum TitleError { emptyOrWhitespace }
