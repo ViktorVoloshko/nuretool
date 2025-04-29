@@ -24,7 +24,7 @@ class SupertaskViewBloc extends Bloc<SupertaskViewEvent, SupertaskViewState> {
 
     int? taskID = event.taskID;
 
-    taskID ??= await _tasksRepository.saveSupertaskWithSubtasks(
+    taskID ??= await _tasksRepository.saveSupertask(
       Supertask(
         title: '',
         isDone: false,

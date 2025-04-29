@@ -42,7 +42,13 @@ class SupertaskViewView extends StatelessWidget {
         return Scaffold(
           floatingActionButton: FloatingActionButton(
             child: Icon(Icons.add),
-            onPressed: () {},
+            onPressed: () async {
+              showModalBottomSheet(
+                context: context,
+                showDragHandle: true,
+                builder: (context) => SizedBox(height: 360),
+              );
+            },
           ),
           body: CustomScrollView(
             slivers: [
