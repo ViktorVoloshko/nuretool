@@ -46,19 +46,24 @@ class SupertaskViewView extends StatelessWidget {
           ),
           body: CustomScrollView(
             slivers: [
-              SliverAppBar.large(),
+              SliverAppBar.large(
+                title: Text(AppLocalizations.of(context)!.supertasksEdit),
+              ),
               if (state is SupertaskViewSuccess)
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TaskTitleField(
                           initialValue: state.task.title,
                           errorText: switch (state.titleError) {
                             null => null,
                             TitleError.emptyOrWhitespace =>
-                              AppLocalizations.of(context)!.title_error,
+                              AppLocalizations.of(
+                                context,
+                              )!.titleEmptyOrWhitespace,
                           },
                           onChanged:
                               (value) => context.read<SupertaskViewBloc>().add(
@@ -79,6 +84,13 @@ class SupertaskViewView extends StatelessWidget {
                                   deadline: value,
                                 ),
                               ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4.0, left: 8.0),
+                          child: Text(
+                            AppLocalizations.of(context)!.subtasks,
+                            style: Theme.of(context).textTheme.labelMedium,
+                          ),
                         ),
                       ],
                     ),

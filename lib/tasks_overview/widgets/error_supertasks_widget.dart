@@ -19,7 +19,7 @@ class ErrorSupertasksWidget extends StatelessWidget {
         ),
         SizedBox(height: 10.0),
         Text(
-          AppLocalizations.of(context)!.error_supertasks,
+          AppLocalizations.of(context)!.supertasksError,
           style: TextStyle(color: Theme.of(context).disabledColor),
         ),
         if (message != null) SizedBox(height: 4.0),

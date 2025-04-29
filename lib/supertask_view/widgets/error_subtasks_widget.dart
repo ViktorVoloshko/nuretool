@@ -19,7 +19,7 @@ class ErrorSubtasksWidget extends StatelessWidget {
         ),
         SizedBox(height: 10.0),
         Text(
-          AppLocalizations.of(context)!.error_subtasks,
+          AppLocalizations.of(context)!.subtasksError,
           style: TextStyle(color: Theme.of(context).disabledColor),
         ),
         if (message != null) SizedBox(height: 4.0),

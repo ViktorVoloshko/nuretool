@@ -17,7 +17,7 @@ class NoSupertasksWidget extends StatelessWidget {
         ),
         SizedBox(height: 10),
         Text(
-          AppLocalizations.of(context)!.no_supertasks,
+          AppLocalizations.of(context)!.supertasksEmpty,
           style: TextStyle(color: Theme.of(context).disabledColor),
         ),
       ],
