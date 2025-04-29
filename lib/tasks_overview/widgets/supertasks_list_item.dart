@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tasks_repository/tasks_repository.dart';
 
 import '../../l10n/app_localizations.dart';
+import '../../utils/utils.dart';
 
 class SupertasksListItem extends StatelessWidget {
   const SupertasksListItem({
@@ -74,7 +75,11 @@ class SupertasksListItem extends StatelessWidget {
                                 ),
                               ),
                             if (supertask.deadline != null)
-                              Chip(label: Text('${supertask.deadline!}')),
+                              Chip(
+                                label: Text(
+                                  supertask.deadline!.toLocalDateFormatString(),
+                                ),
+                              ),
                           ],
                         ),
                       ),

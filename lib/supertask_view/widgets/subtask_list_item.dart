@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tasks_repository/tasks_repository.dart';
 
 import '../../l10n/app_localizations.dart';
+import '../../utils/utils.dart';
 
 class SubtaskListItem extends StatelessWidget {
   const SubtaskListItem({
@@ -52,7 +53,9 @@ class SubtaskListItem extends StatelessWidget {
                     if (!task.isDone && task.deadline != null)
                       Padding(
                         padding: const EdgeInsets.only(top: 4.0),
-                        child: Chip(label: Text('${task.deadline!}')),
+                        child: Chip(
+                          label: Text(task.deadline!.toLocalDateFormatString()),
+                        ),
                       ),
                   ],
                 ),

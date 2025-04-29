@@ -35,17 +35,17 @@ class SupertaskViewBloc extends Bloc<SupertaskViewEvent, SupertaskViewState> {
       ),
     );
 
-    final task = (await _tasksRepository.tasks.first).firstWhere(
-      (task) => task.id == taskID,
-    );
-
     await emit.forEach(
       _tasksRepository.tasks,
       onData:
           (supertasks) => SupertaskViewSuccess(
-            task: task,
+            task: supertasks.firstWhere((task) => task.id == taskID),
             titleError:
-                _isTitleValid(task.title) ? null : TitleError.emptyOrWhitespace,
+                _isTitleValid(
+                      supertasks.firstWhere((task) => task.id == taskID).title,
+                    )
+                    ? null
+                    : TitleError.emptyOrWhitespace,
           ),
     );
   }

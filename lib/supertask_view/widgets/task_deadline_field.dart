@@ -14,8 +14,8 @@ class TaskDeadlineField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: TextEditingController(text: deadline?.toString()),
+    return TextFormField(
+      initialValue: deadline?.toString(),
       onTap: () async {
         final date = await showDatePicker(
           context: context,
