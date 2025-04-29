@@ -111,29 +111,41 @@ abstract class AppLocalizations {
   /// **'More'**
   String get more;
 
-  /// No description provided for @no_supertasks.
+  /// No description provided for @supertasksEmpty.
   ///
   /// In en, this message translates to:
   /// **'No tasks'**
-  String get no_supertasks;
+  String get supertasksEmpty;
 
-  /// No description provided for @error_supertasks.
+  /// No description provided for @supertasksError.
   ///
   /// In en, this message translates to:
   /// **'Error retrieving tasks'**
-  String get error_supertasks;
+  String get supertasksError;
 
-  /// No description provided for @no_subtasks.
+  /// No description provided for @supertasksEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit task'**
+  String get supertasksEdit;
+
+  /// No description provided for @subtasks.
+  ///
+  /// In en, this message translates to:
+  /// **'Subtasks'**
+  String get subtasks;
+
+  /// No description provided for @subtasksEmpty.
   ///
   /// In en, this message translates to:
   /// **'No subtasks'**
-  String get no_subtasks;
+  String get subtasksEmpty;
 
-  /// No description provided for @error_subtasks.
+  /// No description provided for @subtasksError.
   ///
   /// In en, this message translates to:
   /// **'Error retrieving subtasks'**
-  String get error_subtasks;
+  String get subtasksError;
 
   /// No description provided for @project.
   ///
@@ -189,11 +201,11 @@ abstract class AppLocalizations {
   /// **'Title'**
   String get title;
 
-  /// No description provided for @title_error.
+  /// No description provided for @titleEmptyOrWhitespace.
   ///
   /// In en, this message translates to:
   /// **'Title shouldn\'t be empty or contain only whitespace'**
-  String get title_error;
+  String get titleEmptyOrWhitespace;
 
   /// No description provided for @addDeadline.
   ///

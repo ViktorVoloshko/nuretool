@@ -18,16 +18,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get more => 'More';
 
   @override
-  String get no_supertasks => 'No tasks';
+  String get supertasksEmpty => 'No tasks';
 
   @override
-  String get error_supertasks => 'Error retrieving tasks';
+  String get supertasksError => 'Error retrieving tasks';
 
   @override
-  String get no_subtasks => 'No subtasks';
+  String get supertasksEdit => 'Edit task';
 
   @override
-  String get error_subtasks => 'Error retrieving subtasks';
+  String get subtasks => 'Subtasks';
+
+  @override
+  String get subtasksEmpty => 'No subtasks';
+
+  @override
+  String get subtasksError => 'Error retrieving subtasks';
 
   @override
   String get project => 'Project';
@@ -59,7 +65,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get title => 'Title';
 
   @override
-  String get title_error => 'Title shouldn\'t be empty or contain only whitespace';
+  String get titleEmptyOrWhitespace => 'Title shouldn\'t be empty or contain only whitespace';
 
   @override
   String get addDeadline => 'Add deadline';
