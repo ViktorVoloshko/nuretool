@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
+import '../../utils/utils.dart';
 
-class TaskDeadlineField extends StatelessWidget {
+class TaskDeadlineField extends StatefulWidget {
   const TaskDeadlineField({
     super.key,
     required this.deadline,
@@ -13,26 +14,60 @@ class TaskDeadlineField extends StatelessWidget {
   final ValueChanged<DateTime> onDeadlineChanged;
 
   @override
+  State<TaskDeadlineField> createState() => _TaskDeadlineFieldState();
+}
+
+class _TaskDeadlineFieldState extends State<TaskDeadlineField> {
+  final _textController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _textController.text =
+        widget.deadline == null
+            ? ''
+            : widget.deadline!.toLocalDateFormatString();
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      initialValue: deadline?.toString(),
+    return TextField(
+      controller: _textController,
       onTap: () async {
         final date = await showDatePicker(
           context: context,
-          initialDate: deadline,
+          initialDate: widget.deadline,
           firstDate: DateTime(2000),
           lastDate: DateTime(2100),
         );
         if (!context.mounted || date == null) return;
         final time = await showTimePicker(
           context: context,
-          initialTime: TimeOfDay.fromDateTime(deadline ?? DateTime.now()),
+          initialTime: TimeOfDay.fromDateTime(
+            widget.deadline ?? DateTime.now(),
+          ),
         );
         if (time == null) return;
 
-        onDeadlineChanged(
-          DateTime(date.year, date.month, date.day, time.hour, time.minute),
+        final newDeadline = DateTime(
+          date.year,
+          date.month,
+          date.day,
+          time.hour,
+          time.minute,
         );
+
+        setState(
+          () => _textController.text = newDeadline.toLocalDateFormatString(),
+        );
+
+        widget.onDeadlineChanged(newDeadline);
       },
       showCursor: false,
       enableInteractiveSelection: false,
