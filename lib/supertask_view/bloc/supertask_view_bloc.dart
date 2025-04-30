@@ -12,6 +12,7 @@ class SupertaskViewBloc extends Bloc<SupertaskViewEvent, SupertaskViewState> {
     on<SupertaskViewSubscriptionRequested>(_onSubscriptionRequested);
     on<SupertaskViewDataChanged>(_onDataChanged);
     on<SupertaskViewSubtaskCheckboxToggled>(_onSubtaskCheckboxToggled);
+    on<SupertaskViewSubtaskCreationRequested>(_onSubtaskCreationRequested);
   }
 
   final TasksRepository _tasksRepository;
@@ -22,27 +23,16 @@ class SupertaskViewBloc extends Bloc<SupertaskViewEvent, SupertaskViewState> {
   ) async {
     emit(const SupertaskViewLoading());
 
-    int? taskID = event.taskID;
-
-    taskID ??= await _tasksRepository.saveSupertask(
-      Supertask(
-        title: '',
-        isDone: false,
-        isCustom: true,
-        type: null,
-        deadline: null,
-        subtasks: [],
-      ),
-    );
-
     await emit.forEach(
       _tasksRepository.tasks,
       onData:
           (supertasks) => SupertaskViewSuccess(
-            task: supertasks.firstWhere((task) => task.id == taskID),
+            task: supertasks.firstWhere((task) => task.id == event.taskID),
             titleError:
                 _isTitleValid(
-                      supertasks.firstWhere((task) => task.id == taskID).title,
+                      supertasks
+                          .firstWhere((task) => task.id == event.taskID)
+                          .title,
                     )
                     ? null
                     : TitleError.emptyOrWhitespace,
@@ -78,6 +68,25 @@ class SupertaskViewBloc extends Bloc<SupertaskViewEvent, SupertaskViewState> {
   ) => _tasksRepository.saveTask(
     event.task.copyWith(isDone: event.isDone),
     (state as SupertaskViewSuccess).task.id!,
+  );
+
+  Future<void> _onSubtaskCreationRequested(
+    SupertaskViewSubtaskCreationRequested event,
+    Emitter<SupertaskViewState> emit,
+  ) async => emit(
+    SupertaskViewSubtaskCreated(
+      task: (state as SupertaskViewSuccess).task,
+      subtaskID: await _tasksRepository.saveTask(
+        Task(
+          title: 'New subtask',
+          isDone: false,
+          isCustom: true,
+          type: null,
+          deadline: null,
+        ),
+        (state as SupertaskViewSuccess).task.id!,
+      ),
+    ),
   );
 
   bool _isTitleValid(String title) => title.trim().isEmpty ? false : true;

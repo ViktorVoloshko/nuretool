@@ -29,8 +29,17 @@ final class SupertaskViewSuccess extends SupertaskViewState {
   List<Object?> get props => [task, titleError];
 }
 
-final class SupertaskViewExited extends SupertaskViewState {
-  const SupertaskViewExited();
+final class SupertaskViewSubtaskCreated extends SupertaskViewSuccess {
+  const SupertaskViewSubtaskCreated({
+    required super.task,
+    super.titleError,
+    required this.subtaskID,
+  });
+
+  final int subtaskID;
+
+  @override
+  List<Object?> get props => [...super.props, subtaskID];
 }
 
 enum TitleError { emptyOrWhitespace }

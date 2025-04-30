@@ -23,9 +23,23 @@ class SupertaskViewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<SupertaskViewBloc, SupertaskViewState>(
-      listener: (context, state) {
-        if (state is SupertaskViewExited) {
-          Navigator.of(context).pop();
+      listener: (context, state) async {
+        if (state is SupertaskViewSubtaskCreated) {
+          await Future.delayed(Durations.short1);
+          if (!context.mounted) return;
+          showModalBottomSheet(
+            context: context,
+            enableDrag: true,
+            showDragHandle: true,
+            builder:
+                (context) => Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: TaskViewPage(
+                    supertaskID: state.task.id!,
+                    taskID: state.subtaskID,
+                  ),
+                ),
+          );
         }
       },
       child: const SupertaskViewView(),
@@ -41,16 +55,16 @@ class SupertaskViewView extends StatelessWidget {
     return BlocBuilder<SupertaskViewBloc, SupertaskViewState>(
       builder: (context, state) {
         return Scaffold(
-          floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.add),
-            onPressed: () async {
-              showModalBottomSheet(
-                context: context,
-                showDragHandle: true,
-                builder: (context) => SizedBox(height: 360),
-              );
-            },
-          ),
+          floatingActionButton:
+              (state is! SupertaskViewSuccess)
+                  ? null
+                  : FloatingActionButton(
+                    child: Icon(Icons.add),
+                    onPressed:
+                        () => context.read<SupertaskViewBloc>().add(
+                          const SupertaskViewSubtaskCreationRequested(),
+                        ),
+                  ),
           body: CustomScrollView(
             slivers: [
               SliverAppBar.large(
@@ -171,10 +185,6 @@ class SupertaskViewView extends StatelessWidget {
                               ),
                             ),
                       ),
-                SupertaskViewExited() => const SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: CircularProgressIndicator(),
-                ),
               },
             ],
           ),

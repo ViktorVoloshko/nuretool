@@ -23,18 +23,6 @@ class TaskViewBloc extends Bloc<TaskViewEvent, TaskViewState> {
     emit(const TaskViewLoading());
 
     supertaskID = event.supertaskID;
-    int? taskID = event.taskID;
-
-    taskID ??= await _tasksRepository.saveTask(
-      Task(
-        title: '',
-        isDone: false,
-        isCustom: true,
-        type: null,
-        deadline: null,
-      ),
-      supertaskID,
-    );
 
     await emit.forEach(
       _tasksRepository.tasks,
@@ -42,12 +30,12 @@ class TaskViewBloc extends Bloc<TaskViewEvent, TaskViewState> {
         for (final supertask in supertasks) {
           return TaskViewSuccess(
             task: supertask.subtasks.firstWhere(
-              (subtask) => subtask.id == taskID,
+              (subtask) => subtask.id == event.taskID,
             ),
             titleError:
                 _isTitleValid(
                       supertask.subtasks
-                          .firstWhere((subtask) => subtask.id == taskID)
+                          .firstWhere((subtask) => subtask.id == event.taskID)
                           .title,
                     )
                     ? null

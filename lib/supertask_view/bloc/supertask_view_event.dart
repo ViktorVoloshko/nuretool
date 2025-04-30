@@ -43,3 +43,7 @@ final class SupertaskViewSubtaskCheckboxToggled extends SupertaskViewEvent {
   @override
   List<Object?> get props => [task, isDone];
 }
+
+final class SupertaskViewSubtaskCreationRequested extends SupertaskViewEvent {
+  const SupertaskViewSubtaskCreationRequested();
+}
