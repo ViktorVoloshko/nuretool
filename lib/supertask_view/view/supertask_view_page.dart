@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nuretool/l10n/app_localizations.dart';
 import 'package:tasks_repository/tasks_repository.dart';
 
 import '../supertask_view.dart';
+import '../../l10n/app_localizations.dart';
+import '../../task_view/task_view.dart' hide TitleError;
 
 class SupertaskViewPage extends StatelessWidget {
   const SupertaskViewPage({super.key});
@@ -62,7 +63,7 @@ class SupertaskViewView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        TaskTitleField(
+                        SupertaskTitleField(
                           initialValue: state.task.title,
                           errorText: switch (state.titleError) {
                             null => null,
@@ -80,7 +81,7 @@ class SupertaskViewView extends StatelessWidget {
                                 ),
                               ),
                         ),
-                        TaskDeadlineField(
+                        SupertaskDeadlineField(
                           deadline: state.task.deadline,
                           onDeadlineChanged:
                               (value) => context.read<SupertaskViewBloc>().add(
@@ -143,7 +144,22 @@ class SupertaskViewView extends StatelessWidget {
                               ),
                               child: SubtaskListItem(
                                 task: state.task.subtasks[index],
-                                onTap: () {},
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    enableDrag: true,
+                                    showDragHandle: true,
+                                    builder:
+                                        (context) => Padding(
+                                          padding: const EdgeInsets.all(16.0),
+                                          child: TaskViewPage(
+                                            taskID:
+                                                state.task.subtasks[index].id,
+                                            supertaskID: state.task.id!,
+                                          ),
+                                        ),
+                                  );
+                                },
                                 onCheckboxTapped:
                                     (value) =>
                                         context.read<SupertaskViewBloc>().add(

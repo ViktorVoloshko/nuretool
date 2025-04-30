@@ -3,21 +3,21 @@ import 'package:flutter/material.dart';
 import '../../l10n/app_localizations.dart';
 import '../../utils/utils.dart';
 
-class TaskDeadlineField extends StatefulWidget {
-  const TaskDeadlineField({
+class SupertaskDeadlineField extends StatefulWidget {
+  const SupertaskDeadlineField({
     super.key,
     required this.deadline,
     required this.onDeadlineChanged,
   });
 
   final DateTime? deadline;
-  final ValueChanged<DateTime> onDeadlineChanged;
+  final ValueChanged<DateTime?> onDeadlineChanged;
 
   @override
-  State<TaskDeadlineField> createState() => _TaskDeadlineFieldState();
+  State<SupertaskDeadlineField> createState() => _SupertaskDeadlineFieldState();
 }
 
-class _TaskDeadlineFieldState extends State<TaskDeadlineField> {
+class _SupertaskDeadlineFieldState extends State<SupertaskDeadlineField> {
   final _textController = TextEditingController();
 
   @override
@@ -75,6 +75,13 @@ class _TaskDeadlineFieldState extends State<TaskDeadlineField> {
         hintText: AppLocalizations.of(context)!.addDeadline,
         prefixIcon: Icon(Icons.calendar_today),
         border: InputBorder.none,
+        suffixIcon: IconButton(
+          onPressed: () {
+            setState(() => _textController.clear());
+            widget.onDeadlineChanged(null);
+          },
+          icon: Icon(Icons.clear),
+        ),
       ),
     );
   }
