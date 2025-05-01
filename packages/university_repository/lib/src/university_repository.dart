@@ -4,7 +4,7 @@ import 'package:events_api/events_api.dart' show EventsApi;
 import 'package:groups_api/groups_api.dart' show GroupsApi;
 import 'package:rooms_api/rooms_api.dart' show RoomsApi;
 import 'package:teachers_api/teachers_api.dart' show TeachersApi;
-import 'package:local_db_api/local_db_api.dart' as db;
+import 'package:drift_db/drift_db.dart' as db;
 import 'package:rxdart/rxdart.dart' hide Subject;
 
 import 'models/models.dart';
@@ -15,12 +15,12 @@ class UniversityRepository {
     required GroupsApi groupsApi,
     required TeachersApi teachersApi,
     required RoomsApi roomsApi,
-    required db.LocalDBApi localDBApi,
+    required db.DriftDB driftDB,
   }) : _eventsApi = eventsApi,
        _groupsApi = groupsApi,
        _teachersApi = teachersApi,
        _roomsApi = roomsApi,
-       _localDBApi = localDBApi {
+       _driftDB = driftDB {
     _init();
   }
 
@@ -28,7 +28,7 @@ class UniversityRepository {
   final GroupsApi _groupsApi;
   final TeachersApi _teachersApi;
   final RoomsApi _roomsApi;
-  final db.LocalDBApi _localDBApi;
+  final db.DriftDB _driftDB;
 
   final BehaviorSubject<List<Event>> _eventsStreamController =
       BehaviorSubject<List<Event>>.seeded(const []);
@@ -70,7 +70,7 @@ class UniversityRepository {
       }
     }
 
-    return _localDBApi.saveGroups(groups);
+    return _driftDB.saveGroups(groups);
   }
 
   Future<void> fetchTeachers() async {
@@ -87,7 +87,7 @@ class UniversityRepository {
       }
     }
 
-    return _localDBApi.saveTeachers(teachers);
+    return _driftDB.saveTeachers(teachers);
   }
 
   Future<void> fetchRooms() async {
@@ -99,7 +99,7 @@ class UniversityRepository {
       rooms.addAll(building.auditories.map((e) => e.toDBModel()));
     }
 
-    return _localDBApi.saveRooms(rooms);
+    return _driftDB.saveRooms(rooms);
   }
 
   Future<void> fetchEventsForGroup(
@@ -113,15 +113,14 @@ class UniversityRepository {
       to.millisecondsSinceEpoch ~/ 1000,
     );
 
-    _localDBApi.saveSubjects(subjects.map((e) => e.toDBModel()));
-    return _localDBApi.saveApiEvents(
+    _driftDB.saveSubjects(subjects.map((e) => e.toDBModel()));
+    return _driftDB.saveApiEvents(
       events.map((e) => e.toDBModel()),
       types.map((e) => e.toDBModel()),
     );
   }
 
-  Future<void> saveEvent(Event event) =>
-      _localDBApi.saveEvent(event.toDBModel());
+  Future<void> saveEvent(Event event) => _driftDB.saveEvent(event.toDBModel());
 
   // TODO: Delete event
 
@@ -143,37 +142,31 @@ class UniversityRepository {
   }
 
   Future<void> _init() async {
-    _subjectsSubscription = _localDBApi
-        .loadSubjects()
-        .asBroadcastStream()
-        .listen(
-          (subjects) => _subjectsStreamController.add(
-            subjects.map((e) => Subject.fromDBModel(e)).toList(),
-          ),
-        );
+    _subjectsSubscription = _driftDB.loadSubjects().asBroadcastStream().listen(
+      (subjects) => _subjectsStreamController.add(
+        subjects.map((e) => Subject.fromDBModel(e)).toList(),
+      ),
+    );
 
-    _groupsSubscription = _localDBApi.loadGroups().asBroadcastStream().listen(
+    _groupsSubscription = _driftDB.loadGroups().asBroadcastStream().listen(
       (groups) => _groupsStreamController.add(
         groups.map((e) => Group.fromDBModel(e)).toList(),
       ),
     );
 
-    _teachersSubscription = _localDBApi
-        .loadTeachers()
-        .asBroadcastStream()
-        .listen(
-          (teachers) => _teachersStreamController.add(
-            teachers.map((e) => Teacher.fromDBModel(e)).toList(),
-          ),
-        );
+    _teachersSubscription = _driftDB.loadTeachers().asBroadcastStream().listen(
+      (teachers) => _teachersStreamController.add(
+        teachers.map((e) => Teacher.fromDBModel(e)).toList(),
+      ),
+    );
 
-    _roomsSubscription = _localDBApi.loadRooms().asBroadcastStream().listen(
+    _roomsSubscription = _driftDB.loadRooms().asBroadcastStream().listen(
       (rooms) => _roomsStreamController.add(
         rooms.map((e) => Room.fromDBModel(e)).toList(),
       ),
     );
 
-    _eventsSubscription = _localDBApi.loadEvents().asBroadcastStream().listen((
+    _eventsSubscription = _driftDB.loadEvents().asBroadcastStream().listen((
       eventsData,
     ) {
       final subjects = _subjectsStreamController.value;

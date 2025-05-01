@@ -14,8 +14,8 @@ dependencies:
   equatable: ^2.0.7
   flutter:
     sdk: flutter
-  local_db_api:
-    path: ../local_db_api
+  drift_db:
+    path: ../drift_db
   meta: ^1.16.0
   rxdart: ^0.28.0
 

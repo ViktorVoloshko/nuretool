@@ -1,8 +1,8 @@
+import 'package:drift_db/drift_db.dart';
 import 'package:events_api/events_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:groups_api/groups_api.dart';
-import 'package:local_db_api/local_db_api.dart';
 import 'package:nuretool/home/view/view.dart';
 import 'package:rooms_api/rooms_api.dart';
 import 'package:tasks_repository/tasks_repository.dart';
@@ -16,7 +16,7 @@ class App extends StatelessWidget {
     super.key,
     required this.createUniversityRepository,
     required this.createTasksRepository,
-    required this.localDBApi,
+    required this.driftDB,
     required this.eventsApi,
     required this.groupsApi,
     required this.teachersApi,
@@ -28,13 +28,13 @@ class App extends StatelessWidget {
     required GroupsApi groupsApi,
     required TeachersApi teachersApi,
     required RoomsApi roomsApi,
-    required LocalDBApi localDBApi,
+    required DriftDB driftDB,
   })
   createUniversityRepository;
-  final TasksRepository Function({required LocalDBApi localDBApi})
+  final TasksRepository Function({required DriftDB driftDB})
   createTasksRepository;
 
-  final LocalDBApi localDBApi;
+  final DriftDB driftDB;
   final EventsApi eventsApi;
   final GroupsApi groupsApi;
   final TeachersApi teachersApi;
@@ -47,7 +47,7 @@ class App extends StatelessWidget {
         RepositoryProvider<UniversityRepository>(
           create:
               (_) => createUniversityRepository(
-                localDBApi: localDBApi,
+                driftDB: driftDB,
                 eventsApi: eventsApi,
                 groupsApi: groupsApi,
                 teachersApi: teachersApi,
@@ -56,7 +56,7 @@ class App extends StatelessWidget {
           dispose: (repository) => repository.dispose(),
         ),
         RepositoryProvider<TasksRepository>(
-          create: (_) => createTasksRepository(localDBApi: localDBApi),
+          create: (_) => createTasksRepository(driftDB: driftDB),
           dispose: (repository) => repository.dispose(),
         ),
       ],
@@ -71,7 +71,6 @@ class AppView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // TODO: Themes
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       home: const HomePage(),

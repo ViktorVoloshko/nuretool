@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:drift/drift.dart';
 import 'package:events_api/events_api.dart' as api;
-import 'package:local_db_api/local_db_api.dart' as db;
+import 'package:drift_db/drift_db.dart' as db;
 
 @immutable
 class EventType extends Equatable {

@@ -1,17 +1,16 @@
 import 'dart:async';
 
-import 'package:local_db_api/local_db_api.dart' as db;
+import 'package:drift_db/drift_db.dart' as db;
 import 'package:rxdart/rxdart.dart';
 
 import 'models/models.dart';
 
 class TasksRepository {
-  TasksRepository({required db.LocalDBApi localDBApi})
-    : _localDBApi = localDBApi {
+  TasksRepository({required db.DriftDB driftDB}) : _driftDB = driftDB {
     _init();
   }
 
-  final db.LocalDBApi _localDBApi;
+  final db.DriftDB _driftDB;
 
   final _tasksStreamController = BehaviorSubject<List<Supertask>>.seeded(
     const [],
@@ -23,25 +22,25 @@ class TasksRepository {
       _tasksStreamController.asBroadcastStream();
 
   Future<int> saveTask(Task task, int supertaskID) =>
-      _localDBApi.saveTask(task.toDBModel(supertaskID));
+      _driftDB.saveTask(task.toDBModel(supertaskID));
 
   Future<int> saveSupertask(Supertask task) =>
-      _localDBApi.saveTask(task.toDBModel());
+      _driftDB.saveTask(task.toDBModel());
 
   Future<int> saveSupertaskWithSubtasks(Supertask task) async {
-    _localDBApi.saveTasks(task.subtasksToDBModels(task.id));
-    return _localDBApi.saveTask(task.toDBModel());
+    _driftDB.saveTasks(task.subtasksToDBModels(task.id));
+    return _driftDB.saveTask(task.toDBModel());
   }
 
   Future<void> saveSupertasks(Iterable<Supertask> tasks) async {
     final subtasks = <db.TasksCompanion>[];
 
     for (final supertask in tasks) {
-      final id = await _localDBApi.saveTask(supertask.toDBModel());
+      final id = await _driftDB.saveTask(supertask.toDBModel());
       subtasks.addAll(supertask.subtasksToDBModels(id));
     }
 
-    return _localDBApi.saveTasks(subtasks);
+    return _driftDB.saveTasks(subtasks);
   }
 
   Future<dynamic> dispose() async {
@@ -50,7 +49,7 @@ class TasksRepository {
   }
 
   void _init() {
-    _tasksSubscription = _localDBApi.loadTasks().listen((tasks) {
+    _tasksSubscription = _driftDB.loadTasks().listen((tasks) {
       final result = <Supertask>[];
 
       final supertasks = tasks.where((task) => task.supertask == null);

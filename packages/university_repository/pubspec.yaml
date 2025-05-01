@@ -19,8 +19,8 @@ dependencies:
     path: ../rooms_api
   cist_api:
     path: ../cist_api
-  local_db_api:
-    path: ../local_db_api
+  drift_db:
+    path: ../drift_db
   flutter:
     sdk: flutter
   equatable: ^2.0.7
