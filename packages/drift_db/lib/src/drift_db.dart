@@ -75,6 +75,9 @@ class DriftDB extends _$DriftDB {
   Future<void> saveEvents(Iterable<EventsCompanion> events) =>
       batch((batch) => batch.insertAllOnConflictUpdate(this.events, events));
 
+  Future<int> deleteFetchedEvents() =>
+      (delete(events)..where((event) => event.isCustom.equals(false))).go();
+
   Future<void> saveSubjects(Iterable<SubjectsCompanion> subjects) => batch(
     (batch) => batch.insertAllOnConflictUpdate(this.subjects, subjects),
   );
@@ -96,4 +99,15 @@ class DriftDB extends _$DriftDB {
 
   Future<void> saveTasks(Iterable<TasksCompanion> tasks) =>
       batch((batch) => batch.insertAllOnConflictUpdate(this.tasks, tasks));
+
+  Future<int> deleteTask(int id) =>
+      (delete(tasks)..where((task) => task.id.equals(id))).go();
+
+  Future<int> deleteSupertask(int id) async {
+    await (delete(tasks)..where((task) => task.supertask.equals(id))).go();
+    return deleteTask(id);
+  }
+
+  Future<int> deleteGeneratedTasks() =>
+      (delete(tasks)..where((task) => task.isCustom.equals(false))).go();
 }
