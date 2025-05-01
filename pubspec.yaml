@@ -15,8 +15,8 @@ dependencies:
     path: ./packages/tasks_repository
   cist_api:
     path: ./packages/cist_api
-  local_db_api:
-    path: ./packages/local_db_api
+  drift_db:
+    path: ./packages/drift_db
   events_api:
     path: ./packages/events_api
   groups_api:

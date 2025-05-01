@@ -2108,9 +2108,9 @@ class RoomsCompanion extends UpdateCompanion<Room> {
   }
 }
 
-abstract class _$AppDatabase extends GeneratedDatabase {
-  _$AppDatabase(QueryExecutor e) : super(e);
-  $AppDatabaseManager get managers => $AppDatabaseManager(this);
+abstract class _$DriftDB extends GeneratedDatabase {
+  _$DriftDB(QueryExecutor e) : super(e);
+  $DriftDBManager get managers => $DriftDBManager(this);
   late final $SubjectsTable subjects = $SubjectsTable(this);
   late final $EventTypesTable eventTypes = $EventTypesTable(this);
   late final $EventsTable events = $EventsTable(this);
@@ -2147,11 +2147,11 @@ typedef $$SubjectsTableUpdateCompanionBuilder =
     });
 
 final class $$SubjectsTableReferences
-    extends BaseReferences<_$AppDatabase, $SubjectsTable, Subject> {
+    extends BaseReferences<_$DriftDB, $SubjectsTable, Subject> {
   $$SubjectsTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
   static MultiTypedResultKey<$EventsTable, List<Event>> _eventsRefsTable(
-    _$AppDatabase db,
+    _$DriftDB db,
   ) => MultiTypedResultKey.fromTable(
     db.events,
     aliasName: $_aliasNameGenerator(db.subjects.id, db.events.subject),
@@ -2171,7 +2171,7 @@ final class $$SubjectsTableReferences
 }
 
 class $$SubjectsTableFilterComposer
-    extends Composer<_$AppDatabase, $SubjectsTable> {
+    extends Composer<_$DriftDB, $SubjectsTable> {
   $$SubjectsTableFilterComposer({
     required super.$db,
     required super.$table,
@@ -2221,7 +2221,7 @@ class $$SubjectsTableFilterComposer
 }
 
 class $$SubjectsTableOrderingComposer
-    extends Composer<_$AppDatabase, $SubjectsTable> {
+    extends Composer<_$DriftDB, $SubjectsTable> {
   $$SubjectsTableOrderingComposer({
     required super.$db,
     required super.$table,
@@ -2246,7 +2246,7 @@ class $$SubjectsTableOrderingComposer
 }
 
 class $$SubjectsTableAnnotationComposer
-    extends Composer<_$AppDatabase, $SubjectsTable> {
+    extends Composer<_$DriftDB, $SubjectsTable> {
   $$SubjectsTableAnnotationComposer({
     required super.$db,
     required super.$table,
@@ -2294,7 +2294,7 @@ class $$SubjectsTableAnnotationComposer
 class $$SubjectsTableTableManager
     extends
         RootTableManager<
-          _$AppDatabase,
+          _$DriftDB,
           $SubjectsTable,
           Subject,
           $$SubjectsTableFilterComposer,
@@ -2306,7 +2306,7 @@ class $$SubjectsTableTableManager
           Subject,
           PrefetchHooks Function({bool eventsRefs})
         > {
-  $$SubjectsTableTableManager(_$AppDatabase db, $SubjectsTable table)
+  $$SubjectsTableTableManager(_$DriftDB db, $SubjectsTable table)
     : super(
         TableManagerState(
           db: db,
@@ -2382,7 +2382,7 @@ class $$SubjectsTableTableManager
 
 typedef $$SubjectsTableProcessedTableManager =
     ProcessedTableManager<
-      _$AppDatabase,
+      _$DriftDB,
       $SubjectsTable,
       Subject,
       $$SubjectsTableFilterComposer,
@@ -2408,11 +2408,11 @@ typedef $$EventTypesTableUpdateCompanionBuilder =
     });
 
 final class $$EventTypesTableReferences
-    extends BaseReferences<_$AppDatabase, $EventTypesTable, EventType> {
+    extends BaseReferences<_$DriftDB, $EventTypesTable, EventType> {
   $$EventTypesTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
   static MultiTypedResultKey<$EventsTable, List<Event>> _eventsRefsTable(
-    _$AppDatabase db,
+    _$DriftDB db,
   ) => MultiTypedResultKey.fromTable(
     db.events,
     aliasName: $_aliasNameGenerator(db.eventTypes.id, db.events.type),
@@ -2432,7 +2432,7 @@ final class $$EventTypesTableReferences
 }
 
 class $$EventTypesTableFilterComposer
-    extends Composer<_$AppDatabase, $EventTypesTable> {
+    extends Composer<_$DriftDB, $EventTypesTable> {
   $$EventTypesTableFilterComposer({
     required super.$db,
     required super.$table,
@@ -2482,7 +2482,7 @@ class $$EventTypesTableFilterComposer
 }
 
 class $$EventTypesTableOrderingComposer
-    extends Composer<_$AppDatabase, $EventTypesTable> {
+    extends Composer<_$DriftDB, $EventTypesTable> {
   $$EventTypesTableOrderingComposer({
     required super.$db,
     required super.$table,
@@ -2507,7 +2507,7 @@ class $$EventTypesTableOrderingComposer
 }
 
 class $$EventTypesTableAnnotationComposer
-    extends Composer<_$AppDatabase, $EventTypesTable> {
+    extends Composer<_$DriftDB, $EventTypesTable> {
   $$EventTypesTableAnnotationComposer({
     required super.$db,
     required super.$table,
@@ -2553,7 +2553,7 @@ class $$EventTypesTableAnnotationComposer
 class $$EventTypesTableTableManager
     extends
         RootTableManager<
-          _$AppDatabase,
+          _$DriftDB,
           $EventTypesTable,
           EventType,
           $$EventTypesTableFilterComposer,
@@ -2565,7 +2565,7 @@ class $$EventTypesTableTableManager
           EventType,
           PrefetchHooks Function({bool eventsRefs})
         > {
-  $$EventTypesTableTableManager(_$AppDatabase db, $EventTypesTable table)
+  $$EventTypesTableTableManager(_$DriftDB db, $EventTypesTable table)
     : super(
         TableManagerState(
           db: db,
@@ -2641,7 +2641,7 @@ class $$EventTypesTableTableManager
 
 typedef $$EventTypesTableProcessedTableManager =
     ProcessedTableManager<
-      _$AppDatabase,
+      _$DriftDB,
       $EventTypesTable,
       EventType,
       $$EventTypesTableFilterComposer,
@@ -2677,11 +2677,12 @@ typedef $$EventsTableUpdateCompanionBuilder =
     });
 
 final class $$EventsTableReferences
-    extends BaseReferences<_$AppDatabase, $EventsTable, Event> {
+    extends BaseReferences<_$DriftDB, $EventsTable, Event> {
   $$EventsTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static $SubjectsTable _subjectTable(_$AppDatabase db) => db.subjects
-      .createAlias($_aliasNameGenerator(db.events.subject, db.subjects.id));
+  static $SubjectsTable _subjectTable(_$DriftDB db) => db.subjects.createAlias(
+    $_aliasNameGenerator(db.events.subject, db.subjects.id),
+  );
 
   $$SubjectsTableProcessedTableManager get subject {
     final $_column = $_itemColumn<int>('subject')!;
@@ -2697,8 +2698,9 @@ final class $$EventsTableReferences
     );
   }
 
-  static $EventTypesTable _typeTable(_$AppDatabase db) => db.eventTypes
-      .createAlias($_aliasNameGenerator(db.events.type, db.eventTypes.id));
+  static $EventTypesTable _typeTable(_$DriftDB db) => db.eventTypes.createAlias(
+    $_aliasNameGenerator(db.events.type, db.eventTypes.id),
+  );
 
   $$EventTypesTableProcessedTableManager? get type {
     final $_column = $_itemColumn<int>('type');
@@ -2715,8 +2717,7 @@ final class $$EventsTableReferences
   }
 }
 
-class $$EventsTableFilterComposer
-    extends Composer<_$AppDatabase, $EventsTable> {
+class $$EventsTableFilterComposer extends Composer<_$DriftDB, $EventsTable> {
   $$EventsTableFilterComposer({
     required super.$db,
     required super.$table,
@@ -2803,8 +2804,7 @@ class $$EventsTableFilterComposer
   }
 }
 
-class $$EventsTableOrderingComposer
-    extends Composer<_$AppDatabase, $EventsTable> {
+class $$EventsTableOrderingComposer extends Composer<_$DriftDB, $EventsTable> {
   $$EventsTableOrderingComposer({
     required super.$db,
     required super.$table,
@@ -2890,7 +2890,7 @@ class $$EventsTableOrderingComposer
 }
 
 class $$EventsTableAnnotationComposer
-    extends Composer<_$AppDatabase, $EventsTable> {
+    extends Composer<_$DriftDB, $EventsTable> {
   $$EventsTableAnnotationComposer({
     required super.$db,
     required super.$table,
@@ -2966,7 +2966,7 @@ class $$EventsTableAnnotationComposer
 class $$EventsTableTableManager
     extends
         RootTableManager<
-          _$AppDatabase,
+          _$DriftDB,
           $EventsTable,
           Event,
           $$EventsTableFilterComposer,
@@ -2978,7 +2978,7 @@ class $$EventsTableTableManager
           Event,
           PrefetchHooks Function({bool subject, bool type})
         > {
-  $$EventsTableTableManager(_$AppDatabase db, $EventsTable table)
+  $$EventsTableTableManager(_$DriftDB db, $EventsTable table)
     : super(
         TableManagerState(
           db: db,
@@ -3097,7 +3097,7 @@ class $$EventsTableTableManager
 
 typedef $$EventsTableProcessedTableManager =
     ProcessedTableManager<
-      _$AppDatabase,
+      _$DriftDB,
       $EventsTable,
       Event,
       $$EventsTableFilterComposer,
@@ -3130,7 +3130,7 @@ typedef $$TasksTableUpdateCompanionBuilder =
       Value<TaskType?> type,
     });
 
-class $$TasksTableFilterComposer extends Composer<_$AppDatabase, $TasksTable> {
+class $$TasksTableFilterComposer extends Composer<_$DriftDB, $TasksTable> {
   $$TasksTableFilterComposer({
     required super.$db,
     required super.$table,
@@ -3175,8 +3175,7 @@ class $$TasksTableFilterComposer extends Composer<_$AppDatabase, $TasksTable> {
       );
 }
 
-class $$TasksTableOrderingComposer
-    extends Composer<_$AppDatabase, $TasksTable> {
+class $$TasksTableOrderingComposer extends Composer<_$DriftDB, $TasksTable> {
   $$TasksTableOrderingComposer({
     required super.$db,
     required super.$table,
@@ -3220,8 +3219,7 @@ class $$TasksTableOrderingComposer
   );
 }
 
-class $$TasksTableAnnotationComposer
-    extends Composer<_$AppDatabase, $TasksTable> {
+class $$TasksTableAnnotationComposer extends Composer<_$DriftDB, $TasksTable> {
   $$TasksTableAnnotationComposer({
     required super.$db,
     required super.$table,
@@ -3254,7 +3252,7 @@ class $$TasksTableAnnotationComposer
 class $$TasksTableTableManager
     extends
         RootTableManager<
-          _$AppDatabase,
+          _$DriftDB,
           $TasksTable,
           Task,
           $$TasksTableFilterComposer,
@@ -3262,11 +3260,11 @@ class $$TasksTableTableManager
           $$TasksTableAnnotationComposer,
           $$TasksTableCreateCompanionBuilder,
           $$TasksTableUpdateCompanionBuilder,
-          (Task, BaseReferences<_$AppDatabase, $TasksTable, Task>),
+          (Task, BaseReferences<_$DriftDB, $TasksTable, Task>),
           Task,
           PrefetchHooks Function()
         > {
-  $$TasksTableTableManager(_$AppDatabase db, $TasksTable table)
+  $$TasksTableTableManager(_$DriftDB db, $TasksTable table)
     : super(
         TableManagerState(
           db: db,
@@ -3330,7 +3328,7 @@ class $$TasksTableTableManager
 
 typedef $$TasksTableProcessedTableManager =
     ProcessedTableManager<
-      _$AppDatabase,
+      _$DriftDB,
       $TasksTable,
       Task,
       $$TasksTableFilterComposer,
@@ -3338,7 +3336,7 @@ typedef $$TasksTableProcessedTableManager =
       $$TasksTableAnnotationComposer,
       $$TasksTableCreateCompanionBuilder,
       $$TasksTableUpdateCompanionBuilder,
-      (Task, BaseReferences<_$AppDatabase, $TasksTable, Task>),
+      (Task, BaseReferences<_$DriftDB, $TasksTable, Task>),
       Task,
       PrefetchHooks Function()
     >;
@@ -3347,8 +3345,7 @@ typedef $$GroupsTableCreateCompanionBuilder =
 typedef $$GroupsTableUpdateCompanionBuilder =
     GroupsCompanion Function({Value<int> id, Value<String> name});
 
-class $$GroupsTableFilterComposer
-    extends Composer<_$AppDatabase, $GroupsTable> {
+class $$GroupsTableFilterComposer extends Composer<_$DriftDB, $GroupsTable> {
   $$GroupsTableFilterComposer({
     required super.$db,
     required super.$table,
@@ -3367,8 +3364,7 @@ class $$GroupsTableFilterComposer
   );
 }
 
-class $$GroupsTableOrderingComposer
-    extends Composer<_$AppDatabase, $GroupsTable> {
+class $$GroupsTableOrderingComposer extends Composer<_$DriftDB, $GroupsTable> {
   $$GroupsTableOrderingComposer({
     required super.$db,
     required super.$table,
@@ -3388,7 +3384,7 @@ class $$GroupsTableOrderingComposer
 }
 
 class $$GroupsTableAnnotationComposer
-    extends Composer<_$AppDatabase, $GroupsTable> {
+    extends Composer<_$DriftDB, $GroupsTable> {
   $$GroupsTableAnnotationComposer({
     required super.$db,
     required super.$table,
@@ -3406,7 +3402,7 @@ class $$GroupsTableAnnotationComposer
 class $$GroupsTableTableManager
     extends
         RootTableManager<
-          _$AppDatabase,
+          _$DriftDB,
           $GroupsTable,
           Group,
           $$GroupsTableFilterComposer,
@@ -3414,11 +3410,11 @@ class $$GroupsTableTableManager
           $$GroupsTableAnnotationComposer,
           $$GroupsTableCreateCompanionBuilder,
           $$GroupsTableUpdateCompanionBuilder,
-          (Group, BaseReferences<_$AppDatabase, $GroupsTable, Group>),
+          (Group, BaseReferences<_$DriftDB, $GroupsTable, Group>),
           Group,
           PrefetchHooks Function()
         > {
-  $$GroupsTableTableManager(_$AppDatabase db, $GroupsTable table)
+  $$GroupsTableTableManager(_$DriftDB db, $GroupsTable table)
     : super(
         TableManagerState(
           db: db,
@@ -3454,7 +3450,7 @@ class $$GroupsTableTableManager
 
 typedef $$GroupsTableProcessedTableManager =
     ProcessedTableManager<
-      _$AppDatabase,
+      _$DriftDB,
       $GroupsTable,
       Group,
       $$GroupsTableFilterComposer,
@@ -3462,7 +3458,7 @@ typedef $$GroupsTableProcessedTableManager =
       $$GroupsTableAnnotationComposer,
       $$GroupsTableCreateCompanionBuilder,
       $$GroupsTableUpdateCompanionBuilder,
-      (Group, BaseReferences<_$AppDatabase, $GroupsTable, Group>),
+      (Group, BaseReferences<_$DriftDB, $GroupsTable, Group>),
       Group,
       PrefetchHooks Function()
     >;
@@ -3480,7 +3476,7 @@ typedef $$TeachersTableUpdateCompanionBuilder =
     });
 
 class $$TeachersTableFilterComposer
-    extends Composer<_$AppDatabase, $TeachersTable> {
+    extends Composer<_$DriftDB, $TeachersTable> {
   $$TeachersTableFilterComposer({
     required super.$db,
     required super.$table,
@@ -3505,7 +3501,7 @@ class $$TeachersTableFilterComposer
 }
 
 class $$TeachersTableOrderingComposer
-    extends Composer<_$AppDatabase, $TeachersTable> {
+    extends Composer<_$DriftDB, $TeachersTable> {
   $$TeachersTableOrderingComposer({
     required super.$db,
     required super.$table,
@@ -3530,7 +3526,7 @@ class $$TeachersTableOrderingComposer
 }
 
 class $$TeachersTableAnnotationComposer
-    extends Composer<_$AppDatabase, $TeachersTable> {
+    extends Composer<_$DriftDB, $TeachersTable> {
   $$TeachersTableAnnotationComposer({
     required super.$db,
     required super.$table,
@@ -3551,7 +3547,7 @@ class $$TeachersTableAnnotationComposer
 class $$TeachersTableTableManager
     extends
         RootTableManager<
-          _$AppDatabase,
+          _$DriftDB,
           $TeachersTable,
           Teacher,
           $$TeachersTableFilterComposer,
@@ -3559,11 +3555,11 @@ class $$TeachersTableTableManager
           $$TeachersTableAnnotationComposer,
           $$TeachersTableCreateCompanionBuilder,
           $$TeachersTableUpdateCompanionBuilder,
-          (Teacher, BaseReferences<_$AppDatabase, $TeachersTable, Teacher>),
+          (Teacher, BaseReferences<_$DriftDB, $TeachersTable, Teacher>),
           Teacher,
           PrefetchHooks Function()
         > {
-  $$TeachersTableTableManager(_$AppDatabase db, $TeachersTable table)
+  $$TeachersTableTableManager(_$DriftDB db, $TeachersTable table)
     : super(
         TableManagerState(
           db: db,
@@ -3607,7 +3603,7 @@ class $$TeachersTableTableManager
 
 typedef $$TeachersTableProcessedTableManager =
     ProcessedTableManager<
-      _$AppDatabase,
+      _$DriftDB,
       $TeachersTable,
       Teacher,
       $$TeachersTableFilterComposer,
@@ -3615,7 +3611,7 @@ typedef $$TeachersTableProcessedTableManager =
       $$TeachersTableAnnotationComposer,
       $$TeachersTableCreateCompanionBuilder,
       $$TeachersTableUpdateCompanionBuilder,
-      (Teacher, BaseReferences<_$AppDatabase, $TeachersTable, Teacher>),
+      (Teacher, BaseReferences<_$DriftDB, $TeachersTable, Teacher>),
       Teacher,
       PrefetchHooks Function()
     >;
@@ -3624,7 +3620,7 @@ typedef $$RoomsTableCreateCompanionBuilder =
 typedef $$RoomsTableUpdateCompanionBuilder =
     RoomsCompanion Function({Value<int> id, Value<String> name});
 
-class $$RoomsTableFilterComposer extends Composer<_$AppDatabase, $RoomsTable> {
+class $$RoomsTableFilterComposer extends Composer<_$DriftDB, $RoomsTable> {
   $$RoomsTableFilterComposer({
     required super.$db,
     required super.$table,
@@ -3643,8 +3639,7 @@ class $$RoomsTableFilterComposer extends Composer<_$AppDatabase, $RoomsTable> {
   );
 }
 
-class $$RoomsTableOrderingComposer
-    extends Composer<_$AppDatabase, $RoomsTable> {
+class $$RoomsTableOrderingComposer extends Composer<_$DriftDB, $RoomsTable> {
   $$RoomsTableOrderingComposer({
     required super.$db,
     required super.$table,
@@ -3663,8 +3658,7 @@ class $$RoomsTableOrderingComposer
   );
 }
 
-class $$RoomsTableAnnotationComposer
-    extends Composer<_$AppDatabase, $RoomsTable> {
+class $$RoomsTableAnnotationComposer extends Composer<_$DriftDB, $RoomsTable> {
   $$RoomsTableAnnotationComposer({
     required super.$db,
     required super.$table,
@@ -3682,7 +3676,7 @@ class $$RoomsTableAnnotationComposer
 class $$RoomsTableTableManager
     extends
         RootTableManager<
-          _$AppDatabase,
+          _$DriftDB,
           $RoomsTable,
           Room,
           $$RoomsTableFilterComposer,
@@ -3690,11 +3684,11 @@ class $$RoomsTableTableManager
           $$RoomsTableAnnotationComposer,
           $$RoomsTableCreateCompanionBuilder,
           $$RoomsTableUpdateCompanionBuilder,
-          (Room, BaseReferences<_$AppDatabase, $RoomsTable, Room>),
+          (Room, BaseReferences<_$DriftDB, $RoomsTable, Room>),
           Room,
           PrefetchHooks Function()
         > {
-  $$RoomsTableTableManager(_$AppDatabase db, $RoomsTable table)
+  $$RoomsTableTableManager(_$DriftDB db, $RoomsTable table)
     : super(
         TableManagerState(
           db: db,
@@ -3730,7 +3724,7 @@ class $$RoomsTableTableManager
 
 typedef $$RoomsTableProcessedTableManager =
     ProcessedTableManager<
-      _$AppDatabase,
+      _$DriftDB,
       $RoomsTable,
       Room,
       $$RoomsTableFilterComposer,
@@ -3738,14 +3732,14 @@ typedef $$RoomsTableProcessedTableManager =
       $$RoomsTableAnnotationComposer,
       $$RoomsTableCreateCompanionBuilder,
       $$RoomsTableUpdateCompanionBuilder,
-      (Room, BaseReferences<_$AppDatabase, $RoomsTable, Room>),
+      (Room, BaseReferences<_$DriftDB, $RoomsTable, Room>),
       Room,
       PrefetchHooks Function()
     >;
 
-class $AppDatabaseManager {
-  final _$AppDatabase _db;
-  $AppDatabaseManager(this._db);
+class $DriftDBManager {
+  final _$DriftDB _db;
+  $DriftDBManager(this._db);
   $$SubjectsTableTableManager get subjects =>
       $$SubjectsTableTableManager(_db, _db.subjects);
   $$EventTypesTableTableManager get eventTypes =>

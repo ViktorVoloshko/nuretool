@@ -10,8 +10,8 @@ part 'drift_db.g.dart';
 @DriftDatabase(
   tables: [Subjects, Events, EventTypes, Tasks, Groups, Teachers, Rooms],
 )
-class AppDatabase extends _$AppDatabase {
-  AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
+class DriftDB extends _$DriftDB {
+  DriftDB([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
   @override
   int get schemaVersion => 1;

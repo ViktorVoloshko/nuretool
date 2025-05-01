@@ -160,6 +160,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.26.0"
+  drift_db:
+    dependency: "direct main"
+    description:
+      path: "packages/drift_db"
+      relative: true
+    source: path
+    version: "0.0.1"
   drift_flutter:
     dependency: transitive
     description:
@@ -326,7 +333,7 @@ packages:
     source: hosted
     version: "5.1.1"
   local_db_api:
-    dependency: "direct main"
+    dependency: transitive
     description:
       path: "packages/local_db_api"
       relative: true
