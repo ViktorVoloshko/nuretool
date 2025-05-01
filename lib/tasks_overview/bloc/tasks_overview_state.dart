@@ -24,12 +24,8 @@ final class TasksOverviewFailure extends TasksOverviewState {
   List<Object?> get props => [message];
 }
 
-final class TasksOverviewNoSupertasksPresent extends TasksOverviewState {
-  const TasksOverviewNoSupertasksPresent();
-}
-
-final class TasksOverviewSupertasksPresent extends TasksOverviewState {
-  const TasksOverviewSupertasksPresent({required this.tasks});
+final class TasksOverviewSuccess extends TasksOverviewState {
+  const TasksOverviewSuccess({required this.tasks});
 
   final List<Supertask> tasks;
 

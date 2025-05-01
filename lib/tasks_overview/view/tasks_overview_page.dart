@@ -57,33 +57,39 @@ class TasksOverviewView extends StatelessWidget {
                 hasScrollBody: false,
                 child: ErrorSupertasksWidget(message: state.message),
               ),
-              TasksOverviewNoSupertasksPresent() => SliverFillRemaining(
-                hasScrollBody: false,
-                child: NoSupertasksWidget(),
-              ),
-              TasksOverviewSupertasksPresent() => SliverList.builder(
-                itemCount: state.tasks.length,
-                itemBuilder:
-                    (_, index) => Padding(
-                      padding: const EdgeInsets.only(left: 4.0, right: 4.0),
-                      child: SupertasksListItem(
-                        supertask: state.tasks[index],
-                        onTap:
-                            () => Navigator.of(context).push(
-                              SupertaskViewPage.route(
-                                initialTaskID: state.tasks[index].id,
-                              ),
+              TasksOverviewSuccess() =>
+                state.tasks.isEmpty
+                    ? SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: NoSupertasksWidget(),
+                    )
+                    : SliverList.builder(
+                      itemCount: state.tasks.length,
+                      itemBuilder:
+                          (_, index) => Padding(
+                            padding: const EdgeInsets.only(
+                              left: 4.0,
+                              right: 4.0,
                             ),
-                        onCheckboxTapped:
-                            (value) => context.read<TasksOverviewBloc>().add(
-                              TasksOverviewSupertaskCheckboxToggled(
-                                task: state.tasks[index],
-                                isDone: value!,
-                              ),
+                            child: SupertasksListItem(
+                              supertask: state.tasks[index],
+                              onTap:
+                                  () => Navigator.of(context).push(
+                                    SupertaskViewPage.route(
+                                      initialTaskID: state.tasks[index].id,
+                                    ),
+                                  ),
+                              onCheckboxTapped:
+                                  (value) =>
+                                      context.read<TasksOverviewBloc>().add(
+                                        TasksOverviewSupertaskCheckboxToggled(
+                                          task: state.tasks[index],
+                                          isDone: value!,
+                                        ),
+                                      ),
                             ),
-                      ),
+                          ),
                     ),
-              ),
             },
           ],
         );

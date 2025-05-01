@@ -28,19 +28,18 @@ class TaskViewBloc extends Bloc<TaskViewEvent, TaskViewState> {
       _tasksRepository.tasks,
       onData: (supertasks) {
         for (final supertask in supertasks) {
-          return TaskViewSuccess(
-            task: supertask.subtasks.firstWhere(
-              (subtask) => subtask.id == event.taskID,
-            ),
-            titleError:
-                _isTitleValid(
-                      supertask.subtasks
-                          .firstWhere((subtask) => subtask.id == event.taskID)
-                          .title,
-                    )
-                    ? null
-                    : TitleError.emptyOrWhitespace,
+          final subtask = supertask.subtasks.where(
+            (subtask) => subtask.id == event.taskID,
           );
+          if (subtask.isNotEmpty) {
+            return TaskViewSuccess(
+              task: subtask.first,
+              titleError:
+                  _isTitleValid(subtask.first.title)
+                      ? null
+                      : TitleError.emptyOrWhitespace,
+            );
+          }
         }
         return TaskViewFailure(message: 'Subtask not found');
       },

@@ -80,7 +80,7 @@ class SupertaskViewBloc extends Bloc<SupertaskViewEvent, SupertaskViewState> {
         Task(
           title: 'New subtask',
           isDone: false,
-          isCustom: true,
+          isGenerated: true,
           type: null,
           deadline: null,
         ),

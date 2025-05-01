@@ -29,11 +29,7 @@ class TasksOverviewBloc extends Bloc<TasksOverviewEvent, TasksOverviewState> {
 
     await emit.forEach(
       _tasksRepository.tasks,
-      onData:
-          (supertasks) =>
-              supertasks.isEmpty
-                  ? const TasksOverviewNoSupertasksPresent()
-                  : TasksOverviewSupertasksPresent(tasks: supertasks),
+      onData: (supertasks) => TasksOverviewSuccess(tasks: supertasks),
       onError: (error, _) => TasksOverviewFailure(message: error.toString()),
     );
   }
@@ -68,7 +64,7 @@ class TasksOverviewBloc extends Bloc<TasksOverviewEvent, TasksOverviewState> {
         Supertask(
           title: subject.title,
           isDone: false,
-          isCustom: false,
+          isGenerated: true,
           type: TaskType.subject,
           deadline: null,
           subtasks: subjectTasks,
@@ -103,7 +99,7 @@ class TasksOverviewBloc extends Bloc<TasksOverviewEvent, TasksOverviewState> {
         Task(
           title: '#1',
           isDone: false,
-          isCustom: false,
+          isGenerated: true,
           type: type.toTaskType(),
           deadline: examEvents.last.endTime,
         ),
@@ -120,7 +116,7 @@ class TasksOverviewBloc extends Bloc<TasksOverviewEvent, TasksOverviewState> {
         Task(
           title: '#${(index + eventsPerTask!) ~/ eventsPerTask}',
           isDone: false,
-          isCustom: false,
+          isGenerated: true,
           type: type.toTaskType(),
           deadline:
               ((index + eventsPerTask) < eventsOfType.length)
