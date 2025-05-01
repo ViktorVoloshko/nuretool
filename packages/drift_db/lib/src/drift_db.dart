@@ -28,7 +28,7 @@ class DriftDB extends _$DriftDB {
   Stream<List<EventData>> loadEvents() {
     final query = select(
       events,
-    ).join([leftOuterJoin(eventTypes, eventTypes.id.equalsExp(events.type))]);
+    ).join([leftOuterJoin(eventTypes, eventTypes.id.equalsExp(events.typeID))]);
 
     return query.watch().map((rows) {
       return rows
@@ -76,7 +76,7 @@ class DriftDB extends _$DriftDB {
       batch((batch) => batch.insertAllOnConflictUpdate(this.events, events));
 
   Future<int> deleteFetchedEvents() =>
-      (delete(events)..where((event) => event.isCustom.equals(false))).go();
+      (delete(events)..where((event) => event.isFetched.equals(true))).go();
 
   Future<void> saveSubjects(Iterable<SubjectsCompanion> subjects) => batch(
     (batch) => batch.insertAllOnConflictUpdate(this.subjects, subjects),
@@ -104,10 +104,10 @@ class DriftDB extends _$DriftDB {
       (delete(tasks)..where((task) => task.id.equals(id))).go();
 
   Future<int> deleteSupertask(int id) async {
-    await (delete(tasks)..where((task) => task.supertask.equals(id))).go();
+    await (delete(tasks)..where((task) => task.supertaskID.equals(id))).go();
     return deleteTask(id);
   }
 
   Future<int> deleteGeneratedTasks() =>
-      (delete(tasks)..where((task) => task.isCustom.equals(false))).go();
+      (delete(tasks)..where((task) => task.isGenerated.equals(true))).go();
 }

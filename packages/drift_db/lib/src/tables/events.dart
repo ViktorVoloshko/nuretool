@@ -9,8 +9,9 @@ class Events extends Table {
   IntColumn get subject => integer().references(Subjects, #id)();
   DateTimeColumn get startTime => dateTime()();
   DateTimeColumn get endTime => dateTime()();
-  BoolColumn get isCustom => boolean()();
+  BoolColumn get isFetched => boolean()();
   IntColumn get baseType => intEnum<EventBaseType>().nullable()();
-  IntColumn get type => integer().nullable().references(EventTypes, #id)();
+  IntColumn get typeID =>
+      integer().nullable().named('type_id').references(EventTypes, #id)();
   TextColumn get relations => text().map(EventRelations.converter)();
 }

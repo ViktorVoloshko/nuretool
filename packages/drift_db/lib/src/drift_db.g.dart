@@ -559,18 +559,18 @@ class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
     type: DriftSqlType.dateTime,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _isCustomMeta = const VerificationMeta(
-    'isCustom',
+  static const VerificationMeta _isFetchedMeta = const VerificationMeta(
+    'isFetched',
   );
   @override
-  late final GeneratedColumn<bool> isCustom = GeneratedColumn<bool>(
-    'is_custom',
+  late final GeneratedColumn<bool> isFetched = GeneratedColumn<bool>(
+    'is_fetched',
     aliasedName,
     false,
     type: DriftSqlType.bool,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'CHECK ("is_custom" IN (0, 1))',
+      'CHECK ("is_fetched" IN (0, 1))',
     ),
   );
   @override
@@ -582,10 +582,10 @@ class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
         type: DriftSqlType.int,
         requiredDuringInsert: false,
       ).withConverter<EventBaseType?>($EventsTable.$converterbaseTypen);
-  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  static const VerificationMeta _typeIDMeta = const VerificationMeta('typeID');
   @override
-  late final GeneratedColumn<int> type = GeneratedColumn<int>(
-    'type',
+  late final GeneratedColumn<int> typeID = GeneratedColumn<int>(
+    'type_id',
     aliasedName,
     true,
     type: DriftSqlType.int,
@@ -609,9 +609,9 @@ class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
     subject,
     startTime,
     endTime,
-    isCustom,
+    isFetched,
     baseType,
-    type,
+    typeID,
     relations,
   ];
   @override
@@ -653,18 +653,18 @@ class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
     } else if (isInserting) {
       context.missing(_endTimeMeta);
     }
-    if (data.containsKey('is_custom')) {
+    if (data.containsKey('is_fetched')) {
       context.handle(
-        _isCustomMeta,
-        isCustom.isAcceptableOrUnknown(data['is_custom']!, _isCustomMeta),
+        _isFetchedMeta,
+        isFetched.isAcceptableOrUnknown(data['is_fetched']!, _isFetchedMeta),
       );
     } else if (isInserting) {
-      context.missing(_isCustomMeta);
+      context.missing(_isFetchedMeta);
     }
-    if (data.containsKey('type')) {
+    if (data.containsKey('type_id')) {
       context.handle(
-        _typeMeta,
-        type.isAcceptableOrUnknown(data['type']!, _typeMeta),
+        _typeIDMeta,
+        typeID.isAcceptableOrUnknown(data['type_id']!, _typeIDMeta),
       );
     }
     return context;
@@ -696,10 +696,10 @@ class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
             DriftSqlType.dateTime,
             data['${effectivePrefix}end_time'],
           )!,
-      isCustom:
+      isFetched:
           attachedDatabase.typeMapping.read(
             DriftSqlType.bool,
-            data['${effectivePrefix}is_custom'],
+            data['${effectivePrefix}is_fetched'],
           )!,
       baseType: $EventsTable.$converterbaseTypen.fromSql(
         attachedDatabase.typeMapping.read(
@@ -707,9 +707,9 @@ class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
           data['${effectivePrefix}base_type'],
         ),
       ),
-      type: attachedDatabase.typeMapping.read(
+      typeID: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}type'],
+        data['${effectivePrefix}type_id'],
       ),
       relations: $EventsTable.$converterrelations.fromSql(
         attachedDatabase.typeMapping.read(
@@ -738,18 +738,18 @@ class Event extends DataClass implements Insertable<Event> {
   final int subject;
   final DateTime startTime;
   final DateTime endTime;
-  final bool isCustom;
+  final bool isFetched;
   final EventBaseType? baseType;
-  final int? type;
+  final int? typeID;
   final EventRelations relations;
   const Event({
     required this.id,
     required this.subject,
     required this.startTime,
     required this.endTime,
-    required this.isCustom,
+    required this.isFetched,
     this.baseType,
-    this.type,
+    this.typeID,
     required this.relations,
   });
   @override
@@ -759,14 +759,14 @@ class Event extends DataClass implements Insertable<Event> {
     map['subject'] = Variable<int>(subject);
     map['start_time'] = Variable<DateTime>(startTime);
     map['end_time'] = Variable<DateTime>(endTime);
-    map['is_custom'] = Variable<bool>(isCustom);
+    map['is_fetched'] = Variable<bool>(isFetched);
     if (!nullToAbsent || baseType != null) {
       map['base_type'] = Variable<int>(
         $EventsTable.$converterbaseTypen.toSql(baseType),
       );
     }
-    if (!nullToAbsent || type != null) {
-      map['type'] = Variable<int>(type);
+    if (!nullToAbsent || typeID != null) {
+      map['type_id'] = Variable<int>(typeID);
     }
     {
       map['relations'] = Variable<String>(
@@ -782,12 +782,13 @@ class Event extends DataClass implements Insertable<Event> {
       subject: Value(subject),
       startTime: Value(startTime),
       endTime: Value(endTime),
-      isCustom: Value(isCustom),
+      isFetched: Value(isFetched),
       baseType:
           baseType == null && nullToAbsent
               ? const Value.absent()
               : Value(baseType),
-      type: type == null && nullToAbsent ? const Value.absent() : Value(type),
+      typeID:
+          typeID == null && nullToAbsent ? const Value.absent() : Value(typeID),
       relations: Value(relations),
     );
   }
@@ -802,11 +803,11 @@ class Event extends DataClass implements Insertable<Event> {
       subject: serializer.fromJson<int>(json['subject']),
       startTime: serializer.fromJson<DateTime>(json['startTime']),
       endTime: serializer.fromJson<DateTime>(json['endTime']),
-      isCustom: serializer.fromJson<bool>(json['isCustom']),
+      isFetched: serializer.fromJson<bool>(json['isFetched']),
       baseType: $EventsTable.$converterbaseTypen.fromJson(
         serializer.fromJson<int?>(json['baseType']),
       ),
-      type: serializer.fromJson<int?>(json['type']),
+      typeID: serializer.fromJson<int?>(json['typeID']),
       relations: $EventsTable.$converterrelations.fromJson(
         serializer.fromJson<Object?>(json['relations']),
       ),
@@ -820,11 +821,11 @@ class Event extends DataClass implements Insertable<Event> {
       'subject': serializer.toJson<int>(subject),
       'startTime': serializer.toJson<DateTime>(startTime),
       'endTime': serializer.toJson<DateTime>(endTime),
-      'isCustom': serializer.toJson<bool>(isCustom),
+      'isFetched': serializer.toJson<bool>(isFetched),
       'baseType': serializer.toJson<int?>(
         $EventsTable.$converterbaseTypen.toJson(baseType),
       ),
-      'type': serializer.toJson<int?>(type),
+      'typeID': serializer.toJson<int?>(typeID),
       'relations': serializer.toJson<Object?>(
         $EventsTable.$converterrelations.toJson(relations),
       ),
@@ -836,18 +837,18 @@ class Event extends DataClass implements Insertable<Event> {
     int? subject,
     DateTime? startTime,
     DateTime? endTime,
-    bool? isCustom,
+    bool? isFetched,
     Value<EventBaseType?> baseType = const Value.absent(),
-    Value<int?> type = const Value.absent(),
+    Value<int?> typeID = const Value.absent(),
     EventRelations? relations,
   }) => Event(
     id: id ?? this.id,
     subject: subject ?? this.subject,
     startTime: startTime ?? this.startTime,
     endTime: endTime ?? this.endTime,
-    isCustom: isCustom ?? this.isCustom,
+    isFetched: isFetched ?? this.isFetched,
     baseType: baseType.present ? baseType.value : this.baseType,
-    type: type.present ? type.value : this.type,
+    typeID: typeID.present ? typeID.value : this.typeID,
     relations: relations ?? this.relations,
   );
   Event copyWithCompanion(EventsCompanion data) {
@@ -856,9 +857,9 @@ class Event extends DataClass implements Insertable<Event> {
       subject: data.subject.present ? data.subject.value : this.subject,
       startTime: data.startTime.present ? data.startTime.value : this.startTime,
       endTime: data.endTime.present ? data.endTime.value : this.endTime,
-      isCustom: data.isCustom.present ? data.isCustom.value : this.isCustom,
+      isFetched: data.isFetched.present ? data.isFetched.value : this.isFetched,
       baseType: data.baseType.present ? data.baseType.value : this.baseType,
-      type: data.type.present ? data.type.value : this.type,
+      typeID: data.typeID.present ? data.typeID.value : this.typeID,
       relations: data.relations.present ? data.relations.value : this.relations,
     );
   }
@@ -870,9 +871,9 @@ class Event extends DataClass implements Insertable<Event> {
           ..write('subject: $subject, ')
           ..write('startTime: $startTime, ')
           ..write('endTime: $endTime, ')
-          ..write('isCustom: $isCustom, ')
+          ..write('isFetched: $isFetched, ')
           ..write('baseType: $baseType, ')
-          ..write('type: $type, ')
+          ..write('typeID: $typeID, ')
           ..write('relations: $relations')
           ..write(')'))
         .toString();
@@ -884,9 +885,9 @@ class Event extends DataClass implements Insertable<Event> {
     subject,
     startTime,
     endTime,
-    isCustom,
+    isFetched,
     baseType,
-    type,
+    typeID,
     relations,
   );
   @override
@@ -897,9 +898,9 @@ class Event extends DataClass implements Insertable<Event> {
           other.subject == this.subject &&
           other.startTime == this.startTime &&
           other.endTime == this.endTime &&
-          other.isCustom == this.isCustom &&
+          other.isFetched == this.isFetched &&
           other.baseType == this.baseType &&
-          other.type == this.type &&
+          other.typeID == this.typeID &&
           other.relations == this.relations);
 }
 
@@ -908,18 +909,18 @@ class EventsCompanion extends UpdateCompanion<Event> {
   final Value<int> subject;
   final Value<DateTime> startTime;
   final Value<DateTime> endTime;
-  final Value<bool> isCustom;
+  final Value<bool> isFetched;
   final Value<EventBaseType?> baseType;
-  final Value<int?> type;
+  final Value<int?> typeID;
   final Value<EventRelations> relations;
   const EventsCompanion({
     this.id = const Value.absent(),
     this.subject = const Value.absent(),
     this.startTime = const Value.absent(),
     this.endTime = const Value.absent(),
-    this.isCustom = const Value.absent(),
+    this.isFetched = const Value.absent(),
     this.baseType = const Value.absent(),
-    this.type = const Value.absent(),
+    this.typeID = const Value.absent(),
     this.relations = const Value.absent(),
   });
   EventsCompanion.insert({
@@ -927,23 +928,23 @@ class EventsCompanion extends UpdateCompanion<Event> {
     required int subject,
     required DateTime startTime,
     required DateTime endTime,
-    required bool isCustom,
+    required bool isFetched,
     this.baseType = const Value.absent(),
-    this.type = const Value.absent(),
+    this.typeID = const Value.absent(),
     required EventRelations relations,
   }) : subject = Value(subject),
        startTime = Value(startTime),
        endTime = Value(endTime),
-       isCustom = Value(isCustom),
+       isFetched = Value(isFetched),
        relations = Value(relations);
   static Insertable<Event> custom({
     Expression<int>? id,
     Expression<int>? subject,
     Expression<DateTime>? startTime,
     Expression<DateTime>? endTime,
-    Expression<bool>? isCustom,
+    Expression<bool>? isFetched,
     Expression<int>? baseType,
-    Expression<int>? type,
+    Expression<int>? typeID,
     Expression<String>? relations,
   }) {
     return RawValuesInsertable({
@@ -951,9 +952,9 @@ class EventsCompanion extends UpdateCompanion<Event> {
       if (subject != null) 'subject': subject,
       if (startTime != null) 'start_time': startTime,
       if (endTime != null) 'end_time': endTime,
-      if (isCustom != null) 'is_custom': isCustom,
+      if (isFetched != null) 'is_fetched': isFetched,
       if (baseType != null) 'base_type': baseType,
-      if (type != null) 'type': type,
+      if (typeID != null) 'type_id': typeID,
       if (relations != null) 'relations': relations,
     });
   }
@@ -963,9 +964,9 @@ class EventsCompanion extends UpdateCompanion<Event> {
     Value<int>? subject,
     Value<DateTime>? startTime,
     Value<DateTime>? endTime,
-    Value<bool>? isCustom,
+    Value<bool>? isFetched,
     Value<EventBaseType?>? baseType,
-    Value<int?>? type,
+    Value<int?>? typeID,
     Value<EventRelations>? relations,
   }) {
     return EventsCompanion(
@@ -973,9 +974,9 @@ class EventsCompanion extends UpdateCompanion<Event> {
       subject: subject ?? this.subject,
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
-      isCustom: isCustom ?? this.isCustom,
+      isFetched: isFetched ?? this.isFetched,
       baseType: baseType ?? this.baseType,
-      type: type ?? this.type,
+      typeID: typeID ?? this.typeID,
       relations: relations ?? this.relations,
     );
   }
@@ -995,16 +996,16 @@ class EventsCompanion extends UpdateCompanion<Event> {
     if (endTime.present) {
       map['end_time'] = Variable<DateTime>(endTime.value);
     }
-    if (isCustom.present) {
-      map['is_custom'] = Variable<bool>(isCustom.value);
+    if (isFetched.present) {
+      map['is_fetched'] = Variable<bool>(isFetched.value);
     }
     if (baseType.present) {
       map['base_type'] = Variable<int>(
         $EventsTable.$converterbaseTypen.toSql(baseType.value),
       );
     }
-    if (type.present) {
-      map['type'] = Variable<int>(type.value);
+    if (typeID.present) {
+      map['type_id'] = Variable<int>(typeID.value);
     }
     if (relations.present) {
       map['relations'] = Variable<String>(
@@ -1021,9 +1022,9 @@ class EventsCompanion extends UpdateCompanion<Event> {
           ..write('subject: $subject, ')
           ..write('startTime: $startTime, ')
           ..write('endTime: $endTime, ')
-          ..write('isCustom: $isCustom, ')
+          ..write('isFetched: $isFetched, ')
           ..write('baseType: $baseType, ')
-          ..write('type: $type, ')
+          ..write('typeID: $typeID, ')
           ..write('relations: $relations')
           ..write(')'))
         .toString();
@@ -1070,26 +1071,26 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
     ),
     clientDefault: () => false,
   );
-  static const VerificationMeta _isCustomMeta = const VerificationMeta(
-    'isCustom',
+  static const VerificationMeta _isGeneratedMeta = const VerificationMeta(
+    'isGenerated',
   );
   @override
-  late final GeneratedColumn<bool> isCustom = GeneratedColumn<bool>(
-    'is_custom',
+  late final GeneratedColumn<bool> isGenerated = GeneratedColumn<bool>(
+    'is_generated',
     aliasedName,
     false,
     type: DriftSqlType.bool,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'CHECK ("is_custom" IN (0, 1))',
+      'CHECK ("is_generated" IN (0, 1))',
     ),
   );
-  static const VerificationMeta _supertaskMeta = const VerificationMeta(
-    'supertask',
+  static const VerificationMeta _supertaskIDMeta = const VerificationMeta(
+    'supertaskID',
   );
   @override
-  late final GeneratedColumn<int> supertask = GeneratedColumn<int>(
-    'supertask',
+  late final GeneratedColumn<int> supertaskID = GeneratedColumn<int>(
+    'supertask_id',
     aliasedName,
     true,
     type: DriftSqlType.int,
@@ -1120,8 +1121,8 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
     id,
     title,
     isDone,
-    isCustom,
-    supertask,
+    isGenerated,
+    supertaskID,
     deadline,
     type,
   ];
@@ -1154,18 +1155,24 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
         isDone.isAcceptableOrUnknown(data['is_done']!, _isDoneMeta),
       );
     }
-    if (data.containsKey('is_custom')) {
+    if (data.containsKey('is_generated')) {
       context.handle(
-        _isCustomMeta,
-        isCustom.isAcceptableOrUnknown(data['is_custom']!, _isCustomMeta),
+        _isGeneratedMeta,
+        isGenerated.isAcceptableOrUnknown(
+          data['is_generated']!,
+          _isGeneratedMeta,
+        ),
       );
     } else if (isInserting) {
-      context.missing(_isCustomMeta);
+      context.missing(_isGeneratedMeta);
     }
-    if (data.containsKey('supertask')) {
+    if (data.containsKey('supertask_id')) {
       context.handle(
-        _supertaskMeta,
-        supertask.isAcceptableOrUnknown(data['supertask']!, _supertaskMeta),
+        _supertaskIDMeta,
+        supertaskID.isAcceptableOrUnknown(
+          data['supertask_id']!,
+          _supertaskIDMeta,
+        ),
       );
     }
     if (data.containsKey('deadline')) {
@@ -1198,14 +1205,14 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
             DriftSqlType.bool,
             data['${effectivePrefix}is_done'],
           )!,
-      isCustom:
+      isGenerated:
           attachedDatabase.typeMapping.read(
             DriftSqlType.bool,
-            data['${effectivePrefix}is_custom'],
+            data['${effectivePrefix}is_generated'],
           )!,
-      supertask: attachedDatabase.typeMapping.read(
+      supertaskID: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}supertask'],
+        data['${effectivePrefix}supertask_id'],
       ),
       deadline: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
@@ -1235,16 +1242,16 @@ class Task extends DataClass implements Insertable<Task> {
   final int id;
   final String title;
   final bool isDone;
-  final bool isCustom;
-  final int? supertask;
+  final bool isGenerated;
+  final int? supertaskID;
   final DateTime? deadline;
   final TaskType? type;
   const Task({
     required this.id,
     required this.title,
     required this.isDone,
-    required this.isCustom,
-    this.supertask,
+    required this.isGenerated,
+    this.supertaskID,
     this.deadline,
     this.type,
   });
@@ -1254,9 +1261,9 @@ class Task extends DataClass implements Insertable<Task> {
     map['id'] = Variable<int>(id);
     map['title'] = Variable<String>(title);
     map['is_done'] = Variable<bool>(isDone);
-    map['is_custom'] = Variable<bool>(isCustom);
-    if (!nullToAbsent || supertask != null) {
-      map['supertask'] = Variable<int>(supertask);
+    map['is_generated'] = Variable<bool>(isGenerated);
+    if (!nullToAbsent || supertaskID != null) {
+      map['supertask_id'] = Variable<int>(supertaskID);
     }
     if (!nullToAbsent || deadline != null) {
       map['deadline'] = Variable<DateTime>(deadline);
@@ -1272,11 +1279,11 @@ class Task extends DataClass implements Insertable<Task> {
       id: Value(id),
       title: Value(title),
       isDone: Value(isDone),
-      isCustom: Value(isCustom),
-      supertask:
-          supertask == null && nullToAbsent
+      isGenerated: Value(isGenerated),
+      supertaskID:
+          supertaskID == null && nullToAbsent
               ? const Value.absent()
-              : Value(supertask),
+              : Value(supertaskID),
       deadline:
           deadline == null && nullToAbsent
               ? const Value.absent()
@@ -1294,8 +1301,8 @@ class Task extends DataClass implements Insertable<Task> {
       id: serializer.fromJson<int>(json['id']),
       title: serializer.fromJson<String>(json['title']),
       isDone: serializer.fromJson<bool>(json['isDone']),
-      isCustom: serializer.fromJson<bool>(json['isCustom']),
-      supertask: serializer.fromJson<int?>(json['supertask']),
+      isGenerated: serializer.fromJson<bool>(json['isGenerated']),
+      supertaskID: serializer.fromJson<int?>(json['supertaskID']),
       deadline: serializer.fromJson<DateTime?>(json['deadline']),
       type: $TasksTable.$convertertypen.fromJson(
         serializer.fromJson<int?>(json['type']),
@@ -1309,8 +1316,8 @@ class Task extends DataClass implements Insertable<Task> {
       'id': serializer.toJson<int>(id),
       'title': serializer.toJson<String>(title),
       'isDone': serializer.toJson<bool>(isDone),
-      'isCustom': serializer.toJson<bool>(isCustom),
-      'supertask': serializer.toJson<int?>(supertask),
+      'isGenerated': serializer.toJson<bool>(isGenerated),
+      'supertaskID': serializer.toJson<int?>(supertaskID),
       'deadline': serializer.toJson<DateTime?>(deadline),
       'type': serializer.toJson<int?>($TasksTable.$convertertypen.toJson(type)),
     };
@@ -1320,16 +1327,16 @@ class Task extends DataClass implements Insertable<Task> {
     int? id,
     String? title,
     bool? isDone,
-    bool? isCustom,
-    Value<int?> supertask = const Value.absent(),
+    bool? isGenerated,
+    Value<int?> supertaskID = const Value.absent(),
     Value<DateTime?> deadline = const Value.absent(),
     Value<TaskType?> type = const Value.absent(),
   }) => Task(
     id: id ?? this.id,
     title: title ?? this.title,
     isDone: isDone ?? this.isDone,
-    isCustom: isCustom ?? this.isCustom,
-    supertask: supertask.present ? supertask.value : this.supertask,
+    isGenerated: isGenerated ?? this.isGenerated,
+    supertaskID: supertaskID.present ? supertaskID.value : this.supertaskID,
     deadline: deadline.present ? deadline.value : this.deadline,
     type: type.present ? type.value : this.type,
   );
@@ -1338,8 +1345,10 @@ class Task extends DataClass implements Insertable<Task> {
       id: data.id.present ? data.id.value : this.id,
       title: data.title.present ? data.title.value : this.title,
       isDone: data.isDone.present ? data.isDone.value : this.isDone,
-      isCustom: data.isCustom.present ? data.isCustom.value : this.isCustom,
-      supertask: data.supertask.present ? data.supertask.value : this.supertask,
+      isGenerated:
+          data.isGenerated.present ? data.isGenerated.value : this.isGenerated,
+      supertaskID:
+          data.supertaskID.present ? data.supertaskID.value : this.supertaskID,
       deadline: data.deadline.present ? data.deadline.value : this.deadline,
       type: data.type.present ? data.type.value : this.type,
     );
@@ -1351,8 +1360,8 @@ class Task extends DataClass implements Insertable<Task> {
           ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('isDone: $isDone, ')
-          ..write('isCustom: $isCustom, ')
-          ..write('supertask: $supertask, ')
+          ..write('isGenerated: $isGenerated, ')
+          ..write('supertaskID: $supertaskID, ')
           ..write('deadline: $deadline, ')
           ..write('type: $type')
           ..write(')'))
@@ -1361,7 +1370,7 @@ class Task extends DataClass implements Insertable<Task> {
 
   @override
   int get hashCode =>
-      Object.hash(id, title, isDone, isCustom, supertask, deadline, type);
+      Object.hash(id, title, isDone, isGenerated, supertaskID, deadline, type);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1369,8 +1378,8 @@ class Task extends DataClass implements Insertable<Task> {
           other.id == this.id &&
           other.title == this.title &&
           other.isDone == this.isDone &&
-          other.isCustom == this.isCustom &&
-          other.supertask == this.supertask &&
+          other.isGenerated == this.isGenerated &&
+          other.supertaskID == this.supertaskID &&
           other.deadline == this.deadline &&
           other.type == this.type);
 }
@@ -1379,16 +1388,16 @@ class TasksCompanion extends UpdateCompanion<Task> {
   final Value<int> id;
   final Value<String> title;
   final Value<bool> isDone;
-  final Value<bool> isCustom;
-  final Value<int?> supertask;
+  final Value<bool> isGenerated;
+  final Value<int?> supertaskID;
   final Value<DateTime?> deadline;
   final Value<TaskType?> type;
   const TasksCompanion({
     this.id = const Value.absent(),
     this.title = const Value.absent(),
     this.isDone = const Value.absent(),
-    this.isCustom = const Value.absent(),
-    this.supertask = const Value.absent(),
+    this.isGenerated = const Value.absent(),
+    this.supertaskID = const Value.absent(),
     this.deadline = const Value.absent(),
     this.type = const Value.absent(),
   });
@@ -1396,18 +1405,18 @@ class TasksCompanion extends UpdateCompanion<Task> {
     this.id = const Value.absent(),
     required String title,
     this.isDone = const Value.absent(),
-    required bool isCustom,
-    this.supertask = const Value.absent(),
+    required bool isGenerated,
+    this.supertaskID = const Value.absent(),
     this.deadline = const Value.absent(),
     this.type = const Value.absent(),
   }) : title = Value(title),
-       isCustom = Value(isCustom);
+       isGenerated = Value(isGenerated);
   static Insertable<Task> custom({
     Expression<int>? id,
     Expression<String>? title,
     Expression<bool>? isDone,
-    Expression<bool>? isCustom,
-    Expression<int>? supertask,
+    Expression<bool>? isGenerated,
+    Expression<int>? supertaskID,
     Expression<DateTime>? deadline,
     Expression<int>? type,
   }) {
@@ -1415,8 +1424,8 @@ class TasksCompanion extends UpdateCompanion<Task> {
       if (id != null) 'id': id,
       if (title != null) 'title': title,
       if (isDone != null) 'is_done': isDone,
-      if (isCustom != null) 'is_custom': isCustom,
-      if (supertask != null) 'supertask': supertask,
+      if (isGenerated != null) 'is_generated': isGenerated,
+      if (supertaskID != null) 'supertask_id': supertaskID,
       if (deadline != null) 'deadline': deadline,
       if (type != null) 'type': type,
     });
@@ -1426,8 +1435,8 @@ class TasksCompanion extends UpdateCompanion<Task> {
     Value<int>? id,
     Value<String>? title,
     Value<bool>? isDone,
-    Value<bool>? isCustom,
-    Value<int?>? supertask,
+    Value<bool>? isGenerated,
+    Value<int?>? supertaskID,
     Value<DateTime?>? deadline,
     Value<TaskType?>? type,
   }) {
@@ -1435,8 +1444,8 @@ class TasksCompanion extends UpdateCompanion<Task> {
       id: id ?? this.id,
       title: title ?? this.title,
       isDone: isDone ?? this.isDone,
-      isCustom: isCustom ?? this.isCustom,
-      supertask: supertask ?? this.supertask,
+      isGenerated: isGenerated ?? this.isGenerated,
+      supertaskID: supertaskID ?? this.supertaskID,
       deadline: deadline ?? this.deadline,
       type: type ?? this.type,
     );
@@ -1454,11 +1463,11 @@ class TasksCompanion extends UpdateCompanion<Task> {
     if (isDone.present) {
       map['is_done'] = Variable<bool>(isDone.value);
     }
-    if (isCustom.present) {
-      map['is_custom'] = Variable<bool>(isCustom.value);
+    if (isGenerated.present) {
+      map['is_generated'] = Variable<bool>(isGenerated.value);
     }
-    if (supertask.present) {
-      map['supertask'] = Variable<int>(supertask.value);
+    if (supertaskID.present) {
+      map['supertask_id'] = Variable<int>(supertaskID.value);
     }
     if (deadline.present) {
       map['deadline'] = Variable<DateTime>(deadline.value);
@@ -1477,8 +1486,8 @@ class TasksCompanion extends UpdateCompanion<Task> {
           ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('isDone: $isDone, ')
-          ..write('isCustom: $isCustom, ')
-          ..write('supertask: $supertask, ')
+          ..write('isGenerated: $isGenerated, ')
+          ..write('supertaskID: $supertaskID, ')
           ..write('deadline: $deadline, ')
           ..write('type: $type')
           ..write(')'))
@@ -2415,14 +2424,14 @@ final class $$EventTypesTableReferences
     _$DriftDB db,
   ) => MultiTypedResultKey.fromTable(
     db.events,
-    aliasName: $_aliasNameGenerator(db.eventTypes.id, db.events.type),
+    aliasName: $_aliasNameGenerator(db.eventTypes.id, db.events.typeID),
   );
 
   $$EventsTableProcessedTableManager get eventsRefs {
     final manager = $$EventsTableTableManager(
       $_db,
       $_db.events,
-    ).filter((f) => f.type.id.sqlEquals($_itemColumn<int>('id')!));
+    ).filter((f) => f.typeID.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_eventsRefsTable($_db));
     return ProcessedTableManager(
@@ -2462,7 +2471,7 @@ class $$EventTypesTableFilterComposer
       composer: this,
       getCurrentColumn: (t) => t.id,
       referencedTable: $db.events,
-      getReferencedColumn: (t) => t.type,
+      getReferencedColumn: (t) => t.typeID,
       builder:
           (
             joinBuilder, {
@@ -2531,7 +2540,7 @@ class $$EventTypesTableAnnotationComposer
       composer: this,
       getCurrentColumn: (t) => t.id,
       referencedTable: $db.events,
-      getReferencedColumn: (t) => t.type,
+      getReferencedColumn: (t) => t.typeID,
       builder:
           (
             joinBuilder, {
@@ -2628,7 +2637,7 @@ class $$EventTypesTableTableManager
                               ).eventsRefs,
                       referencedItemsForCurrentItem:
                           (item, referencedItems) =>
-                              referencedItems.where((e) => e.type == item.id),
+                              referencedItems.where((e) => e.typeID == item.id),
                       typedResults: items,
                     ),
                 ];
@@ -2659,9 +2668,9 @@ typedef $$EventsTableCreateCompanionBuilder =
       required int subject,
       required DateTime startTime,
       required DateTime endTime,
-      required bool isCustom,
+      required bool isFetched,
       Value<EventBaseType?> baseType,
-      Value<int?> type,
+      Value<int?> typeID,
       required EventRelations relations,
     });
 typedef $$EventsTableUpdateCompanionBuilder =
@@ -2670,9 +2679,9 @@ typedef $$EventsTableUpdateCompanionBuilder =
       Value<int> subject,
       Value<DateTime> startTime,
       Value<DateTime> endTime,
-      Value<bool> isCustom,
+      Value<bool> isFetched,
       Value<EventBaseType?> baseType,
-      Value<int?> type,
+      Value<int?> typeID,
       Value<EventRelations> relations,
     });
 
@@ -2698,18 +2707,17 @@ final class $$EventsTableReferences
     );
   }
 
-  static $EventTypesTable _typeTable(_$DriftDB db) => db.eventTypes.createAlias(
-    $_aliasNameGenerator(db.events.type, db.eventTypes.id),
-  );
+  static $EventTypesTable _typeIDTable(_$DriftDB db) => db.eventTypes
+      .createAlias($_aliasNameGenerator(db.events.typeID, db.eventTypes.id));
 
-  $$EventTypesTableProcessedTableManager? get type {
-    final $_column = $_itemColumn<int>('type');
+  $$EventTypesTableProcessedTableManager? get typeID {
+    final $_column = $_itemColumn<int>('type_id');
     if ($_column == null) return null;
     final manager = $$EventTypesTableTableManager(
       $_db,
       $_db.eventTypes,
     ).filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_typeTable($_db));
+    final item = $_typedResult.readTableOrNull(_typeIDTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: [item]),
@@ -2740,8 +2748,8 @@ class $$EventsTableFilterComposer extends Composer<_$DriftDB, $EventsTable> {
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<bool> get isCustom => $composableBuilder(
-    column: $table.isCustom,
+  ColumnFilters<bool> get isFetched => $composableBuilder(
+    column: $table.isFetched,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2780,10 +2788,10 @@ class $$EventsTableFilterComposer extends Composer<_$DriftDB, $EventsTable> {
     return composer;
   }
 
-  $$EventTypesTableFilterComposer get type {
+  $$EventTypesTableFilterComposer get typeID {
     final $$EventTypesTableFilterComposer composer = $composerBuilder(
       composer: this,
-      getCurrentColumn: (t) => t.type,
+      getCurrentColumn: (t) => t.typeID,
       referencedTable: $db.eventTypes,
       getReferencedColumn: (t) => t.id,
       builder:
@@ -2827,8 +2835,8 @@ class $$EventsTableOrderingComposer extends Composer<_$DriftDB, $EventsTable> {
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<bool> get isCustom => $composableBuilder(
-    column: $table.isCustom,
+  ColumnOrderings<bool> get isFetched => $composableBuilder(
+    column: $table.isFetched,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -2865,10 +2873,10 @@ class $$EventsTableOrderingComposer extends Composer<_$DriftDB, $EventsTable> {
     return composer;
   }
 
-  $$EventTypesTableOrderingComposer get type {
+  $$EventTypesTableOrderingComposer get typeID {
     final $$EventTypesTableOrderingComposer composer = $composerBuilder(
       composer: this,
-      getCurrentColumn: (t) => t.type,
+      getCurrentColumn: (t) => t.typeID,
       referencedTable: $db.eventTypes,
       getReferencedColumn: (t) => t.id,
       builder:
@@ -2907,8 +2915,8 @@ class $$EventsTableAnnotationComposer
   GeneratedColumn<DateTime> get endTime =>
       $composableBuilder(column: $table.endTime, builder: (column) => column);
 
-  GeneratedColumn<bool> get isCustom =>
-      $composableBuilder(column: $table.isCustom, builder: (column) => column);
+  GeneratedColumn<bool> get isFetched =>
+      $composableBuilder(column: $table.isFetched, builder: (column) => column);
 
   GeneratedColumnWithTypeConverter<EventBaseType?, int> get baseType =>
       $composableBuilder(column: $table.baseType, builder: (column) => column);
@@ -2939,10 +2947,10 @@ class $$EventsTableAnnotationComposer
     return composer;
   }
 
-  $$EventTypesTableAnnotationComposer get type {
+  $$EventTypesTableAnnotationComposer get typeID {
     final $$EventTypesTableAnnotationComposer composer = $composerBuilder(
       composer: this,
-      getCurrentColumn: (t) => t.type,
+      getCurrentColumn: (t) => t.typeID,
       referencedTable: $db.eventTypes,
       getReferencedColumn: (t) => t.id,
       builder:
@@ -2976,7 +2984,7 @@ class $$EventsTableTableManager
           $$EventsTableUpdateCompanionBuilder,
           (Event, $$EventsTableReferences),
           Event,
-          PrefetchHooks Function({bool subject, bool type})
+          PrefetchHooks Function({bool subject, bool typeID})
         > {
   $$EventsTableTableManager(_$DriftDB db, $EventsTable table)
     : super(
@@ -2995,18 +3003,18 @@ class $$EventsTableTableManager
                 Value<int> subject = const Value.absent(),
                 Value<DateTime> startTime = const Value.absent(),
                 Value<DateTime> endTime = const Value.absent(),
-                Value<bool> isCustom = const Value.absent(),
+                Value<bool> isFetched = const Value.absent(),
                 Value<EventBaseType?> baseType = const Value.absent(),
-                Value<int?> type = const Value.absent(),
+                Value<int?> typeID = const Value.absent(),
                 Value<EventRelations> relations = const Value.absent(),
               }) => EventsCompanion(
                 id: id,
                 subject: subject,
                 startTime: startTime,
                 endTime: endTime,
-                isCustom: isCustom,
+                isFetched: isFetched,
                 baseType: baseType,
-                type: type,
+                typeID: typeID,
                 relations: relations,
               ),
           createCompanionCallback:
@@ -3015,18 +3023,18 @@ class $$EventsTableTableManager
                 required int subject,
                 required DateTime startTime,
                 required DateTime endTime,
-                required bool isCustom,
+                required bool isFetched,
                 Value<EventBaseType?> baseType = const Value.absent(),
-                Value<int?> type = const Value.absent(),
+                Value<int?> typeID = const Value.absent(),
                 required EventRelations relations,
               }) => EventsCompanion.insert(
                 id: id,
                 subject: subject,
                 startTime: startTime,
                 endTime: endTime,
-                isCustom: isCustom,
+                isFetched: isFetched,
                 baseType: baseType,
-                type: type,
+                typeID: typeID,
                 relations: relations,
               ),
           withReferenceMapper:
@@ -3039,7 +3047,7 @@ class $$EventsTableTableManager
                         ),
                       )
                       .toList(),
-          prefetchHooksCallback: ({subject = false, type = false}) {
+          prefetchHooksCallback: ({subject = false, typeID = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [],
@@ -3070,16 +3078,15 @@ class $$EventsTableTableManager
                           )
                           as T;
                 }
-                if (type) {
+                if (typeID) {
                   state =
                       state.withJoin(
                             currentTable: table,
-                            currentColumn: table.type,
-                            referencedTable: $$EventsTableReferences._typeTable(
-                              db,
-                            ),
+                            currentColumn: table.typeID,
+                            referencedTable: $$EventsTableReferences
+                                ._typeIDTable(db),
                             referencedColumn:
-                                $$EventsTableReferences._typeTable(db).id,
+                                $$EventsTableReferences._typeIDTable(db).id,
                           )
                           as T;
                 }
@@ -3107,15 +3114,15 @@ typedef $$EventsTableProcessedTableManager =
       $$EventsTableUpdateCompanionBuilder,
       (Event, $$EventsTableReferences),
       Event,
-      PrefetchHooks Function({bool subject, bool type})
+      PrefetchHooks Function({bool subject, bool typeID})
     >;
 typedef $$TasksTableCreateCompanionBuilder =
     TasksCompanion Function({
       Value<int> id,
       required String title,
       Value<bool> isDone,
-      required bool isCustom,
-      Value<int?> supertask,
+      required bool isGenerated,
+      Value<int?> supertaskID,
       Value<DateTime?> deadline,
       Value<TaskType?> type,
     });
@@ -3124,8 +3131,8 @@ typedef $$TasksTableUpdateCompanionBuilder =
       Value<int> id,
       Value<String> title,
       Value<bool> isDone,
-      Value<bool> isCustom,
-      Value<int?> supertask,
+      Value<bool> isGenerated,
+      Value<int?> supertaskID,
       Value<DateTime?> deadline,
       Value<TaskType?> type,
     });
@@ -3153,13 +3160,13 @@ class $$TasksTableFilterComposer extends Composer<_$DriftDB, $TasksTable> {
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<bool> get isCustom => $composableBuilder(
-    column: $table.isCustom,
+  ColumnFilters<bool> get isGenerated => $composableBuilder(
+    column: $table.isGenerated,
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<int> get supertask => $composableBuilder(
-    column: $table.supertask,
+  ColumnFilters<int> get supertaskID => $composableBuilder(
+    column: $table.supertaskID,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -3198,13 +3205,13 @@ class $$TasksTableOrderingComposer extends Composer<_$DriftDB, $TasksTable> {
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<bool> get isCustom => $composableBuilder(
-    column: $table.isCustom,
+  ColumnOrderings<bool> get isGenerated => $composableBuilder(
+    column: $table.isGenerated,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get supertask => $composableBuilder(
-    column: $table.supertask,
+  ColumnOrderings<int> get supertaskID => $composableBuilder(
+    column: $table.supertaskID,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -3236,11 +3243,15 @@ class $$TasksTableAnnotationComposer extends Composer<_$DriftDB, $TasksTable> {
   GeneratedColumn<bool> get isDone =>
       $composableBuilder(column: $table.isDone, builder: (column) => column);
 
-  GeneratedColumn<bool> get isCustom =>
-      $composableBuilder(column: $table.isCustom, builder: (column) => column);
+  GeneratedColumn<bool> get isGenerated => $composableBuilder(
+    column: $table.isGenerated,
+    builder: (column) => column,
+  );
 
-  GeneratedColumn<int> get supertask =>
-      $composableBuilder(column: $table.supertask, builder: (column) => column);
+  GeneratedColumn<int> get supertaskID => $composableBuilder(
+    column: $table.supertaskID,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<DateTime> get deadline =>
       $composableBuilder(column: $table.deadline, builder: (column) => column);
@@ -3280,16 +3291,16 @@ class $$TasksTableTableManager
                 Value<int> id = const Value.absent(),
                 Value<String> title = const Value.absent(),
                 Value<bool> isDone = const Value.absent(),
-                Value<bool> isCustom = const Value.absent(),
-                Value<int?> supertask = const Value.absent(),
+                Value<bool> isGenerated = const Value.absent(),
+                Value<int?> supertaskID = const Value.absent(),
                 Value<DateTime?> deadline = const Value.absent(),
                 Value<TaskType?> type = const Value.absent(),
               }) => TasksCompanion(
                 id: id,
                 title: title,
                 isDone: isDone,
-                isCustom: isCustom,
-                supertask: supertask,
+                isGenerated: isGenerated,
+                supertaskID: supertaskID,
                 deadline: deadline,
                 type: type,
               ),
@@ -3298,16 +3309,16 @@ class $$TasksTableTableManager
                 Value<int> id = const Value.absent(),
                 required String title,
                 Value<bool> isDone = const Value.absent(),
-                required bool isCustom,
-                Value<int?> supertask = const Value.absent(),
+                required bool isGenerated,
+                Value<int?> supertaskID = const Value.absent(),
                 Value<DateTime?> deadline = const Value.absent(),
                 Value<TaskType?> type = const Value.absent(),
               }) => TasksCompanion.insert(
                 id: id,
                 title: title,
                 isDone: isDone,
-                isCustom: isCustom,
-                supertask: supertask,
+                isGenerated: isGenerated,
+                supertaskID: supertaskID,
                 deadline: deadline,
                 type: type,
               ),
