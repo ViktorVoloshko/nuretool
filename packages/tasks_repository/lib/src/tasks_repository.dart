@@ -52,14 +52,14 @@ class TasksRepository {
     _tasksSubscription = _driftDB.loadTasks().listen((tasks) {
       final result = <Supertask>[];
 
-      final supertasks = tasks.where((task) => task.supertask == null);
-      final subtasks = tasks.where((task) => task.supertask != null);
+      final supertasks = tasks.where((task) => task.supertaskID == null);
+      final subtasks = tasks.where((task) => task.supertaskID != null);
 
       result.addAll(
         supertasks.map(
           (e) => Supertask.fromDBModel(
             e,
-            subtasks.where((task) => task.supertask == e.id),
+            subtasks.where((task) => task.supertaskID == e.id),
           ),
         ),
       );

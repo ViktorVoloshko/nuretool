@@ -11,7 +11,7 @@ class Task extends Equatable {
     this.id,
     required this.title,
     required this.isDone,
-    required this.isCustom,
+    required this.isGenerated,
     required this.type,
     required this.deadline,
   });
@@ -20,7 +20,7 @@ class Task extends Equatable {
     id: task.id,
     title: task.title,
     isDone: task.isDone,
-    isCustom: task.isCustom,
+    isGenerated: task.isGenerated,
     type: task.type?.fromDBModel(),
     deadline: task.deadline,
   );
@@ -28,7 +28,7 @@ class Task extends Equatable {
   final int? id;
   final String title;
   final bool isDone;
-  final bool isCustom;
+  final bool isGenerated;
   final TaskType? type;
   final DateTime? deadline;
 
@@ -36,14 +36,14 @@ class Task extends Equatable {
     int? id,
     String? title,
     bool? isDone,
-    bool? isCustom,
+    bool? isGenerated,
     TaskType? type,
     DateTime? deadline,
   }) => Task(
     id: id ?? this.id,
     title: title ?? this.title,
     isDone: isDone ?? this.isDone,
-    isCustom: isCustom ?? this.isCustom,
+    isGenerated: isGenerated ?? this.isGenerated,
     type: type ?? this.type,
     deadline: deadline ?? this.deadline,
   );
@@ -56,7 +56,7 @@ class Task extends Equatable {
     id: id,
     title: title,
     isDone: isDone,
-    isCustom: isCustom,
+    isGenerated: isGenerated,
     type: type,
     deadline: deadline,
   );
@@ -64,15 +64,15 @@ class Task extends Equatable {
   db.TasksCompanion toDBModel([int? supertaskID]) => db.TasksCompanion.insert(
     id: Value.absentIfNull(id),
     title: title,
-    supertask: Value(supertaskID),
+    supertaskID: Value(supertaskID),
     isDone: Value(isDone),
-    isCustom: isCustom,
+    isGenerated: isGenerated,
     deadline: Value(deadline),
     type: Value(type?.toDBModel()),
   );
 
   @override
-  List<Object?> get props => [id, title, isDone, isCustom, type, deadline];
+  List<Object?> get props => [id, title, isDone, isGenerated, type, deadline];
 }
 
 @immutable
@@ -81,7 +81,7 @@ class Supertask extends Task {
     super.id,
     required super.title,
     required super.isDone,
-    required super.isCustom,
+    required super.isGenerated,
     required super.type,
     required super.deadline,
     required this.subtasks,
@@ -92,7 +92,7 @@ class Supertask extends Task {
         id: task.id,
         title: task.title,
         isDone: task.isDone,
-        isCustom: task.isCustom,
+        isGenerated: task.isGenerated,
         type: task.type?.fromDBModel(),
         deadline: task.deadline,
         subtasks: subtasks.map((e) => Task.fromDBModel(e)).toList(),
@@ -113,7 +113,7 @@ class Supertask extends Task {
     int? id,
     String? title,
     bool? isDone,
-    bool? isCustom,
+    bool? isGenerated,
     TaskType? type,
     DateTime? deadline,
     List<Task>? subtasks,
@@ -121,7 +121,7 @@ class Supertask extends Task {
     id: id ?? this.id,
     title: title ?? this.title,
     isDone: isDone ?? this.isDone,
-    isCustom: isCustom ?? this.isCustom,
+    isGenerated: isGenerated ?? this.isGenerated,
     type: type ?? this.type,
     deadline: deadline ?? this.deadline,
     subtasks: subtasks ?? this.subtasks,
@@ -136,7 +136,7 @@ class Supertask extends Task {
     id: id,
     title: title,
     isDone: isDone,
-    isCustom: isCustom,
+    isGenerated: isGenerated,
     type: type,
     deadline: deadline,
     subtasks: subtasks,

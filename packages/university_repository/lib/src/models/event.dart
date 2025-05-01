@@ -13,7 +13,7 @@ class Event extends Equatable {
     required this.subject,
     required this.startTime,
     required this.endTime,
-    required this.isCustom,
+    required this.isFetched,
     required this.baseType,
     this.type,
     required this.groups,
@@ -26,7 +26,7 @@ class Event extends Equatable {
       subject = event.subject,
       startTime = event.startTime,
       endTime = event.endTime,
-      isCustom = event.isCustom,
+      isFetched = event.isFetched,
       baseType = event.baseType!.fromDBModel(),
       room = event.relations.room,
       groups = event.relations.groups,
@@ -36,7 +36,7 @@ class Event extends Equatable {
   final int subject;
   final DateTime startTime;
   final DateTime endTime;
-  final bool isCustom;
+  final bool isFetched;
   final EventBaseType baseType;
   final EventType? type;
   final List<int> groups;
@@ -48,9 +48,9 @@ class Event extends Equatable {
     subject: subject,
     startTime: startTime,
     endTime: endTime,
-    isCustom: isCustom,
+    isFetched: isFetched,
     baseType: Value(baseType.toDBModel()),
-    type: Value.absentIfNull(type?.id),
+    typeID: Value.absentIfNull(type?.id),
     relations: db.EventRelations(
       groups: groups,
       teachers: teachers,
@@ -63,7 +63,7 @@ class Event extends Equatable {
     int? subject,
     DateTime? startTime,
     DateTime? endTime,
-    bool? isCustom,
+    bool? isFetched,
     EventBaseType? baseType,
     EventType? type,
     List<int>? groups,
@@ -74,7 +74,7 @@ class Event extends Equatable {
     subject: subject ?? this.subject,
     startTime: startTime ?? this.startTime,
     endTime: endTime ?? this.endTime,
-    isCustom: isCustom ?? this.isCustom,
+    isFetched: isFetched ?? this.isFetched,
     baseType: baseType ?? this.baseType,
     type: type ?? this.type,
     groups: groups ?? this.groups,
@@ -88,7 +88,7 @@ class Event extends Equatable {
     subject,
     startTime,
     endTime,
-    isCustom,
+    isFetched,
     baseType,
     type,
     groups,
@@ -149,9 +149,9 @@ extension ApiToDBEvent on api.Event {
     subject: subjectID,
     startTime: DateTime.fromMillisecondsSinceEpoch(startTime * 1000),
     endTime: DateTime.fromMillisecondsSinceEpoch(endTime * 1000),
-    isCustom: false,
+    isFetched: true,
     baseType: Value(_fromIDBase(type ~/ 10)),
-    type: Value(type),
+    typeID: Value(type),
     relations: db.EventRelations(
       groups: groups,
       teachers: teachers,
