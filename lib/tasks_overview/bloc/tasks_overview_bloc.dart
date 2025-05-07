@@ -38,6 +38,8 @@ class TasksOverviewBloc extends Bloc<TasksOverviewEvent, TasksOverviewState> {
     TasksOverviewGenerationRequested event,
     Emitter<TasksOverviewState> emit,
   ) async {
+    await _tasksRepository.deleteGeneratedTasks();
+
     final result = <Supertask>[];
 
     final groupEvents =

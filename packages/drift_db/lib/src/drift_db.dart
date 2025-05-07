@@ -47,22 +47,8 @@ class DriftDB extends _$DriftDB {
   Stream<List<Teacher>> loadTeachers() => select(teachers).watch();
   Stream<List<Room>> loadRooms() => select(rooms).watch();
 
-  Future<void> saveEvent(EventsCompanion event) => batch((batch) {
-    batch.insert(
-      events,
-      event,
-      // onConflict: DoUpdate(
-      //   (old) => event,
-      //   target: [
-      //     _database.events.startTime,
-      //     _database.events.endTime,
-      //     _database.events.baseType,
-      //     _database.events.room,
-      //     _database.events.subjectID,
-      //   ],
-      // ),
-    );
-  });
+  Future<int> saveEvent(EventsCompanion event) =>
+      into(events).insertOnConflictUpdate(event);
 
   Future<void> saveApiEvents(
     Iterable<EventsCompanion> events,

@@ -40,6 +40,8 @@ class SupertaskViewPage extends StatelessWidget {
                   ),
                 ),
           );
+        } else if (state is SupertaskViewSupertaskDeleted) {
+          Navigator.of(context).pop();
         }
       },
       child: const SupertaskViewView(),
@@ -69,6 +71,18 @@ class SupertaskViewView extends StatelessWidget {
             slivers: [
               SliverAppBar.large(
                 title: Text(AppLocalizations.of(context)!.supertasksEdit),
+                actions: [
+                  if (state is SupertaskViewSuccess)
+                    IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed:
+                          () => context.read<SupertaskViewBloc>().add(
+                            SupertaskViewSupertaskDeletionRequested(
+                              id: state.task.id!,
+                            ),
+                          ),
+                    ),
+                ],
               ),
               if (state is SupertaskViewSuccess)
                 SliverToBoxAdapter(
@@ -142,6 +156,10 @@ class SupertaskViewView extends StatelessWidget {
                   hasScrollBody: false,
                   child: ErrorSubtasksWidget(),
                 ),
+                SupertaskViewSupertaskDeleted() => const SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: CircularProgressIndicator(),
+                ),
                 SupertaskViewSuccess() =>
                   state.task.subtasks.isEmpty
                       ? SliverFillRemaining(
@@ -182,6 +200,12 @@ class SupertaskViewView extends StatelessWidget {
                                             isDone: value!,
                                           ),
                                         ),
+                                onDeleteTapped:
+                                    () => context.read<SupertaskViewBloc>().add(
+                                      SupertaskViewSubtaskDeletionRequested(
+                                        id: state.task.subtasks[index].id!,
+                                      ),
+                                    ),
                               ),
                             ),
                       ),

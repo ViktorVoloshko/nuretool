@@ -43,6 +43,12 @@ class TasksRepository {
     return _driftDB.saveTasks(subtasks);
   }
 
+  Future<int> deleteTask(int id) => _driftDB.deleteTask(id);
+
+  Future<int> deleteSupertask(int id) => _driftDB.deleteSupertask(id);
+
+  Future<int> deleteGeneratedTasks() => _driftDB.deleteGeneratedTasks();
+
   Future<dynamic> dispose() async {
     await _tasksSubscription.cancel();
     return _tasksStreamController.close();

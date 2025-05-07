@@ -10,11 +10,13 @@ class SubtaskListItem extends StatelessWidget {
     required this.task,
     required this.onTap,
     required this.onCheckboxTapped,
+    required this.onDeleteTapped,
   });
 
   final Task task;
   final GestureTapCallback onTap;
   final ValueChanged<bool?> onCheckboxTapped;
+  final GestureTapCallback onDeleteTapped;
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +61,13 @@ class SubtaskListItem extends StatelessWidget {
                       ),
                   ],
                 ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: onDeleteTapped,
               ),
             ),
           ],

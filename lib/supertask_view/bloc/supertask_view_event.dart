@@ -44,6 +44,24 @@ final class SupertaskViewSubtaskCheckboxToggled extends SupertaskViewEvent {
   List<Object?> get props => [task, isDone];
 }
 
+final class SupertaskViewSupertaskDeletionRequested extends SupertaskViewEvent {
+  const SupertaskViewSupertaskDeletionRequested({required this.id});
+
+  final int id;
+
+  @override
+  List<Object?> get props => [id];
+}
+
+final class SupertaskViewSubtaskDeletionRequested extends SupertaskViewEvent {
+  const SupertaskViewSubtaskDeletionRequested({required this.id});
+
+  final int id;
+
+  @override
+  List<Object?> get props => [id];
+}
+
 final class SupertaskViewSubtaskCreationRequested extends SupertaskViewEvent {
   const SupertaskViewSubtaskCreationRequested();
 }

@@ -12,6 +12,8 @@ class SupertaskViewBloc extends Bloc<SupertaskViewEvent, SupertaskViewState> {
     on<SupertaskViewSubscriptionRequested>(_onSubscriptionRequested);
     on<SupertaskViewDataChanged>(_onDataChanged);
     on<SupertaskViewSubtaskCheckboxToggled>(_onSubtaskCheckboxToggled);
+    on<SupertaskViewSupertaskDeletionRequested>(_onSupertaskDeletionRequested);
+    on<SupertaskViewSubtaskDeletionRequested>(_onSubtaskDeletionRequested);
     on<SupertaskViewSubtaskCreationRequested>(_onSubtaskCreationRequested);
   }
 
@@ -69,6 +71,19 @@ class SupertaskViewBloc extends Bloc<SupertaskViewEvent, SupertaskViewState> {
     event.task.copyWith(isDone: event.isDone),
     (state as SupertaskViewSuccess).task.id!,
   );
+
+  void _onSupertaskDeletionRequested(
+    SupertaskViewSupertaskDeletionRequested event,
+    Emitter<SupertaskViewState> emit,
+  ) {
+    emit(const SupertaskViewSupertaskDeleted());
+    _tasksRepository.deleteSupertask(event.id);
+  }
+
+  void _onSubtaskDeletionRequested(
+    SupertaskViewSubtaskDeletionRequested event,
+    Emitter<SupertaskViewState> emit,
+  ) => _tasksRepository.deleteTask(event.id);
 
   Future<void> _onSubtaskCreationRequested(
     SupertaskViewSubtaskCreationRequested event,

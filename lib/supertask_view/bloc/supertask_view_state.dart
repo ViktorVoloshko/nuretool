@@ -42,4 +42,8 @@ final class SupertaskViewSubtaskCreated extends SupertaskViewSuccess {
   List<Object?> get props => [...super.props, subtaskID];
 }
 
+final class SupertaskViewSupertaskDeleted extends SupertaskViewState {
+  const SupertaskViewSupertaskDeleted();
+}
+
 enum TitleError { emptyOrWhitespace }
