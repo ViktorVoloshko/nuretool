@@ -30,11 +30,6 @@ final class TasksOverviewSupertaskCheckboxToggled extends TasksOverviewEvent {
   List<Object> get props => [task, isDone];
 }
 
-final class TasksOverviewSupertaskDeleted extends TasksOverviewEvent {
-  const TasksOverviewSupertaskDeleted({required this.task});
-
-  final Supertask task;
-
-  @override
-  List<Object> get props => [task];
+final class TasksOverviewCreationRequested extends TasksOverviewEvent {
+  const TasksOverviewCreationRequested();
 }

@@ -18,7 +18,18 @@ class TasksOverviewPage extends StatelessWidget {
             tasksRepository: context.read<TasksRepository>(),
             universityRepository: context.read<UniversityRepository>(),
           )..add(const TasksOverviewSubscriptionRequested()),
-      child: const TasksOverviewView(),
+      child: BlocListener<TasksOverviewBloc, TasksOverviewState>(
+        listener: (context, state) async {
+          if (state is TasksOverviewSupertaskCreated) {
+            await Future.delayed(Durations.short1);
+            if (!context.mounted) return;
+            Navigator.of(
+              context,
+            ).push(SupertaskViewPage.route(initialTaskID: state.supertaskID));
+          }
+        },
+        child: const TasksOverviewView(),
+      ),
     );
   }
 }
@@ -30,67 +41,85 @@ class TasksOverviewView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<TasksOverviewBloc, TasksOverviewState>(
       builder: (context, state) {
-        return CustomScrollView(
-          slivers: [
-            SliverAppBar.large(
-              title: Text(AppLocalizations.of(context)!.tasks),
-              actions: [
-                IconButton(
-                  onPressed:
-                      () => context.read<TasksOverviewBloc>().add(
-                        TasksOverviewGenerationRequested(groupID: 9311133),
-                      ),
-                  icon: Icon(Icons.refresh),
+        return Stack(
+          children: [
+            CustomScrollView(
+              slivers: [
+                SliverAppBar.large(
+                  title: Text(AppLocalizations.of(context)!.tasks),
+                  actions: [
+                    IconButton(
+                      onPressed:
+                          () => context.read<TasksOverviewBloc>().add(
+                            TasksOverviewGenerationRequested(groupID: 9311133),
+                          ),
+                      icon: Icon(Icons.refresh),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            switch (state) {
-              TasksOverviewInitial() => const SliverFillRemaining(
-                hasScrollBody: false,
-                child: Center(child: CircularProgressIndicator()),
-              ),
-              TasksOverviewLoading() => const SliverFillRemaining(
-                hasScrollBody: false,
-                child: Center(child: CircularProgressIndicator()),
-              ),
-              TasksOverviewFailure() => SliverFillRemaining(
-                hasScrollBody: false,
-                child: ErrorSupertasksWidget(message: state.message),
-              ),
-              TasksOverviewSuccess() =>
-                state.tasks.isEmpty
-                    ? SliverFillRemaining(
-                      hasScrollBody: false,
-                      child: NoSupertasksWidget(),
-                    )
-                    : SliverList.builder(
-                      itemCount: state.tasks.length,
-                      itemBuilder:
-                          (_, index) => Padding(
-                            padding: const EdgeInsets.only(
-                              left: 4.0,
-                              right: 4.0,
-                            ),
-                            child: SupertasksListItem(
-                              supertask: state.tasks[index],
-                              onTap:
-                                  () => Navigator.of(context).push(
-                                    SupertaskViewPage.route(
-                                      initialTaskID: state.tasks[index].id,
-                                    ),
-                                  ),
-                              onCheckboxTapped:
-                                  (value) =>
-                                      context.read<TasksOverviewBloc>().add(
+                switch (state) {
+                  TasksOverviewInitial() => const SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+                  TasksOverviewLoading() => const SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+                  TasksOverviewFailure() => SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: ErrorSupertasksWidget(message: state.message),
+                  ),
+                  TasksOverviewSuccess() =>
+                    state.tasks.isEmpty
+                        ? SliverFillRemaining(
+                          hasScrollBody: false,
+                          child: NoSupertasksWidget(),
+                        )
+                        : SliverList.builder(
+                          itemCount: state.tasks.length,
+                          itemBuilder:
+                              (_, index) => Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 4.0,
+                                  right: 4.0,
+                                ),
+                                child: SupertasksListItem(
+                                  supertask: state.tasks[index],
+                                  onTap:
+                                      () => Navigator.of(context).push(
+                                        SupertaskViewPage.route(
+                                          initialTaskID: state.tasks[index].id,
+                                        ),
+                                      ),
+                                  onCheckboxTapped:
+                                      (
+                                        value,
+                                      ) => context.read<TasksOverviewBloc>().add(
                                         TasksOverviewSupertaskCheckboxToggled(
                                           task: state.tasks[index],
                                           isDone: value!,
                                         ),
                                       ),
-                            ),
-                          ),
-                    ),
-            },
+                                ),
+                              ),
+                        ),
+                },
+              ],
+            ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: FloatingActionButton(
+                  child: Icon(Icons.add),
+                  onPressed:
+                      () => context.read<TasksOverviewBloc>().add(
+                        const TasksOverviewCreationRequested(),
+                      ),
+                ),
+              ),
+            ),
           ],
         );
       },

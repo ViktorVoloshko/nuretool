@@ -16,6 +16,7 @@ class TasksOverviewBloc extends Bloc<TasksOverviewEvent, TasksOverviewState> {
     on<TasksOverviewSubscriptionRequested>(_onSubscriptionRequested);
     on<TasksOverviewGenerationRequested>(_onGenerationRequested);
     on<TasksOverviewSupertaskCheckboxToggled>(_onCheckboxToggled);
+    on<TasksOverviewCreationRequested>(_onCreationRequested);
   }
 
   final TasksRepository _tasksRepository;
@@ -82,6 +83,25 @@ class TasksOverviewBloc extends Bloc<TasksOverviewEvent, TasksOverviewState> {
     Emitter<TasksOverviewState> emit,
   ) => _tasksRepository.saveSupertaskWithSubtasks(
     event.task.copyWith(isDone: event.isDone),
+  );
+
+  Future<void> _onCreationRequested(
+    TasksOverviewCreationRequested event,
+    Emitter<TasksOverviewState> emit,
+  ) async => emit(
+    TasksOverviewSupertaskCreated(
+      tasks: (state as TasksOverviewSuccess).tasks,
+      supertaskID: await _tasksRepository.saveSupertask(
+        Supertask(
+          title: 'New task',
+          isDone: false,
+          isGenerated: false,
+          type: null,
+          deadline: null,
+          subtasks: const [],
+        ),
+      ),
+    ),
   );
 
   List<Task> _createTasksForType(

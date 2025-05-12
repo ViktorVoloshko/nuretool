@@ -32,3 +32,15 @@ final class TasksOverviewSuccess extends TasksOverviewState {
   @override
   List<Object?> get props => [tasks];
 }
+
+final class TasksOverviewSupertaskCreated extends TasksOverviewSuccess {
+  const TasksOverviewSupertaskCreated({
+    required super.tasks,
+    required this.supertaskID,
+  });
+
+  final int supertaskID;
+
+  @override
+  List<Object?> get props => [super.props, supertaskID];
+}
