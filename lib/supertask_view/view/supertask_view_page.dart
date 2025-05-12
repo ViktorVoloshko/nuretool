@@ -24,7 +24,9 @@ class SupertaskViewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<SupertaskViewBloc, SupertaskViewState>(
       listener: (context, state) async {
-        if (state is SupertaskViewSubtaskCreated) {
+        if (state is SupertaskViewSupertaskDeleted) {
+          Navigator.of(context).pop();
+        } else if (state is SupertaskViewSubtaskCreated) {
           await Future.delayed(Durations.short1);
           if (!context.mounted) return;
           showModalBottomSheet(
@@ -40,8 +42,6 @@ class SupertaskViewPage extends StatelessWidget {
                   ),
                 ),
           );
-        } else if (state is SupertaskViewSupertaskDeleted) {
-          Navigator.of(context).pop();
         }
       },
       child: const SupertaskViewView(),

@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:tasks_repository/tasks_repository.dart';
 
 part 'supertask_view_event.dart';
@@ -75,8 +76,9 @@ class SupertaskViewBloc extends Bloc<SupertaskViewEvent, SupertaskViewState> {
   void _onSupertaskDeletionRequested(
     SupertaskViewSupertaskDeletionRequested event,
     Emitter<SupertaskViewState> emit,
-  ) {
+  ) async {
     emit(const SupertaskViewSupertaskDeleted());
+    await Future.delayed(Durations.short1);
     _tasksRepository.deleteSupertask(event.id);
   }
 
