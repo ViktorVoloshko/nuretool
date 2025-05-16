@@ -12,6 +12,7 @@ import 'package:university_repository/university_repository.dart';
 import 'package:settings_storage/settings_storage.dart';
 
 import '../l10n/app_localizations.dart';
+import 'cubit/app_cubit.dart';
 
 class App extends StatelessWidget {
   const App({
@@ -70,9 +71,16 @@ class App extends StatelessWidget {
           create:
               (_) => createSettingsRepository(settingsStorage: settingsStorage),
           dispose: (repository) => repository.dispose(),
+          lazy: false,
         ),
       ],
-      child: AppView(),
+      child: BlocProvider(
+        create:
+            (context) => AppCubit(
+              settingsRepository: context.read<SettingsRepository>(),
+            ),
+        child: const AppView(),
+      ),
     );
   }
 }
@@ -85,7 +93,16 @@ class AppView extends StatelessWidget {
     return MaterialApp(
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
+      themeMode: fromSettings(context.watch<AppCubit>().state.theme),
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
       home: const HomePage(),
     );
   }
 }
+
+ThemeMode fromSettings(AppTheme theme) => switch (theme) {
+  AppTheme.system => ThemeMode.system,
+  AppTheme.light => ThemeMode.light,
+  AppTheme.dark => ThemeMode.dark,
+};
