@@ -5,9 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:groups_api/groups_api.dart';
 import 'package:nuretool/home/view/view.dart';
 import 'package:rooms_api/rooms_api.dart';
+import 'package:settings_repository/settings_repository.dart';
 import 'package:tasks_repository/tasks_repository.dart';
 import 'package:teachers_api/teachers_api.dart';
 import 'package:university_repository/university_repository.dart';
+import 'package:settings_storage/settings_storage.dart';
 
 import '../l10n/app_localizations.dart';
 
@@ -16,7 +18,9 @@ class App extends StatelessWidget {
     super.key,
     required this.createUniversityRepository,
     required this.createTasksRepository,
+    required this.createSettingsRepository,
     required this.driftDB,
+    required this.settingsStorage,
     required this.eventsApi,
     required this.groupsApi,
     required this.teachersApi,
@@ -33,8 +37,11 @@ class App extends StatelessWidget {
   createUniversityRepository;
   final TasksRepository Function({required DriftDB driftDB})
   createTasksRepository;
+  final SettingsRepository Function({required SettingsStorage settingsStorage})
+  createSettingsRepository;
 
   final DriftDB driftDB;
+  final SettingsStorage settingsStorage;
   final EventsApi eventsApi;
   final GroupsApi groupsApi;
   final TeachersApi teachersApi;
@@ -57,6 +64,11 @@ class App extends StatelessWidget {
         ),
         RepositoryProvider<TasksRepository>(
           create: (_) => createTasksRepository(driftDB: driftDB),
+          dispose: (repository) => repository.dispose(),
+        ),
+        RepositoryProvider<SettingsRepository>(
+          create:
+              (_) => createSettingsRepository(settingsStorage: settingsStorage),
           dispose: (repository) => repository.dispose(),
         ),
       ],
