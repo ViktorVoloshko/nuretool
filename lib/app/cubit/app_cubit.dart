@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:settings_repository/settings_repository.dart';
 import 'package:settings_storage/settings_storage.dart';
 
@@ -17,11 +16,19 @@ class AppCubit extends Cubit<AppState> {
 
   late final StreamSubscription<Settings> _subscription;
 
-  void init() async {
+  void init() {
     _subscription = _settingsRepository.settings.listen(
-      (event) => state.copyWith(event.theme),
+      (event) => emit(state.copyWith(event.theme)),
     );
   }
 
-  void dispose() => _subscription.cancel();
+  void setTheme(AppTheme theme) async => _settingsRepository.saveSettings(
+    (await _settingsRepository.settings.first).copyWith(theme: theme),
+  );
+
+  @override
+  Future<void> close() {
+    _subscription.cancel();
+    return super.close();
+  }
 }

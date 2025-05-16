@@ -76,9 +76,9 @@ class App extends StatelessWidget {
       ],
       child: BlocProvider(
         create:
-            (context) => AppCubit(
-              settingsRepository: context.read<SettingsRepository>(),
-            ),
+            (context) =>
+                AppCubit(settingsRepository: context.read<SettingsRepository>())
+                  ..init(),
         child: const AppView(),
       ),
     );
@@ -90,19 +90,26 @@ class AppView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      supportedLocales: AppLocalizations.supportedLocales,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      themeMode: fromSettings(context.watch<AppCubit>().state.theme),
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
-      home: const HomePage(),
+    return BlocBuilder<AppCubit, AppState>(
+      bloc: context.read<AppCubit>(),
+      builder: (context, state) {
+        return MaterialApp(
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          themeMode: state.theme.toThemeMode(),
+          theme: ThemeData.light(),
+          darkTheme: ThemeData.dark(),
+          home: const HomePage(),
+        );
+      },
     );
   }
 }
 
-ThemeMode fromSettings(AppTheme theme) => switch (theme) {
-  AppTheme.system => ThemeMode.system,
-  AppTheme.light => ThemeMode.light,
-  AppTheme.dark => ThemeMode.dark,
-};
+extension AppThemeToThemeMode on AppTheme {
+  ThemeMode toThemeMode() => switch (this) {
+    AppTheme.system => ThemeMode.system,
+    AppTheme.light => ThemeMode.light,
+    AppTheme.dark => ThemeMode.dark,
+  };
+}

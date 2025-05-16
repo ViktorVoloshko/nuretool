@@ -8,5 +8,5 @@ final class AppState extends Equatable {
   AppState copyWith(AppTheme? theme) => AppState(theme: theme ?? this.theme);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [theme];
 }
