@@ -96,7 +96,7 @@ class AppView extends StatelessWidget {
         return MaterialApp(
           supportedLocales: AppLocalizations.supportedLocales,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
-          themeMode: state.theme.toThemeMode(),
+          themeMode: state.theme.appThemeMode.toThemeMode(),
           theme: ThemeData.light(),
           darkTheme: ThemeData.dark(),
           home: const HomePage(),
@@ -106,10 +106,10 @@ class AppView extends StatelessWidget {
   }
 }
 
-extension AppThemeToThemeMode on AppTheme {
+extension AppThemeModeToThemeMode on AppThemeMode {
   ThemeMode toThemeMode() => switch (this) {
-    AppTheme.system => ThemeMode.system,
-    AppTheme.light => ThemeMode.light,
-    AppTheme.dark => ThemeMode.dark,
+    AppThemeMode.system => ThemeMode.system,
+    AppThemeMode.light => ThemeMode.light,
+    AppThemeMode.dark => ThemeMode.dark,
   };
 }

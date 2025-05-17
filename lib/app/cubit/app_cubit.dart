@@ -10,23 +10,19 @@ part 'app_state.dart';
 class AppCubit extends Cubit<AppState> {
   AppCubit({required SettingsRepository settingsRepository})
     : _settingsRepository = settingsRepository,
-      super(AppState(theme: AppTheme.system)) {
+      super(AppState(theme: AppTheme.defaultValues())) {
     init();
   }
 
   final SettingsRepository _settingsRepository;
 
-  late final StreamSubscription<Settings> _subscription;
+  late final StreamSubscription<AppTheme> _subscription;
 
   void init() {
-    _subscription = _settingsRepository.settings.listen(
-      (event) => emit(state.copyWith(event.theme)),
+    _subscription = _settingsRepository.appTheme.listen(
+      (event) => emit(state.copyWith(event)),
     );
   }
-
-  void setTheme(AppTheme theme) async => _settingsRepository.saveSettings(
-    (await _settingsRepository.settings.first).copyWith(theme: theme),
-  );
 
   @override
   Future<void> close() {

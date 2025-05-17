@@ -79,29 +79,22 @@ class TasksOverviewView extends StatelessWidget {
                         : SliverList.builder(
                           itemCount: state.tasks.length,
                           itemBuilder:
-                              (_, index) => Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 4.0,
-                                  right: 4.0,
-                                ),
-                                child: SupertasksListItem(
-                                  supertask: state.tasks[index],
-                                  onTap:
-                                      () => Navigator.of(context).push(
-                                        SupertaskViewPage.route(
-                                          initialTaskID: state.tasks[index].id,
-                                        ),
+                              (_, index) => SupertasksListItem(
+                                supertask: state.tasks[index],
+                                onTap:
+                                    () => Navigator.of(context).push(
+                                      SupertaskViewPage.route(
+                                        initialTaskID: state.tasks[index].id,
                                       ),
-                                  onCheckboxTapped:
-                                      (
-                                        value,
-                                      ) => context.read<TasksOverviewBloc>().add(
-                                        TasksOverviewSupertaskCheckboxToggled(
-                                          task: state.tasks[index],
-                                          isDone: value!,
+                                    ),
+                                onCheckboxTapped:
+                                    (value) =>
+                                        context.read<TasksOverviewBloc>().add(
+                                          TasksOverviewSupertaskCheckboxToggled(
+                                            task: state.tasks[index],
+                                            isDone: value!,
+                                          ),
                                         ),
-                                      ),
-                                ),
                               ),
                         ),
                 },

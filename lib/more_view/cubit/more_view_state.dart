@@ -1,10 +1,10 @@
 part of 'more_view_cubit.dart';
 
 final class MoreViewState extends Equatable {
-  const MoreViewState({required this.settings});
+  const MoreViewState({required this.appTheme});
 
-  final Settings settings;
+  final AppTheme appTheme;
 
   @override
-  List<Object> get props => [settings];
+  List<Object> get props => [appTheme];
 }

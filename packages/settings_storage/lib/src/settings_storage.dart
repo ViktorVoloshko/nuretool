@@ -14,36 +14,81 @@ class SettingsStorage {
 
   final SharedPreferencesWithCache _storage;
 
-  late final BehaviorSubject<Settings> _settingsStreamController;
+  late final BehaviorSubject<int?> _userGroupIDStreamController;
+  late final BehaviorSubject<SavedSchedules> _savedSchedulesStreamController;
+  late final BehaviorSubject<AppTheme> _appThemeStreamController;
+
+  Stream<int?> get userGroupID =>
+      _userGroupIDStreamController.asBroadcastStream();
+  Stream<SavedSchedules> get savedSchedules =>
+      _savedSchedulesStreamController.asBroadcastStream();
+  Stream<AppTheme> get appTheme =>
+      _appThemeStreamController.asBroadcastStream();
 
   @visibleForTesting
-  static const kSettings = '__settings__';
+  static const kUserGroupID = 'user_group_id';
+  @visibleForTesting
+  static const kSavedSchedules = 'saved_schedules';
+  @visibleForTesting
+  static const kAppTheme = 'app_theme';
 
-  Stream<Settings> get settings =>
-      _settingsStreamController.asBroadcastStream();
-
-  Future<void> updateSettings(Settings settings) {
-    _settingsStreamController.add(settings);
-    return _setValue(kSettings, json.encode(settings));
+  Future<void> setUserGroupID(int groupID) {
+    _userGroupIDStreamController.add(groupID);
+    return _storage.setInt(kUserGroupID, groupID);
   }
 
-  Future<void> close() => _settingsStreamController.close();
+  Future<void> setSavedSchedules(SavedSchedules savedSchedules) {
+    _savedSchedulesStreamController.add(savedSchedules);
+    return _storage.setString(
+      kSavedSchedules,
+      json.encode(savedSchedules.toJson()),
+    );
+  }
+
+  Future<void> setTheme(AppTheme appTheme) {
+    _appThemeStreamController.add(appTheme);
+    return _storage.setString(kAppTheme, json.encode(appTheme.toJson()));
+  }
+
+  Future<void> close() => Future.wait([
+    _userGroupIDStreamController.close(),
+    _savedSchedulesStreamController.close(),
+    _appThemeStreamController.close(),
+  ]);
 
   void _init() {
-    final settingsJson = _getValue(kSettings);
+    _userGroupIDStreamController = BehaviorSubject.seeded(
+      _storage.getInt(kUserGroupID),
+    );
 
-    if (settingsJson == null) {
-      _settingsStreamController = BehaviorSubject.seeded(
-        const Settings.defaultValues(),
+    final savedSchedulesJson = _storage.getString(kSavedSchedules);
+    if (savedSchedulesJson == null) {
+      _savedSchedulesStreamController = BehaviorSubject<SavedSchedules>.seeded(
+        SavedSchedules.empty(),
       );
-      _setValue(kSettings, json.encode(const Settings.defaultValues()));
+      _storage.setString(
+        kSavedSchedules,
+        json.encode(_savedSchedulesStreamController.value.toJson()),
+      );
     } else {
-      final settings = Settings.fromJson(json.decode(settingsJson));
-      _settingsStreamController = BehaviorSubject.seeded(settings);
+      _savedSchedulesStreamController = BehaviorSubject<SavedSchedules>.seeded(
+        SavedSchedules.fromJson(json.decode(savedSchedulesJson)),
+      );
+    }
+
+    final appThemeJson = _storage.getString(kAppTheme);
+    if (appThemeJson == null) {
+      _appThemeStreamController = BehaviorSubject<AppTheme>.seeded(
+        const AppTheme.defaultValues(),
+      );
+      _storage.setString(
+        kAppTheme,
+        json.encode(const AppTheme.defaultValues().toJson()),
+      );
+    } else {
+      _appThemeStreamController = BehaviorSubject<AppTheme>.seeded(
+        AppTheme.fromJson(json.decode(appThemeJson)),
+      );
     }
   }
-
-  String? _getValue(String key) => _storage.getString(key);
-  Future<void> _setValue(String key, String value) =>
-      _storage.setString(key, value);
 }

@@ -169,44 +169,37 @@ class SupertaskViewView extends StatelessWidget {
                       : SliverList.builder(
                         itemCount: state.task.subtasks.length,
                         itemBuilder:
-                            (context, index) => Padding(
-                              padding: const EdgeInsets.only(
-                                left: 4.0,
-                                right: 4.0,
-                              ),
-                              child: SubtaskListItem(
-                                task: state.task.subtasks[index],
-                                onTap: () {
-                                  showModalBottomSheet(
-                                    context: context,
-                                    enableDrag: true,
-                                    showDragHandle: true,
-                                    builder:
-                                        (context) => Padding(
-                                          padding: const EdgeInsets.all(16.0),
-                                          child: TaskViewPage(
-                                            taskID:
-                                                state.task.subtasks[index].id,
-                                            supertaskID: state.task.id!,
-                                          ),
+                            (context, index) => SubtaskListItem(
+                              task: state.task.subtasks[index],
+                              onTap: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  enableDrag: true,
+                                  showDragHandle: true,
+                                  builder:
+                                      (context) => Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: TaskViewPage(
+                                          taskID: state.task.subtasks[index].id,
+                                          supertaskID: state.task.id!,
                                         ),
-                                  );
-                                },
-                                onCheckboxTapped:
-                                    (value) =>
-                                        context.read<SupertaskViewBloc>().add(
-                                          SupertaskViewSubtaskCheckboxToggled(
-                                            task: state.task.subtasks[index],
-                                            isDone: value!,
-                                          ),
-                                        ),
-                                onDeleteTapped:
-                                    () => context.read<SupertaskViewBloc>().add(
-                                      SupertaskViewSubtaskDeletionRequested(
-                                        id: state.task.subtasks[index].id!,
                                       ),
+                                );
+                              },
+                              onCheckboxTapped:
+                                  (value) =>
+                                      context.read<SupertaskViewBloc>().add(
+                                        SupertaskViewSubtaskCheckboxToggled(
+                                          task: state.task.subtasks[index],
+                                          isDone: value!,
+                                        ),
+                                      ),
+                              onDeleteTapped:
+                                  () => context.read<SupertaskViewBloc>().add(
+                                    SupertaskViewSubtaskDeletionRequested(
+                                      id: state.task.subtasks[index].id!,
                                     ),
-                              ),
+                                  ),
                             ),
                       ),
               },

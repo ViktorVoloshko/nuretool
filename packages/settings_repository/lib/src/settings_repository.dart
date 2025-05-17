@@ -6,10 +6,18 @@ class SettingsRepository {
 
   final SettingsStorage _settingsStorage;
 
-  Stream<Settings> get settings => _settingsStorage.settings;
+  Stream<int?> get userGroupID => _settingsStorage.userGroupID;
+  Stream<SavedSchedules> get savedSchedules => _settingsStorage.savedSchedules;
+  Stream<AppTheme> get appTheme => _settingsStorage.appTheme;
 
-  Future<void> saveSettings(Settings settings) =>
-      _settingsStorage.updateSettings(settings);
+  Future<void> setUserGroupID(int groupID) =>
+      _settingsStorage.setUserGroupID(groupID);
+
+  Future<void> setSavedSchedules(SavedSchedules savedSchedules) =>
+      _settingsStorage.setSavedSchedules(savedSchedules);
+
+  Future<void> setTheme(AppTheme appTheme) =>
+      _settingsStorage.setTheme(appTheme);
 
   void dispose() => _settingsStorage.close();
 }

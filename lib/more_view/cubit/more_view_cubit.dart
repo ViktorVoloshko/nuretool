@@ -10,19 +10,22 @@ part 'more_view_state.dart';
 class MoreViewCubit extends Cubit<MoreViewState> {
   MoreViewCubit({required SettingsRepository settingsRepository})
     : _settingsRepository = settingsRepository,
-      super(MoreViewState(settings: Settings.defaultValues())) {
+      super(MoreViewState(appTheme: AppTheme.defaultValues())) {
     init();
   }
 
   final SettingsRepository _settingsRepository;
 
-  late final StreamSubscription<Settings> _subscription;
+  late final StreamSubscription<AppTheme> _subscription;
 
   void init() {
-    _subscription = _settingsRepository.settings.listen(
-      (settings) => emit(MoreViewState(settings: settings)),
+    _subscription = _settingsRepository.appTheme.listen(
+      (appTheme) => emit(MoreViewState(appTheme: appTheme)),
     );
   }
+
+  void setThemeMode(AppThemeMode themeMode) async => _settingsRepository
+      .setTheme(state.appTheme.copyWith(appThemeMode: themeMode));
 
   @override
   Future<void> close() {
