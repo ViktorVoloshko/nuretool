@@ -21,6 +21,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get more => 'More';
 
   @override
+  String get schedulesManage => 'Manage schedules';
+
+  @override
+  String get groups => 'Groups';
+
+  @override
+  String get teachers => 'Teachers';
+
+  @override
+  String get rooms => 'Rooms';
+
+  @override
   String get supertasksEmpty => 'No tasks';
 
   @override
@@ -75,4 +87,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addSubtasks => 'Add subtasks';
+
+  @override
+  String get system => 'System';
+
+  @override
+  String get light => 'Light';
+
+  @override
+  String get dark => 'Dark';
 }

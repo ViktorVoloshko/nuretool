@@ -4,6 +4,10 @@
     "calendar": "Calendar",
     "tasks": "Tasks",
     "more": "More",
+    "schedulesManage": "Manage schedules",
+    "groups": "Groups",
+    "teachers": "Teachers",
+    "rooms": "Rooms",
     "supertasksEmpty": "No tasks",
     "supertasksError": "Error retrieving tasks",
     "supertasksEdit": "Edit task",
@@ -21,5 +25,8 @@
     "title": "Title",
     "titleEmptyOrWhitespace": "Title shouldn't be empty or contain only whitespace",
     "addDeadline": "Add deadline",
-    "addSubtasks": "Add subtasks"
+    "addSubtasks": "Add subtasks",
+    "system": "System",
+    "light": "Light",
+    "dark": "Dark"
 }

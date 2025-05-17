@@ -117,6 +117,30 @@ abstract class AppLocalizations {
   /// **'More'**
   String get more;
 
+  /// No description provided for @schedulesManage.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage schedules'**
+  String get schedulesManage;
+
+  /// No description provided for @groups.
+  ///
+  /// In en, this message translates to:
+  /// **'Groups'**
+  String get groups;
+
+  /// No description provided for @teachers.
+  ///
+  /// In en, this message translates to:
+  /// **'Teachers'**
+  String get teachers;
+
+  /// No description provided for @rooms.
+  ///
+  /// In en, this message translates to:
+  /// **'Rooms'**
+  String get rooms;
+
   /// No description provided for @supertasksEmpty.
   ///
   /// In en, this message translates to:
@@ -224,6 +248,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add subtasks'**
   String get addSubtasks;
+
+  /// No description provided for @system.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get system;
+
+  /// No description provided for @light.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get light;
+
+  /// No description provided for @dark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get dark;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
