@@ -23,7 +23,7 @@ class SupertasksListItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.0),
         onTap: onTap,
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
               padding: const EdgeInsets.all(12.0),
