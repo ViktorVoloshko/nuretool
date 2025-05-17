@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../cubit/home_cubit.dart';
 import '../../tasks_overview/tasks_overview.dart';
+import '../../more_view/more_view.dart';
 import '../../l10n/app_localizations.dart';
 
 class HomePage extends StatelessWidget {
@@ -27,7 +28,7 @@ class HomeView extends StatelessWidget {
       body: SafeArea(
         child: IndexedStack(
           index: selectedTab.index,
-          children: const [Placeholder(), TasksOverviewPage(), Placeholder()],
+          children: const [Placeholder(), TasksOverviewPage(), MoreViewPage()],
         ),
       ),
       bottomNavigationBar: NavigationBar(
