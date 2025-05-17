@@ -21,7 +21,7 @@ void main() async {
   );
 
   runApp(
-    App(
+    AppPage(
       createUniversityRepository: UniversityRepository.new,
       createTasksRepository: TasksRepository.new,
       createSettingsRepository: SettingsRepository.new,

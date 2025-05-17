@@ -10,7 +10,9 @@ part 'app_state.dart';
 class AppCubit extends Cubit<AppState> {
   AppCubit({required SettingsRepository settingsRepository})
     : _settingsRepository = settingsRepository,
-      super(AppState(theme: AppTheme.system));
+      super(AppState(theme: AppTheme.system)) {
+    init();
+  }
 
   final SettingsRepository _settingsRepository;
 
