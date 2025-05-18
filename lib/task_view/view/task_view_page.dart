@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nuretool/task_view/bloc/task_view_bloc.dart';
 import 'package:tasks_repository/tasks_repository.dart';
 
 import '../task_view.dart';
