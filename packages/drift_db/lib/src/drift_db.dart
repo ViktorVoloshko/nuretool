@@ -16,15 +16,6 @@ class DriftDB extends _$DriftDB {
   @override
   int get schemaVersion => 1;
 
-  static QueryExecutor _openConnection() {
-    return driftDatabase(
-      name: 'nuretool',
-      native: const DriftNativeOptions(
-        databaseDirectory: getApplicationDocumentsDirectory,
-      ),
-    );
-  }
-
   Stream<List<EventData>> loadEvents() {
     final query = select(
       events,
@@ -96,4 +87,13 @@ class DriftDB extends _$DriftDB {
 
   Future<int> deleteGeneratedTasks() =>
       (delete(tasks)..where((task) => task.isGenerated.equals(true))).go();
+
+  static QueryExecutor _openConnection() {
+    return driftDatabase(
+      name: 'database',
+      native: const DriftNativeOptions(
+        databaseDirectory: getApplicationSupportDirectory,
+      ),
+    );
+  }
 }
