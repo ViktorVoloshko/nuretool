@@ -8,7 +8,7 @@ class Room extends Entity {
   const Room({required super.id, required super.name, required this.events});
 
   Room.fromDBModel(db.Room room)
-    : this(id: room.id, name: room.name, events: const []);
+    : this(id: room.id, name: room.name, events: []);
 
   final List<int> events;
 

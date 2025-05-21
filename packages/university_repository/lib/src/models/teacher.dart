@@ -19,7 +19,7 @@ class Teacher extends Entity {
         id: teacher.id,
         name: teacher.name,
         shortName: teacher.shortName,
-        events: const [],
+        events: [],
       );
 
   final String shortName;

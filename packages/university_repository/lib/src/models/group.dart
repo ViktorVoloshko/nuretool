@@ -10,7 +10,7 @@ class Group extends Entity {
   const Group({required super.id, required super.name, required this.events});
 
   Group.fromDBModel(db.Group group)
-    : this(id: group.id, name: group.name, events: const []);
+    : this(id: group.id, name: group.name, events: []);
 
   final List<int> events;
 
