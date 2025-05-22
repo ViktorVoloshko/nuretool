@@ -80,7 +80,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get title => 'Title';
 
   @override
-  String get titleEmptyOrWhitespace => 'Title shouldn\'t be empty or contain only whitespace';
+  String get titleEmptyOrWhitespace =>
+      'Title shouldn\'t be empty or contain only whitespace';
 
   @override
   String get addDeadline => 'Add deadline';
