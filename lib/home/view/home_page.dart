@@ -42,8 +42,8 @@ class HomeView extends StatelessWidget {
             label: AppLocalizations.of(context)!.calendar,
           ),
           NavigationDestination(
-            icon: Icon(Icons.task_alt_outlined),
-            selectedIcon: Icon(Icons.task_alt),
+            icon: Icon(Icons.check_box_outlined),
+            selectedIcon: Icon(Icons.check_box),
             label: AppLocalizations.of(context)!.tasks,
           ),
           NavigationDestination(
