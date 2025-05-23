@@ -118,6 +118,36 @@ abstract class AppLocalizations {
   /// **'More'**
   String get more;
 
+  /// No description provided for @today.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get today;
+
+  /// No description provided for @tomorrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Tomorrow'**
+  String get tomorrow;
+
+  /// No description provided for @yesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get yesterday;
+
+  /// No description provided for @daysAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{days} days ago'**
+  String daysAgo(Object days);
+
+  /// No description provided for @daysFromNow.
+  ///
+  /// In en, this message translates to:
+  /// **'{days} days from now'**
+  String daysFromNow(Object days);
+
   /// No description provided for @schedulesManage.
   ///
   /// In en, this message translates to:

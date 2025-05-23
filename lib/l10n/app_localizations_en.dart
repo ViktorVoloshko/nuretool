@@ -21,6 +21,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get more => 'More';
 
   @override
+  String get today => 'Today';
+
+  @override
+  String get tomorrow => 'Tomorrow';
+
+  @override
+  String get yesterday => 'Yesterday';
+
+  @override
+  String daysAgo(Object days) {
+    return '$days days ago';
+  }
+
+  @override
+  String daysFromNow(Object days) {
+    return '$days days from now';
+  }
+
+  @override
   String get schedulesManage => 'Manage schedules';
 
   @override

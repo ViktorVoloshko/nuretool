@@ -56,7 +56,11 @@ class SubtaskListItem extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 4.0),
                         child: Chip(
-                          label: Text(task.deadline!.toLocalDateFormatString()),
+                          label: Text(
+                            task.deadline!
+                                .differenceInDays(DateTime.now())
+                                .toRelativeInDays(context),
+                          ),
                         ),
                       ),
                   ],

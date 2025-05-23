@@ -77,7 +77,9 @@ class SupertasksListItem extends StatelessWidget {
                             if (supertask.deadline != null)
                               Chip(
                                 label: Text(
-                                  supertask.deadline!.toLocalDateFormatString(),
+                                  supertask.deadline!
+                                      .differenceInDays(DateTime.now())
+                                      .toRelativeInDays(context),
                                 ),
                               ),
                           ],
