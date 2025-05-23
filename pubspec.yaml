@@ -29,14 +29,15 @@ dependencies:
     path: ./packages/settings_storage
   settings_repository:
     path: ./packages/settings_repository
-  flutter_bloc: ^9.1.0
   flutter_localizations:
     sdk: flutter
+  flutter_bloc: ^9.1.0
   intl: any
   bloc: ^9.0.0
   meta: ^1.16.0
   equatable: ^2.0.7
   shared_preferences: ^2.5.3
+  collection: ^1.19.1
 
 dev_dependencies:
   flutter_test:

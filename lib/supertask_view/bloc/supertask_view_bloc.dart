@@ -1,6 +1,6 @@
+import 'package:collection/collection.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:tasks_repository/tasks_repository.dart';
 
 part 'supertask_view_event.dart';
@@ -28,8 +28,15 @@ class SupertaskViewBloc extends Bloc<SupertaskViewEvent, SupertaskViewState> {
 
     await emit.forEach(
       _tasksRepository.tasks,
-      onData:
-          (supertasks) => SupertaskViewSuccess(
+      onData: (supertasks) {
+        final supertask = supertasks.firstWhereOrNull(
+          (task) => task.id == event.taskID,
+        );
+
+        if (supertask == null) {
+          return const SupertaskViewSupertaskDeleted();
+        } else {
+          return SupertaskViewSuccess(
             task: supertasks.firstWhere((task) => task.id == event.taskID),
             titleError:
                 _isTitleValid(
@@ -39,7 +46,9 @@ class SupertaskViewBloc extends Bloc<SupertaskViewEvent, SupertaskViewState> {
                     )
                     ? null
                     : TitleError.emptyOrWhitespace,
-          ),
+          );
+        }
+      },
     );
   }
 
@@ -76,11 +85,7 @@ class SupertaskViewBloc extends Bloc<SupertaskViewEvent, SupertaskViewState> {
   void _onSupertaskDeletionRequested(
     SupertaskViewSupertaskDeletionRequested event,
     Emitter<SupertaskViewState> emit,
-  ) async {
-    emit(const SupertaskViewSupertaskDeleted());
-    await Future.delayed(Durations.short1);
-    _tasksRepository.deleteSupertask(event.id);
-  }
+  ) async => _tasksRepository.deleteSupertask(event.id);
 
   void _onSubtaskDeletionRequested(
     SupertaskViewSubtaskDeletionRequested event,
