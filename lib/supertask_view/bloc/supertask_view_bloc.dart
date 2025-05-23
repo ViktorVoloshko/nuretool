@@ -37,15 +37,8 @@ class SupertaskViewBloc extends Bloc<SupertaskViewEvent, SupertaskViewState> {
           return const SupertaskViewSupertaskDeleted();
         } else {
           return SupertaskViewSuccess(
-            task: supertasks.firstWhere((task) => task.id == event.taskID),
-            titleError:
-                _isTitleValid(
-                      supertasks
-                          .firstWhere((task) => task.id == event.taskID)
-                          .title,
-                    )
-                    ? null
-                    : TitleError.emptyOrWhitespace,
+            task: supertask,
+            titleError: _checkTitle(supertask.title),
           );
         }
       },
@@ -56,11 +49,11 @@ class SupertaskViewBloc extends Bloc<SupertaskViewEvent, SupertaskViewState> {
     SupertaskViewDataChanged event,
     Emitter<SupertaskViewState> emit,
   ) {
-    if (!_isTitleValid(event.title)) {
+    if (_checkTitle(event.title) != null) {
       emit(
         SupertaskViewSuccess(
           task: (state as SupertaskViewSuccess).task,
-          titleError: TitleError.emptyOrWhitespace,
+          titleError: _checkTitle(event.title),
         ),
       );
     } else {
@@ -111,5 +104,6 @@ class SupertaskViewBloc extends Bloc<SupertaskViewEvent, SupertaskViewState> {
     ),
   );
 
-  bool _isTitleValid(String title) => title.trim().isEmpty ? false : true;
+  TitleError? _checkTitle(String title) =>
+      title.trim().isEmpty ? TitleError.emptyOrWhitespace : null;
 }
