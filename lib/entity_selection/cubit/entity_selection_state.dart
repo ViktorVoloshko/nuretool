@@ -6,5 +6,5 @@ final class EntitySelectionState extends Equatable {
   final List<Entity> entities;
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [entities];
 }

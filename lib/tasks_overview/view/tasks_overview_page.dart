@@ -23,9 +23,10 @@ class TasksOverviewPage extends StatelessWidget {
           if (state is TasksOverviewSupertaskCreated) {
             await Future.delayed(Durations.short1);
             if (!context.mounted) return;
-            Navigator.of(
+            Navigator.push(
               context,
-            ).push(SupertaskViewPage.route(initialTaskID: state.supertaskID));
+              SupertaskViewPage.route(initialTaskID: state.supertaskID),
+            );
           }
         },
         child: const TasksOverviewView(),
@@ -82,7 +83,8 @@ class TasksOverviewView extends StatelessWidget {
                               (_, index) => SupertasksListItem(
                                 supertask: state.tasks[index],
                                 onTap:
-                                    () => Navigator.of(context).push(
+                                    () => Navigator.push(
+                                      context,
                                       SupertaskViewPage.route(
                                         initialTaskID: state.tasks[index].id,
                                       ),

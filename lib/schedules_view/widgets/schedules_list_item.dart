@@ -7,14 +7,14 @@ class SchedulesListItem extends StatelessWidget {
     super.key,
     required this.title,
     this.lastUpdated,
-    required this.onTap,
+    this.onTap,
     required this.onRefresh,
     required this.onDelete,
   });
 
   final String title;
   final DateTime? lastUpdated;
-  final GestureTapCallback onTap;
+  final GestureTapCallback? onTap;
   final GestureTapCallback onRefresh;
   final GestureTapCallback onDelete;
 

@@ -118,6 +118,12 @@ abstract class AppLocalizations {
   /// **'More'**
   String get more;
 
+  /// No description provided for @search.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get search;
+
   /// No description provided for @today.
   ///
   /// In en, this message translates to:

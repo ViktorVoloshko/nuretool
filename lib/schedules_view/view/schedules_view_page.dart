@@ -7,6 +7,7 @@ import 'package:university_repository/university_repository.dart';
 import '../cubit/schedules_view_cubit.dart';
 import '../widgets/widgets.dart';
 import '../../l10n/app_localizations.dart';
+import '../../entity_selection/entity_selection.dart';
 
 class SchedulesViewPage extends StatelessWidget {
   const SchedulesViewPage({super.key});
@@ -55,7 +56,6 @@ class SchedulesViewView extends StatelessWidget {
                     (context, index) => SchedulesListItem(
                       title: state.groupSchedules[index].name,
                       // lastUpdated: state.groupSchedules[index].lastUpdated,
-                      onTap: () {},
                       onRefresh: () {},
                       onDelete:
                           () => context

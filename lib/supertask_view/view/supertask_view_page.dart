@@ -25,7 +25,7 @@ class SupertaskViewPage extends StatelessWidget {
     return BlocListener<SupertaskViewBloc, SupertaskViewState>(
       listener: (context, state) async {
         if (state is SupertaskViewSupertaskDeleted) {
-          Navigator.of(context).pop();
+          Navigator.pop(context);
         } else if (state is SupertaskViewSubtaskCreated) {
           await Future.delayed(Durations.short1);
           if (!context.mounted) return;

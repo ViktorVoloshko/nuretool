@@ -21,6 +21,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get more => 'More';
 
   @override
+  String get search => 'Search';
+
+  @override
   String get today => 'Today';
 
   @override
