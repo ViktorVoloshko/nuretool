@@ -47,7 +47,9 @@ class SchedulesViewView extends StatelessWidget {
               SliverToBoxAdapter(
                 child: SchedulesTypesDivider(
                   typeName: AppLocalizations.of(context)!.groups,
-                  onAdd: () {},
+                  onAdd:
+                      () =>
+                          Navigator.push(context, EntitySelectionPage.route()),
                 ),
               ),
               SliverList.builder(

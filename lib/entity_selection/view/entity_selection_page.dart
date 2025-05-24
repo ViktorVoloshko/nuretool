@@ -8,10 +8,13 @@ import '../../l10n/app_localizations.dart';
 class EntitySelectionPage extends StatelessWidget {
   const EntitySelectionPage({super.key});
 
-  static Route<int> route(List<Entity> entities) => MaterialPageRoute(
+  static Route<void> route() => MaterialPageRoute(
     builder:
         (context) => BlocProvider(
-          create: (context) => EntitySelectionCubit(entities: entities),
+          create:
+              (context) => EntitySelectionCubit(
+                universityRepository: context.read<UniversityRepository>(),
+              )..requestSubscription(),
           child: const EntitySelectionPage(),
         ),
   );
@@ -31,9 +34,11 @@ class EntitySelectionView extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title: TextFormField(
-              // TODO: Implement search
-              onChanged: (value) {},
+            title: TextField(
+              onChanged:
+                  (value) => context
+                      .read<EntitySelectionCubit>()
+                      .setSearchValue(value),
               decoration: InputDecoration(
                 hintText: AppLocalizations.of(context)!.search,
                 prefixIcon: Icon(Icons.search),
@@ -43,13 +48,11 @@ class EntitySelectionView extends StatelessWidget {
           body: CustomScrollView(
             slivers: [
               SliverList.builder(
-                itemCount: state.entities.length,
+                itemCount: state.filteredGroups.length,
                 itemBuilder:
                     (context, index) => ListTile(
-                      title: Text(state.entities[index].name),
-                      onTap:
-                          () =>
-                              Navigator.pop(context, state.entities[index].id),
+                      title: Text(state.filteredGroups[index].name),
+                      onTap: () => Navigator.pop(context),
                     ),
               ),
             ],
