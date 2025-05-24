@@ -7,9 +7,11 @@ import 'package:university_repository/university_repository.dart';
 part 'entity_selection_state.dart';
 
 class EntitySelectionCubit extends Cubit<EntitySelectionState> {
-  EntitySelectionCubit({required UniversityRepository universityRepository})
-    : _universityRepository = universityRepository,
-      super(EntitySelectionState());
+  EntitySelectionCubit({
+    required UniversityRepository universityRepository,
+    required EntitySelectionTab initialTab,
+  }) : _universityRepository = universityRepository,
+       super(EntitySelectionState(initialTab: initialTab));
 
   final UniversityRepository _universityRepository;
 

@@ -5,21 +5,23 @@ final class EntitySelectionState extends Equatable {
     this.groups = const [],
     this.teachers = const [],
     this.rooms = const [],
+    this.initialTab = EntitySelectionTab.groups,
     this.searchFilter = '',
   });
 
   final List<Group> groups;
   final List<Teacher> teachers;
   final List<Room> rooms;
-
   final String searchFilter;
+
+  final EntitySelectionTab initialTab;
 
   List<Group> get filteredGroups =>
       groups.where((group) => group.name.contains(searchFilter)).toList();
-  List<Group> get filteredTeachers =>
-      groups.where((teacher) => teacher.name.contains(searchFilter)).toList();
-  List<Group> get filteredRooms =>
-      groups.where((room) => room.name.contains(searchFilter)).toList();
+  List<Teacher> get filteredTeachers =>
+      teachers.where((teacher) => teacher.name.contains(searchFilter)).toList();
+  List<Room> get filteredRooms =>
+      rooms.where((room) => room.name.contains(searchFilter)).toList();
 
   EntitySelectionState copyWith({
     List<Group>? groups,
@@ -36,3 +38,5 @@ final class EntitySelectionState extends Equatable {
   @override
   List<Object> get props => [groups, teachers, rooms, searchFilter];
 }
+
+enum EntitySelectionTab { groups, teachers, rooms }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:settings_repository/settings_repository.dart';
-import 'package:settings_storage/settings_storage.dart';
 import 'package:university_repository/university_repository.dart';
 
 import '../cubit/schedules_view_cubit.dart';
@@ -12,7 +11,7 @@ import '../../entity_selection/entity_selection.dart';
 class SchedulesViewPage extends StatelessWidget {
   const SchedulesViewPage({super.key});
 
-  static Route<ScheduleSelection?> route() => MaterialPageRoute(
+  static Route<void> route() => MaterialPageRoute(
     builder: (context) {
       return BlocProvider(
         create:
@@ -48,8 +47,10 @@ class SchedulesViewView extends StatelessWidget {
                 child: SchedulesTypesDivider(
                   typeName: AppLocalizations.of(context)!.groups,
                   onAdd:
-                      () =>
-                          Navigator.push(context, EntitySelectionPage.route()),
+                      () => Navigator.push(
+                        context,
+                        EntitySelectionPage.route(EntitySelectionTab.groups),
+                      ),
                 ),
               ),
               SliverList.builder(
@@ -70,7 +71,11 @@ class SchedulesViewView extends StatelessWidget {
               SliverToBoxAdapter(
                 child: SchedulesTypesDivider(
                   typeName: AppLocalizations.of(context)!.teachers,
-                  onAdd: () {},
+                  onAdd:
+                      () => Navigator.push(
+                        context,
+                        EntitySelectionPage.route(EntitySelectionTab.teachers),
+                      ),
                 ),
               ),
               SliverList.builder(
@@ -87,7 +92,11 @@ class SchedulesViewView extends StatelessWidget {
               SliverToBoxAdapter(
                 child: SchedulesTypesDivider(
                   typeName: AppLocalizations.of(context)!.rooms,
-                  onAdd: () {},
+                  onAdd:
+                      () => Navigator.push(
+                        context,
+                        EntitySelectionPage.route(EntitySelectionTab.rooms),
+                      ),
                 ),
               ),
               SliverList.builder(
