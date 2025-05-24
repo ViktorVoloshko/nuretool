@@ -1,15 +1,14 @@
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:drift/drift.dart';
 import 'package:teachers_api/teachers_api.dart' as api;
 import 'package:drift_db/drift_db.dart' as db;
 
-import 'models.dart';
-
 @immutable
-class Teacher extends Entity {
+class Teacher extends Equatable {
   const Teacher({
-    required super.id,
-    required super.name,
+    required this.id,
+    required this.name,
     required this.shortName,
     required this.events,
   });
@@ -22,6 +21,8 @@ class Teacher extends Entity {
         events: [],
       );
 
+  final int id;
+  final String name;
   final String shortName;
   final List<int> events;
 
