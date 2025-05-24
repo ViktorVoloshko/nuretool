@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:university_repository/university_repository.dart';
 
+import 'view.dart';
 import '../cubit/entity_selection_cubit.dart';
 import '../../l10n/app_localizations.dart';
 
@@ -10,6 +11,7 @@ class EntitySelectionPage extends StatelessWidget {
 
   static Route<void> route([
     EntitySelectionTab tab = EntitySelectionTab.groups,
+    bool onlyGroups = false,
   ]) => MaterialPageRoute(
     builder:
         (context) => BlocProvider(
@@ -62,15 +64,15 @@ class EntitySelectionView extends StatelessWidget {
             ),
             body: TabBarView(
               children: [
-                EntitySelectionGroupList(
+                EntitySelectionGroupsView(
                   groups: state.filteredGroups,
                   onTap: () => Navigator.pop(context),
                 ),
-                EntitySelectionTeachersList(
+                EntitySelectionTeachersView(
                   teachers: state.filteredTeachers,
                   onTap: () => Navigator.pop(context),
                 ),
-                EntitySelectionRoomsList(
+                EntitySelectionRoomsView(
                   rooms: state.filteredRooms,
                   onTap: () => Navigator.pop(context),
                 ),
@@ -79,81 +81,6 @@ class EntitySelectionView extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-class EntitySelectionGroupList extends StatelessWidget {
-  const EntitySelectionGroupList({
-    super.key,
-    required this.groups,
-    required this.onTap,
-  });
-
-  final List<Group> groups;
-  final GestureTapCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverList.builder(
-          itemCount: groups.length,
-          itemBuilder:
-              (context, index) =>
-                  ListTile(title: Text(groups[index].name), onTap: onTap),
-        ),
-      ],
-    );
-  }
-}
-
-class EntitySelectionTeachersList extends StatelessWidget {
-  const EntitySelectionTeachersList({
-    super.key,
-    required this.teachers,
-    required this.onTap,
-  });
-
-  final List<Teacher> teachers;
-  final GestureTapCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverList.builder(
-          itemCount: teachers.length,
-          itemBuilder:
-              (context, index) =>
-                  ListTile(title: Text(teachers[index].name), onTap: onTap),
-        ),
-      ],
-    );
-  }
-}
-
-class EntitySelectionRoomsList extends StatelessWidget {
-  const EntitySelectionRoomsList({
-    super.key,
-    required this.rooms,
-    required this.onTap,
-  });
-
-  final List<Room> rooms;
-  final GestureTapCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverList.builder(
-          itemCount: rooms.length,
-          itemBuilder:
-              (context, index) =>
-                  ListTile(title: Text(rooms[index].name), onTap: onTap),
-        ),
-      ],
     );
   }
 }
