@@ -9,9 +9,12 @@ part 'entity_selection_state.dart';
 class EntitySelectionCubit extends Cubit<EntitySelectionState> {
   EntitySelectionCubit({
     required UniversityRepository universityRepository,
-    required EntitySelectionTab initialTab,
+    EntitySelectionTab initialTab = EntitySelectionTab.groups,
+    bool groupsOnly = false,
   }) : _universityRepository = universityRepository,
-       super(EntitySelectionState(initialTab: initialTab));
+       super(
+         EntitySelectionState(initialTab: initialTab, groupsOnly: groupsOnly),
+       );
 
   final UniversityRepository _universityRepository;
 

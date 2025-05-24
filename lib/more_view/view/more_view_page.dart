@@ -7,6 +7,7 @@ import '../widgets/widgets.dart';
 import '../cubit/more_view_cubit.dart';
 import '../../l10n/app_localizations.dart';
 import '../../schedules_view/schedules_view.dart';
+import '../../entity_selection/entity_selection.dart';
 
 class MoreViewPage extends StatelessWidget {
   const MoreViewPage({super.key});
@@ -62,7 +63,14 @@ class MoreViewView extends StatelessWidget {
                 MoreViewItem(
                   title: 'My group',
                   subtitle: 'КІУКІ-21-5',
-                  onTap: () {},
+                  onTap:
+                      () => Navigator.push(
+                        context,
+                        EntitySelectionPage.route(
+                          tab: EntitySelectionTab.groups,
+                          groupsOnly: true,
+                        ),
+                      ),
                   icon: Icon(Icons.people),
                 ),
                 MoreViewItem(

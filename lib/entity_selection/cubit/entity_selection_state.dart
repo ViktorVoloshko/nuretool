@@ -5,8 +5,9 @@ final class EntitySelectionState extends Equatable {
     this.groups = const [],
     this.teachers = const [],
     this.rooms = const [],
-    this.initialTab = EntitySelectionTab.groups,
     this.searchFilter = '',
+    this.initialTab = EntitySelectionTab.groups,
+    this.groupsOnly = false,
   });
 
   final List<Group> groups;
@@ -15,6 +16,7 @@ final class EntitySelectionState extends Equatable {
   final String searchFilter;
 
   final EntitySelectionTab initialTab;
+  final bool groupsOnly;
 
   List<Group> get filteredGroups =>
       groups.where((group) => group.name.contains(searchFilter)).toList();
@@ -33,10 +35,19 @@ final class EntitySelectionState extends Equatable {
     teachers: teachers ?? this.teachers,
     rooms: rooms ?? this.rooms,
     searchFilter: searchFilter ?? this.searchFilter,
+    initialTab: initialTab,
+    groupsOnly: groupsOnly,
   );
 
   @override
-  List<Object> get props => [groups, teachers, rooms, searchFilter, initialTab];
+  List<Object> get props => [
+    groups,
+    teachers,
+    rooms,
+    searchFilter,
+    initialTab,
+    groupsOnly,
+  ];
 }
 
 enum EntitySelectionTab { groups, teachers, rooms }

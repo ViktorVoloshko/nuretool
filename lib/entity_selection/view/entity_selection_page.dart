@@ -9,16 +9,17 @@ import '../../l10n/app_localizations.dart';
 class EntitySelectionPage extends StatelessWidget {
   const EntitySelectionPage({super.key});
 
-  static Route<void> route([
+  static Route<void> route({
     EntitySelectionTab tab = EntitySelectionTab.groups,
-    bool onlyGroups = false,
-  ]) => MaterialPageRoute(
+    bool groupsOnly = false,
+  }) => MaterialPageRoute(
     builder:
         (context) => BlocProvider(
           create:
               (context) => EntitySelectionCubit(
                 universityRepository: context.read<UniversityRepository>(),
                 initialTab: tab,
+                groupsOnly: groupsOnly,
               )..requestSubscription(),
           child: const EntitySelectionPage(),
         ),
@@ -41,7 +42,7 @@ class EntitySelectionView extends StatelessWidget {
       builder: (context, state) {
         return DefaultTabController(
           initialIndex: state.initialTab.index,
-          length: 3,
+          length: state.groupsOnly ? 1 : 3,
           child: Scaffold(
             appBar: AppBar(
               title: TextField(
@@ -56,9 +57,11 @@ class EntitySelectionView extends StatelessWidget {
               ),
               bottom: TabBar(
                 tabs: [
-                  Tab(text: l10n.groups),
-                  Tab(text: l10n.teachers),
-                  Tab(text: l10n.rooms),
+                  Tab(text: l10n.groups, icon: Icon(Icons.people)),
+                  if (!state.groupsOnly) ...[
+                    Tab(text: l10n.teachers, icon: Icon(Icons.person)),
+                    Tab(text: l10n.rooms, icon: Icon(Icons.sensor_door)),
+                  ],
                 ],
               ),
             ),
@@ -68,14 +71,16 @@ class EntitySelectionView extends StatelessWidget {
                   groups: state.filteredGroups,
                   onTap: () => Navigator.pop(context),
                 ),
-                EntitySelectionTeachersView(
-                  teachers: state.filteredTeachers,
-                  onTap: () => Navigator.pop(context),
-                ),
-                EntitySelectionRoomsView(
-                  rooms: state.filteredRooms,
-                  onTap: () => Navigator.pop(context),
-                ),
+                if (!state.groupsOnly) ...[
+                  EntitySelectionTeachersView(
+                    teachers: state.filteredTeachers,
+                    onTap: () => Navigator.pop(context),
+                  ),
+                  EntitySelectionRoomsView(
+                    rooms: state.filteredRooms,
+                    onTap: () => Navigator.pop(context),
+                  ),
+                ],
               ],
             ),
           ),

@@ -49,7 +49,9 @@ class SchedulesViewView extends StatelessWidget {
                   onAdd:
                       () => Navigator.push(
                         context,
-                        EntitySelectionPage.route(EntitySelectionTab.groups),
+                        EntitySelectionPage.route(
+                          tab: EntitySelectionTab.groups,
+                        ),
                       ),
                 ),
               ),
@@ -74,7 +76,9 @@ class SchedulesViewView extends StatelessWidget {
                   onAdd:
                       () => Navigator.push(
                         context,
-                        EntitySelectionPage.route(EntitySelectionTab.teachers),
+                        EntitySelectionPage.route(
+                          tab: EntitySelectionTab.teachers,
+                        ),
                       ),
                 ),
               ),
@@ -95,7 +99,9 @@ class SchedulesViewView extends StatelessWidget {
                   onAdd:
                       () => Navigator.push(
                         context,
-                        EntitySelectionPage.route(EntitySelectionTab.rooms),
+                        EntitySelectionPage.route(
+                          tab: EntitySelectionTab.rooms,
+                        ),
                       ),
                 ),
               ),
