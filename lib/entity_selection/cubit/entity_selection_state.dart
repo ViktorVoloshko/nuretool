@@ -36,7 +36,7 @@ final class EntitySelectionState extends Equatable {
   );
 
   @override
-  List<Object> get props => [groups, teachers, rooms, searchFilter];
+  List<Object> get props => [groups, teachers, rooms, searchFilter, initialTab];
 }
 
 enum EntitySelectionTab { groups, teachers, rooms }
