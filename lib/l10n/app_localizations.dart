@@ -146,13 +146,13 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'{days} days ago'**
-  String daysAgo(Object days);
+  String daysAgo(int days);
 
   /// No description provided for @daysFromNow.
   ///
   /// In en, this message translates to:
   /// **'{days} days from now'**
-  String daysFromNow(Object days);
+  String daysFromNow(int days);
 
   /// No description provided for @schedulesManage.
   ///
@@ -260,7 +260,7 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'{done} out of {total}'**
-  String subtasksDoneTotal(Object done, Object total);
+  String subtasksDoneTotal(int done, int total);
 
   /// No description provided for @title.
   ///

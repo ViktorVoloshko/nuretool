@@ -9,7 +9,21 @@
     "tomorrow": "Tomorrow",
     "yesterday": "Yesterday",
     "daysAgo": "{days} days ago",
+    "@daysAgo": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
     "daysFromNow": "{days} days from now",
+    "@daysFromNow": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
     "schedulesManage": "Manage schedules",
     "groups": "Groups",
     "teachers": "Teachers",
@@ -28,6 +42,16 @@
     "test": "Test",
     "exam": "Exam",
     "subtasksDoneTotal": "{done} out of {total}",
+    "@subtasksDoneTotal": {
+        "placeholders": {
+            "done": {
+                "type": "int"
+            },
+            "total": {
+                "type": "int"
+            }
+        }
+    },
     "title": "Title",
     "titleEmptyOrWhitespace": "Title shouldn't be empty or contain only whitespace",
     "addDeadline": "Add deadline",

@@ -33,12 +33,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get yesterday => 'Yesterday';
 
   @override
-  String daysAgo(Object days) {
+  String daysAgo(int days) {
     return '$days days ago';
   }
 
   @override
-  String daysFromNow(Object days) {
+  String daysFromNow(int days) {
     return '$days days from now';
   }
 
@@ -94,7 +94,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exam => 'Exam';
 
   @override
-  String subtasksDoneTotal(Object done, Object total) {
+  String subtasksDoneTotal(int done, int total) {
     return '$done out of $total';
   }
 
