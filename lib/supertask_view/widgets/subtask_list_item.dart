@@ -59,7 +59,9 @@ class SubtaskListItem extends StatelessWidget {
                           label: Text(
                             task.deadline!
                                 .differenceInDays(DateTime.now())
-                                .toRelativeInDays(context),
+                                .toRelativeInDays(
+                                  AppLocalizations.of(context)!,
+                                ),
                           ),
                         ),
                       ),

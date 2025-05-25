@@ -79,7 +79,9 @@ class SupertasksListItem extends StatelessWidget {
                                 label: Text(
                                   supertask.deadline!
                                       .differenceInDays(DateTime.now())
-                                      .toRelativeInDays(context),
+                                      .toRelativeInDays(
+                                        AppLocalizations.of(context)!,
+                                      ),
                                 ),
                               ),
                           ],
