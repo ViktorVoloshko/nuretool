@@ -3,3 +3,4 @@ library;
 
 export 'src/university_repository.dart';
 export 'src/models/models.dart';
+export 'src/utils/utils.dart';

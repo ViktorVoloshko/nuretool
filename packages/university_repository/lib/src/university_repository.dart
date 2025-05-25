@@ -3,11 +3,13 @@ import 'dart:async';
 import 'package:events_api/events_api.dart' show EventsApi;
 import 'package:groups_api/groups_api.dart' show GroupsApi;
 import 'package:rooms_api/rooms_api.dart' show RoomsApi;
+import 'package:settings_storage/settings_storage.dart';
 import 'package:teachers_api/teachers_api.dart' show TeachersApi;
 import 'package:drift_db/drift_db.dart' as db;
 import 'package:rxdart/rxdart.dart' hide Subject;
 
 import 'models/models.dart';
+import 'utils/utils.dart';
 
 class UniversityRepository {
   UniversityRepository({
@@ -16,11 +18,13 @@ class UniversityRepository {
     required TeachersApi teachersApi,
     required RoomsApi roomsApi,
     required db.DriftDB driftDB,
+    required SettingsStorage settingsStorage,
   }) : _eventsApi = eventsApi,
        _groupsApi = groupsApi,
        _teachersApi = teachersApi,
        _roomsApi = roomsApi,
-       _driftDB = driftDB {
+       _driftDB = driftDB,
+       _settingsStorage = settingsStorage {
     _init();
   }
 
@@ -29,6 +33,7 @@ class UniversityRepository {
   final TeachersApi _teachersApi;
   final RoomsApi _roomsApi;
   final db.DriftDB _driftDB;
+  final SettingsStorage _settingsStorage;
 
   final BehaviorSubject<List<Event>> _eventsStreamController =
       BehaviorSubject<List<Event>>.seeded(const []);
@@ -48,6 +53,9 @@ class UniversityRepository {
   Stream<List<Room>> get rooms => _roomsStreamController.asBroadcastStream();
   Stream<List<Subject>> get subjects =>
       _subjectsStreamController.asBroadcastStream();
+
+  Stream<int?> get userGroupID => _settingsStorage.userGroupID;
+  Stream<SavedSchedules> get savedSchedules => _settingsStorage.savedSchedules;
 
   late final StreamSubscription<List<db.EventData>> _eventsSubscription;
   late final StreamSubscription<List<db.Group>> _groupsSubscription;
@@ -123,6 +131,24 @@ class UniversityRepository {
   Future<void> saveEvent(Event event) => _driftDB.saveEvent(event.toDBModel());
 
   // TODO: Delete event
+
+  Future<void> setUserGroupID(int groupID) =>
+      _settingsStorage.setUserGroupID(groupID);
+
+  Future<void> addGroupSchedule(int groupID) async {
+    final currentSavedSchedules = await savedSchedules.first;
+    _settingsStorage.setSavedSchedules(
+      currentSavedSchedules.copyWith(
+        groupIDs: [...currentSavedSchedules.groupIDs, groupID],
+      ),
+    );
+
+    return fetchEventsForGroup(
+      groupID,
+      DateTime.now().startOfSemester,
+      DateTime.now().endOfSemester,
+    );
+  }
 
   Future<dynamic> dispose() async {
     await Future.wait([

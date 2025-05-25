@@ -21,6 +21,8 @@ dependencies:
     path: ../cist_api
   drift_db:
     path: ../drift_db
+  settings_storage:
+    path: ../settings_storage
   flutter:
     sdk: flutter
   equatable: ^2.0.7
