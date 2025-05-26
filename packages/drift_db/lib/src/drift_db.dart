@@ -41,6 +41,9 @@ class DriftDB extends _$DriftDB {
   Future<int> saveEvent(EventsCompanion event) =>
       into(events).insertOnConflictUpdate(event);
 
+  Future<void> saveEvents(Iterable<EventsCompanion> events) =>
+      batch((batch) => batch.insertAllOnConflictUpdate(this.events, events));
+
   Future<void> saveApiEvents(
     Iterable<EventsCompanion> events,
     Iterable<EventTypesCompanion> types,
@@ -49,8 +52,9 @@ class DriftDB extends _$DriftDB {
     batch.insertAllOnConflictUpdate(this.events, events);
   });
 
-  Future<void> saveEvents(Iterable<EventsCompanion> events) =>
-      batch((batch) => batch.insertAllOnConflictUpdate(this.events, events));
+  Future<void> deleteEvents(List<int> eventIDs) => batch(
+    (batch) => batch.deleteWhere(events, (event) => event.id.isIn(eventIDs)),
+  );
 
   Future<int> deleteFetchedEvents() =>
       (delete(events)..where((event) => event.isFetched.equals(true))).go();
