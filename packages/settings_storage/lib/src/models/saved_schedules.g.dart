@@ -16,20 +16,17 @@ SavedSchedules _$SavedSchedulesFromJson(
       groupIDs: $checkedConvert(
         'saved_groups_ids',
         (v) =>
-            (v as List<dynamic>?)?.map((e) => (e as num).toInt()).toList() ??
-            [],
+            (v as List<dynamic>?)?.map((e) => (e as num).toInt()).toSet() ?? {},
       ),
       teacherIDs: $checkedConvert(
         'saved_teachers_ids',
         (v) =>
-            (v as List<dynamic>?)?.map((e) => (e as num).toInt()).toList() ??
-            [],
+            (v as List<dynamic>?)?.map((e) => (e as num).toInt()).toSet() ?? {},
       ),
       roomIDs: $checkedConvert(
         'saved_rooms_ids',
         (v) =>
-            (v as List<dynamic>?)?.map((e) => (e as num).toInt()).toList() ??
-            [],
+            (v as List<dynamic>?)?.map((e) => (e as num).toInt()).toSet() ?? {},
       ),
     );
     return val;
@@ -43,7 +40,7 @@ SavedSchedules _$SavedSchedulesFromJson(
 
 Map<String, dynamic> _$SavedSchedulesToJson(SavedSchedules instance) =>
     <String, dynamic>{
-      'saved_groups_ids': instance.groupIDs,
-      'saved_teachers_ids': instance.teacherIDs,
-      'saved_rooms_ids': instance.roomIDs,
+      'saved_groups_ids': instance.groupIDs.toList(),
+      'saved_teachers_ids': instance.teacherIDs.toList(),
+      'saved_rooms_ids': instance.roomIDs.toList(),
     };

@@ -216,7 +216,7 @@ class UniversityRepository {
     final currentSavedSchedules = await savedSchedules.first;
     _settingsStorage.setSavedSchedules(
       currentSavedSchedules.copyWith(
-        groupIDs: [...currentSavedSchedules.groupIDs, groupID],
+        groupIDs: {...currentSavedSchedules.groupIDs, groupID},
       ),
     );
 
@@ -234,7 +234,7 @@ class UniversityRepository {
 
     return _settingsStorage.setSavedSchedules(
       currentSavedSchedules.copyWith(
-        groupIDs: [...currentSavedSchedules.groupIDs]..remove(groupID),
+        groupIDs: {...currentSavedSchedules.groupIDs}..remove(groupID),
       ),
     );
   }
@@ -250,7 +250,7 @@ class UniversityRepository {
 
     return _settingsStorage.setSavedSchedules(
       currentSavedSchedules.copyWith(
-        teacherIDs: [...currentSavedSchedules.teacherIDs, teacherID],
+        teacherIDs: {...currentSavedSchedules.teacherIDs, teacherID},
       ),
     );
   }
@@ -262,7 +262,7 @@ class UniversityRepository {
 
     return _settingsStorage.setSavedSchedules(
       currentSavedSchedules.copyWith(
-        teacherIDs: [...currentSavedSchedules.teacherIDs]..remove(teacherID),
+        teacherIDs: {...currentSavedSchedules.teacherIDs}..remove(teacherID),
       ),
     );
   }
@@ -278,7 +278,7 @@ class UniversityRepository {
 
     return _settingsStorage.setSavedSchedules(
       currentSavedSchedules.copyWith(
-        roomIDs: [...currentSavedSchedules.roomIDs, roomID],
+        roomIDs: {...currentSavedSchedules.roomIDs, roomID},
       ),
     );
   }
@@ -290,7 +290,7 @@ class UniversityRepository {
 
     return _settingsStorage.setSavedSchedules(
       currentSavedSchedules.copyWith(
-        roomIDs: [...currentSavedSchedules.roomIDs]..remove(roomID),
+        roomIDs: {...currentSavedSchedules.roomIDs}..remove(roomID),
       ),
     );
   }

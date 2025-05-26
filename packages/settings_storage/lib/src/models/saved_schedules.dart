@@ -14,24 +14,24 @@ class SavedSchedules extends Equatable {
   });
 
   const SavedSchedules.empty()
-    : groupIDs = const [],
-      teacherIDs = const [],
-      roomIDs = const [];
+    : groupIDs = const {},
+      teacherIDs = const {},
+      roomIDs = const {};
 
   factory SavedSchedules.fromJson(Map<String, dynamic> json) =>
       _$SavedSchedulesFromJson(json);
 
-  @JsonKey(name: 'saved_groups_ids', defaultValue: [])
-  final List<int> groupIDs;
-  @JsonKey(name: 'saved_teachers_ids', defaultValue: [])
-  final List<int> teacherIDs;
-  @JsonKey(name: 'saved_rooms_ids', defaultValue: [])
-  final List<int> roomIDs;
+  @JsonKey(name: 'saved_groups_ids', defaultValue: <int>{})
+  final Set<int> groupIDs;
+  @JsonKey(name: 'saved_teachers_ids', defaultValue: <int>{})
+  final Set<int> teacherIDs;
+  @JsonKey(name: 'saved_rooms_ids', defaultValue: <int>{})
+  final Set<int> roomIDs;
 
   SavedSchedules copyWith({
-    List<int>? groupIDs,
-    List<int>? teacherIDs,
-    List<int>? roomIDs,
+    Set<int>? groupIDs,
+    Set<int>? teacherIDs,
+    Set<int>? roomIDs,
   }) => SavedSchedules(
     groupIDs: groupIDs ?? this.groupIDs,
     teacherIDs: teacherIDs ?? this.teacherIDs,
