@@ -28,6 +28,7 @@
     "groups": "Groups",
     "teachers": "Teachers",
     "rooms": "Rooms",
+    "myGroup": "My group",
     "supertasksEmpty": "No tasks",
     "supertasksError": "Error retrieving tasks",
     "supertasksEdit": "Edit task",

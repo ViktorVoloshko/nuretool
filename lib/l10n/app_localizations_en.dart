@@ -55,6 +55,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get rooms => 'Rooms';
 
   @override
+  String get myGroup => 'My group';
+
+  @override
   String get supertasksEmpty => 'No tasks';
 
   @override

@@ -178,6 +178,12 @@ abstract class AppLocalizations {
   /// **'Rooms'**
   String get rooms;
 
+  /// No description provided for @myGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'My group'**
+  String get myGroup;
+
   /// No description provided for @supertasksEmpty.
   ///
   /// In en, this message translates to:
