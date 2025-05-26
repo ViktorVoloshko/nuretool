@@ -46,7 +46,7 @@ class SchedulesViewView extends StatelessWidget {
                   IconButton(
                     icon: Icon(Icons.refresh),
                     onPressed: () async {
-                      // FIXME: Add autoupdate
+                      // FIXME: Add autoupdate and remove this MMM
                       final repo = context.read<UniversityRepository>();
                       await Future.wait([
                         repo.fetchGroups(),
@@ -75,6 +75,8 @@ class SchedulesViewView extends StatelessWidget {
                     (context, index) => SchedulesListItem(
                       title: state.groupSchedules[index].name,
                       // lastUpdated: state.groupSchedules[index].lastUpdated,
+                      deleteProhibited:
+                          state.userGroupID == state.groupSchedules[index].id,
                       onRefresh:
                           () => context
                               .read<SchedulesViewCubit>()
@@ -107,9 +109,18 @@ class SchedulesViewView extends StatelessWidget {
                     (context, index) => SchedulesListItem(
                       title: state.teacherSchedules[index].name,
                       // lastUpdated: state.teacherSchedules[index].lastUpdated,
-                      onTap: () {},
-                      onRefresh: () {},
-                      onDelete: () {},
+                      onRefresh:
+                          () => context
+                              .read<SchedulesViewCubit>()
+                              .updateTeacherSchedule(
+                                state.teacherSchedules[index].id,
+                              ),
+                      onDelete:
+                          () => context
+                              .read<SchedulesViewCubit>()
+                              .removeTeacherSchedule(
+                                state.teacherSchedules[index].id,
+                              ),
                     ),
               ),
               SliverToBoxAdapter(
@@ -130,9 +141,18 @@ class SchedulesViewView extends StatelessWidget {
                     (context, index) => SchedulesListItem(
                       title: state.roomSchedules[index].name,
                       // lastUpdated: state.roomSchedules[index].lastUpdated,
-                      onTap: () {},
-                      onRefresh: () {},
-                      onDelete: () {},
+                      onRefresh:
+                          () => context
+                              .read<SchedulesViewCubit>()
+                              .updateRoomSchedule(
+                                state.roomSchedules[index].id,
+                              ),
+                      onDelete:
+                          () => context
+                              .read<SchedulesViewCubit>()
+                              .removeRoomSchedule(
+                                state.roomSchedules[index].id,
+                              ),
                     ),
               ),
             ],

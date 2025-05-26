@@ -10,6 +10,7 @@ class SchedulesListItem extends StatelessWidget {
     this.onTap,
     required this.onRefresh,
     required this.onDelete,
+    this.deleteProhibited = false,
   });
 
   final String title;
@@ -17,6 +18,7 @@ class SchedulesListItem extends StatelessWidget {
   final GestureTapCallback? onTap;
   final GestureTapCallback onRefresh;
   final GestureTapCallback onDelete;
+  final bool deleteProhibited;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,8 @@ class SchedulesListItem extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(onPressed: onRefresh, icon: Icon(Icons.refresh)),
-          IconButton(onPressed: onDelete, icon: Icon(Icons.delete)),
+          if (!deleteProhibited)
+            IconButton(onPressed: onDelete, icon: Icon(Icons.delete)),
         ],
       ),
     );

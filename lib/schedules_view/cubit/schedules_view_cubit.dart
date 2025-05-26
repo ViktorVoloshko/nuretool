@@ -18,6 +18,7 @@ class SchedulesViewCubit extends Cubit<SchedulesViewState> {
            groupSchedules: const [],
            teacherSchedules: const [],
            roomSchedules: const [],
+           userGroupID: null,
          ),
        ) {
     _init();
@@ -25,7 +26,8 @@ class SchedulesViewCubit extends Cubit<SchedulesViewState> {
 
   final UniversityRepository _universityRepository;
 
-  late final StreamSubscription<SavedSchedules> _subscription;
+  late final StreamSubscription<SavedSchedules> _schedulesSubscription;
+  late final StreamSubscription<int?> _userGroupSubscription;
 
   void updateGroupSchedule(int groupID) =>
       _universityRepository.fetchEventsForGroup(
@@ -37,8 +39,28 @@ class SchedulesViewCubit extends Cubit<SchedulesViewState> {
   void removeGroupSchedule(int groupID) =>
       _universityRepository.removeGroupSchedule(groupID);
 
+  void updateTeacherSchedule(int teacherID) =>
+      _universityRepository.fetchEventsForTeacher(
+        teacherID,
+        DateTime.now().startOfSemester,
+        DateTime.now().endOfSemester,
+      );
+
+  void removeTeacherSchedule(int teacherID) =>
+      _universityRepository.removeTeacherSchedule(teacherID);
+
+  void updateRoomSchedule(int roomID) =>
+      _universityRepository.fetchEventsForRoom(
+        roomID,
+        DateTime.now().startOfSemester,
+        DateTime.now().endOfSemester,
+      );
+
+  void removeRoomSchedule(int roomID) =>
+      _universityRepository.removeRoomSchedule(roomID);
+
   void _init() {
-    _subscription = _universityRepository.savedSchedules.listen((
+    _schedulesSubscription = _universityRepository.savedSchedules.listen((
       schedules,
     ) async {
       final groups =
@@ -55,18 +77,25 @@ class SchedulesViewCubit extends Cubit<SchedulesViewState> {
               .toList();
 
       emit(
-        SchedulesViewState(
+        state.copyWith(
           groupSchedules: groups,
           teacherSchedules: teachers,
           roomSchedules: rooms,
         ),
       );
     });
+
+    _userGroupSubscription = _universityRepository.userGroupID.listen(
+      (userGroupID) => emit(state.copyWith(userGroupID: userGroupID)),
+    );
   }
 
   @override
   Future<void> close() {
-    _subscription.cancel();
+    Future.wait([
+      _schedulesSubscription.cancel(),
+      _userGroupSubscription.cancel(),
+    ]);
     return super.close();
   }
 }
