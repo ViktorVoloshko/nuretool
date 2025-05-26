@@ -46,6 +46,7 @@ class SchedulesViewView extends StatelessWidget {
                   IconButton(
                     icon: Icon(Icons.refresh),
                     onPressed: () async {
+                      // FIXME: Add autoupdate
                       final repo = context.read<UniversityRepository>();
                       await Future.wait([
                         repo.fetchGroups(),
@@ -74,7 +75,12 @@ class SchedulesViewView extends StatelessWidget {
                     (context, index) => SchedulesListItem(
                       title: state.groupSchedules[index].name,
                       // lastUpdated: state.groupSchedules[index].lastUpdated,
-                      onRefresh: () {},
+                      onRefresh:
+                          () => context
+                              .read<SchedulesViewCubit>()
+                              .updateGroupSchedule(
+                                state.groupSchedules[index].id,
+                              ),
                       onDelete:
                           () => context
                               .read<SchedulesViewCubit>()

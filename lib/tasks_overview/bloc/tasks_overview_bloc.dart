@@ -43,9 +43,10 @@ class TasksOverviewBloc extends Bloc<TasksOverviewEvent, TasksOverviewState> {
 
     final result = <Supertask>[];
 
+    final userGroupID = await _universityRepository.userGroupID.first;
     final groupEvents =
         (await _universityRepository.events.first)
-            .where((e) => e.groups.contains(event.groupID))
+            .where((e) => e.groups.contains(userGroupID))
             .toList();
     final subjectIDs = <int>{};
     subjectIDs.addAll(groupEvents.map((e) => e.subject));

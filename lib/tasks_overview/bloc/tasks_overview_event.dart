@@ -12,9 +12,7 @@ final class TasksOverviewSubscriptionRequested extends TasksOverviewEvent {
 }
 
 final class TasksOverviewGenerationRequested extends TasksOverviewEvent {
-  const TasksOverviewGenerationRequested({required this.groupID});
-
-  final int groupID;
+  const TasksOverviewGenerationRequested();
 }
 
 final class TasksOverviewSupertaskCheckboxToggled extends TasksOverviewEvent {

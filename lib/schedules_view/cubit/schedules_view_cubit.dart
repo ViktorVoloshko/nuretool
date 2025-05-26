@@ -27,6 +27,13 @@ class SchedulesViewCubit extends Cubit<SchedulesViewState> {
 
   late final StreamSubscription<SavedSchedules> _subscription;
 
+  void updateGroupSchedule(int groupID) =>
+      _universityRepository.fetchEventsForGroup(
+        groupID,
+        DateTime.now().startOfSemester,
+        DateTime.now().endOfSemester,
+      );
+
   void removeGroupSchedule(int groupID) =>
       _universityRepository.removeGroupSchedule(groupID);
 

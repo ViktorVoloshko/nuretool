@@ -52,7 +52,7 @@ class TasksOverviewView extends StatelessWidget {
                     IconButton(
                       onPressed:
                           () => context.read<TasksOverviewBloc>().add(
-                            TasksOverviewGenerationRequested(groupID: 9311133),
+                            TasksOverviewGenerationRequested(),
                           ),
                       icon: Icon(Icons.refresh),
                     ),
