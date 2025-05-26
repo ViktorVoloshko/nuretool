@@ -30,17 +30,20 @@ class MoreViewCubit extends Cubit<MoreViewState> {
     _themeSubscription = _settingsRepository.appTheme.listen(
       (appTheme) => emit(state.copyWith(appTheme: appTheme)),
     );
-    _userGroupSubscription = _universityRepository.userGroupID.listen((
-      groupID,
-    ) async {
-      final groups = _universityRepository.groups.skipWhile(
-        (groups) => groups.isEmpty,
-      );
-
+    _userGroupSubscription = _universityRepository.userGroupID.listen(
+      (groupID) async => emit(
+        state.copyWith(
+          userGroup: (await _universityRepository.groups.first)
+              .firstWhereOrNull((group) => group.id == groupID),
+        ),
+      ),
+    );
+    _groupsSubscription = _universityRepository.groups.listen((groups) async {
+      final userGroupID = await _universityRepository.userGroupID.first;
       emit(
         state.copyWith(
-          userGroup: (await groups.first).firstWhereOrNull(
-            (group) => group.id == groupID,
+          userGroup: groups.firstWhereOrNull(
+            (group) => group.id == userGroupID,
           ),
         ),
       );
