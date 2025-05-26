@@ -30,7 +30,7 @@ class SchedulesViewCubit extends Cubit<SchedulesViewState> {
   late final StreamSubscription<int?> _userGroupSubscription;
 
   void updateGroupSchedule(int groupID) =>
-      _universityRepository.updateGroupEvents(
+      _universityRepository.updateGroupSchedule(
         groupID,
         DateTime.now().startOfSemester,
         DateTime.now().endOfSemester,
@@ -40,7 +40,7 @@ class SchedulesViewCubit extends Cubit<SchedulesViewState> {
       _universityRepository.removeGroupSchedule(groupID);
 
   void updateTeacherSchedule(int teacherID) =>
-      _universityRepository.updateTeacherEvents(
+      _universityRepository.updateTeacherSchedule(
         teacherID,
         DateTime.now().startOfSemester,
         DateTime.now().endOfSemester,
@@ -49,11 +49,12 @@ class SchedulesViewCubit extends Cubit<SchedulesViewState> {
   void removeTeacherSchedule(int teacherID) =>
       _universityRepository.removeTeacherSchedule(teacherID);
 
-  void updateRoomSchedule(int roomID) => _universityRepository.updateRoomEvents(
-    roomID,
-    DateTime.now().startOfSemester,
-    DateTime.now().endOfSemester,
-  );
+  void updateRoomSchedule(int roomID) =>
+      _universityRepository.updateRoomSchedule(
+        roomID,
+        DateTime.now().startOfSemester,
+        DateTime.now().endOfSemester,
+      );
 
   void removeRoomSchedule(int roomID) =>
       _universityRepository.removeRoomSchedule(roomID);

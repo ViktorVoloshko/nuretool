@@ -45,6 +45,12 @@ class EntitySelectionCubit extends Cubit<EntitySelectionState> {
   void addGroupSchedule(int groupID) =>
       _universityRepository.addGroupSchedule(groupID);
 
+  void addTeacherSchedule(int groupID) =>
+      _universityRepository.addTeacherSchedule(groupID);
+
+  void addRoomSchedule(int groupID) =>
+      _universityRepository.addRoomSchedule(groupID);
+
   void setUserGroup(int groupID) =>
       _universityRepository.setUserGroupID(groupID);
 

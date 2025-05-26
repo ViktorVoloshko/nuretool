@@ -18,9 +18,9 @@ class EntitySelectionRoomsView extends StatelessWidget {
                   (context, index) => ListTile(
                     title: Text(state.filteredRooms[index].name),
                     onTap: () {
-                      // context.read<EntitySelectionCubit>().addGroupSchedule(
-                      //   state.filteredGroups[index].id,
-                      // );
+                      context.read<EntitySelectionCubit>().addRoomSchedule(
+                        state.filteredRooms[index].id,
+                      );
                       Navigator.pop(context);
                     },
                   ),

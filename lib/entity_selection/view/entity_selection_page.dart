@@ -69,7 +69,7 @@ class EntitySelectionView extends StatelessWidget {
             ),
             body: TabBarView(
               children: [
-                EntitySelectionGroupsView(),
+                const EntitySelectionGroupsView(),
                 if (!state.userGroupSelection) ...[
                   const EntitySelectionTeachersView(),
                   const EntitySelectionRoomsView(),
