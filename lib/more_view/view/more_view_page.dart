@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:settings_repository/settings_repository.dart';
 import 'package:settings_storage/settings_storage.dart';
+import 'package:university_repository/university_repository.dart';
 
 import '../widgets/widgets.dart';
 import '../cubit/more_view_cubit.dart';
@@ -18,6 +19,7 @@ class MoreViewPage extends StatelessWidget {
       create:
           (context) => MoreViewCubit(
             settingsRepository: context.read<SettingsRepository>(),
+            universityRepository: context.read<UniversityRepository>(),
           ),
       child: const MoreViewView(),
     );
@@ -61,14 +63,14 @@ class MoreViewView extends StatelessWidget {
                   ),
                 ),
                 MoreViewItem(
-                  title: 'My group',
-                  subtitle: 'КІУКІ-21-5',
+                  title: AppLocalizations.of(context)!.myGroup,
+                  subtitle: state.userGroup?.name,
                   onTap:
                       () => Navigator.push(
                         context,
                         EntitySelectionPage.route(
                           tab: EntitySelectionTab.groups,
-                          groupsOnly: true,
+                          userGroupSelection: true,
                         ),
                       ),
                   icon: Icon(Icons.people),

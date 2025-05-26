@@ -1,27 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:university_repository/university_repository.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../cubit/entity_selection_cubit.dart';
 
 class EntitySelectionRoomsView extends StatelessWidget {
-  const EntitySelectionRoomsView({
-    super.key,
-    required this.rooms,
-    required this.onTap,
-  });
-
-  final List<Room> rooms;
-  final GestureTapCallback onTap;
+  const EntitySelectionRoomsView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverList.builder(
-          itemCount: rooms.length,
-          itemBuilder:
-              (context, index) =>
-                  ListTile(title: Text(rooms[index].name), onTap: onTap),
-        ),
-      ],
+    return BlocBuilder<EntitySelectionCubit, EntitySelectionState>(
+      builder: (context, state) {
+        return CustomScrollView(
+          slivers: [
+            SliverList.builder(
+              itemCount: state.filteredRooms.length,
+              itemBuilder:
+                  (context, index) => ListTile(
+                    title: Text(state.filteredRooms[index].name),
+                    onTap: () {
+                      // context.read<EntitySelectionCubit>().addGroupSchedule(
+                      //   state.filteredGroups[index].id,
+                      // );
+                      Navigator.pop(context);
+                    },
+                  ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

@@ -42,6 +42,19 @@ class SchedulesViewView extends StatelessWidget {
             slivers: [
               SliverAppBar.large(
                 title: Text(AppLocalizations.of(context)!.schedulesManage),
+                actions: [
+                  IconButton(
+                    icon: Icon(Icons.refresh),
+                    onPressed: () async {
+                      final repo = context.read<UniversityRepository>();
+                      await Future.wait([
+                        repo.fetchGroups(),
+                        repo.fetchTeachers(),
+                        repo.fetchRooms(),
+                      ]);
+                    },
+                  ),
+                ],
               ),
               SliverToBoxAdapter(
                 child: SchedulesTypesDivider(
@@ -65,7 +78,7 @@ class SchedulesViewView extends StatelessWidget {
                       onDelete:
                           () => context
                               .read<SchedulesViewCubit>()
-                              .deleteGroupSchedule(
+                              .removeGroupSchedule(
                                 state.groupSchedules[index].id,
                               ),
                     ),

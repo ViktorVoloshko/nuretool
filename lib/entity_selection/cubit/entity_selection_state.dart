@@ -7,7 +7,7 @@ final class EntitySelectionState extends Equatable {
     this.rooms = const [],
     this.searchFilter = '',
     this.initialTab = EntitySelectionTab.groups,
-    this.groupsOnly = false,
+    this.userGroupSelection = false,
   });
 
   final List<Group> groups;
@@ -16,7 +16,7 @@ final class EntitySelectionState extends Equatable {
   final String searchFilter;
 
   final EntitySelectionTab initialTab;
-  final bool groupsOnly;
+  final bool userGroupSelection;
 
   List<Group> get filteredGroups =>
       groups.where((group) => group.name.contains(searchFilter)).toList();
@@ -36,7 +36,7 @@ final class EntitySelectionState extends Equatable {
     rooms: rooms ?? this.rooms,
     searchFilter: searchFilter ?? this.searchFilter,
     initialTab: initialTab,
-    groupsOnly: groupsOnly,
+    userGroupSelection: userGroupSelection,
   );
 
   @override
@@ -46,7 +46,7 @@ final class EntitySelectionState extends Equatable {
     rooms,
     searchFilter,
     initialTab,
-    groupsOnly,
+    userGroupSelection,
   ];
 }
 

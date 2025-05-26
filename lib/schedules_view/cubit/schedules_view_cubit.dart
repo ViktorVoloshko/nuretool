@@ -13,7 +13,6 @@ class SchedulesViewCubit extends Cubit<SchedulesViewState> {
     required UniversityRepository universityRepository,
     required SettingsRepository settingsRepository,
   }) : _universityRepository = universityRepository,
-       _settingsRepository = settingsRepository,
        super(
          SchedulesViewState(
            groupSchedules: const [],
@@ -25,20 +24,14 @@ class SchedulesViewCubit extends Cubit<SchedulesViewState> {
   }
 
   final UniversityRepository _universityRepository;
-  final SettingsRepository _settingsRepository;
 
   late final StreamSubscription<SavedSchedules> _subscription;
 
-  void deleteGroupSchedule(int groupID) async {
-    final schedules = await _settingsRepository.savedSchedules.first;
-
-    _settingsRepository.setSavedSchedules(
-      schedules.copyWith(groupIDs: schedules.groupIDs..remove(groupID)),
-    );
-  }
+  void removeGroupSchedule(int groupID) =>
+      _universityRepository.removeGroupSchedule(groupID);
 
   void _init() {
-    _subscription = _settingsRepository.savedSchedules.listen((
+    _subscription = _universityRepository.savedSchedules.listen((
       schedules,
     ) async {
       final groups =

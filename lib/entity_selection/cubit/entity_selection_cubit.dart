@@ -10,10 +10,13 @@ class EntitySelectionCubit extends Cubit<EntitySelectionState> {
   EntitySelectionCubit({
     required UniversityRepository universityRepository,
     EntitySelectionTab initialTab = EntitySelectionTab.groups,
-    bool groupsOnly = false,
+    bool userGroupSelection = false,
   }) : _universityRepository = universityRepository,
        super(
-         EntitySelectionState(initialTab: initialTab, groupsOnly: groupsOnly),
+         EntitySelectionState(
+           initialTab: initialTab,
+           userGroupSelection: userGroupSelection,
+         ),
        );
 
   final UniversityRepository _universityRepository;
@@ -38,6 +41,12 @@ class EntitySelectionCubit extends Cubit<EntitySelectionState> {
 
   void setSearchValue(String searchValue) =>
       emit(state.copyWith(searchFilter: searchValue));
+
+  void addGroupSchedule(int groupID) =>
+      _universityRepository.addGroupSchedule(groupID);
+
+  void setUserGroup(int groupID) =>
+      _universityRepository.setUserGroupID(groupID);
 
   @override
   Future<void> close() {

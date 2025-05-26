@@ -1,27 +1,50 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:settings_repository/settings_repository.dart';
 import 'package:settings_storage/settings_storage.dart';
+import 'package:university_repository/university_repository.dart';
 
 part 'more_view_state.dart';
 
 class MoreViewCubit extends Cubit<MoreViewState> {
-  MoreViewCubit({required SettingsRepository settingsRepository})
-    : _settingsRepository = settingsRepository,
-      super(MoreViewState(appTheme: AppTheme.defaultValues())) {
+  MoreViewCubit({
+    required SettingsRepository settingsRepository,
+    required UniversityRepository universityRepository,
+  }) : _settingsRepository = settingsRepository,
+       _universityRepository = universityRepository,
+       super(MoreViewState(appTheme: AppTheme.defaultValues())) {
     init();
   }
 
   final SettingsRepository _settingsRepository;
+  final UniversityRepository _universityRepository;
 
-  late final StreamSubscription<AppTheme> _subscription;
+  late final StreamSubscription<AppTheme> _themeSubscription;
+  late final StreamSubscription<int?> _userGroupSubscription;
+  late final StreamSubscription<List<Group>> _groupsSubscription;
 
   void init() {
-    _subscription = _settingsRepository.appTheme.listen(
-      (appTheme) => emit(MoreViewState(appTheme: appTheme)),
+    _themeSubscription = _settingsRepository.appTheme.listen(
+      (appTheme) => emit(state.copyWith(appTheme: appTheme)),
     );
+    _userGroupSubscription = _universityRepository.userGroupID.listen((
+      groupID,
+    ) async {
+      final groups = _universityRepository.groups.skipWhile(
+        (groups) => groups.isEmpty,
+      );
+
+      emit(
+        state.copyWith(
+          userGroup: (await groups.first).firstWhereOrNull(
+            (group) => group.id == groupID,
+          ),
+        ),
+      );
+    });
   }
 
   void setThemeMode(AppThemeMode themeMode) async => _settingsRepository
@@ -29,7 +52,11 @@ class MoreViewCubit extends Cubit<MoreViewState> {
 
   @override
   Future<void> close() {
-    _subscription.cancel();
+    Future.wait([
+      _groupsSubscription.cancel(),
+      _themeSubscription.cancel(),
+      _userGroupSubscription.cancel(),
+    ]);
     return super.close();
   }
 }
