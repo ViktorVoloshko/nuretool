@@ -29,6 +29,7 @@ dependencies:
   rxdart: ^0.28.0
   meta: ^1.16.0
   drift: ^2.26.0
+  collection: ^1.19.1
 
 dev_dependencies:
   flutter_test:

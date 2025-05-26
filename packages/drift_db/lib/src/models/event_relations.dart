@@ -7,15 +7,10 @@ part 'event_relations.g.dart';
 @immutable
 @JsonSerializable()
 class EventRelations {
-  const EventRelations({
-    required this.groups,
-    required this.teachers,
-    required this.room,
-  });
+  const EventRelations({required this.groups, required this.teachers});
 
   final List<int> groups;
   final List<int> teachers;
-  final int? room;
 
   factory EventRelations.fromJson(Map<String, dynamic> json) =>
       _$EventRelationsFromJson(json);

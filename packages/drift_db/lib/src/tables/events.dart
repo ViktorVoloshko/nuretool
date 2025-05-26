@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 
-import '../models/models.dart';
+import '../../drift_db.dart';
 
 import 'tables.dart';
 
@@ -13,5 +13,7 @@ class Events extends Table {
   IntColumn get baseType => intEnum<EventBaseType>().nullable()();
   IntColumn get typeID =>
       integer().nullable().named('type_id').references(EventTypes, #id)();
+  IntColumn get roomID =>
+      integer().nullable().named('room_id').references(Rooms, #id)();
   TextColumn get relations => text().map(EventRelations.converter)();
 }

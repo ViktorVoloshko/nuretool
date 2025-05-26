@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:events_api/events_api.dart' show EventsApi;
 import 'package:groups_api/groups_api.dart' show GroupsApi;
 import 'package:rooms_api/rooms_api.dart' show RoomsApi;
@@ -123,7 +124,13 @@ class UniversityRepository {
 
     _driftDB.saveSubjects(subjects.map((e) => e.toDBModel()));
     return _driftDB.saveApiEvents(
-      events.map((e) => e.toDBModel()),
+      events.map(
+        (e) => e.toDBModel(
+          _roomsStreamController.value
+              .firstWhereOrNull((room) => room.name == e.auditory)
+              ?.id,
+        ),
+      ),
       types.map((e) => e.toDBModel()),
     );
   }
@@ -147,6 +154,65 @@ class UniversityRepository {
       groupID,
       DateTime.now().startOfSemester,
       DateTime.now().endOfSemester,
+    );
+  }
+
+  Future<void> removeGroupSchedule(int groupID) async {
+    final currentSavedSchedules = await savedSchedules.first;
+    _settingsStorage.setSavedSchedules(
+      currentSavedSchedules.copyWith(
+        groupIDs: [...currentSavedSchedules.groupIDs]..remove(groupID),
+      ),
+    );
+  }
+
+  Future<void> addTeacherSchedule(int teacherID) async {
+    final currentSavedSchedules = await savedSchedules.first;
+    _settingsStorage.setSavedSchedules(
+      currentSavedSchedules.copyWith(
+        teacherIDs: [...currentSavedSchedules.teacherIDs, teacherID],
+      ),
+    );
+
+    // FIXME: Change to teachers
+    return fetchEventsForGroup(
+      teacherID,
+      DateTime.now().startOfSemester,
+      DateTime.now().endOfSemester,
+    );
+  }
+
+  Future<void> removeTeacherSchedule(int teacherID) async {
+    final currentSavedSchedules = await savedSchedules.first;
+    _settingsStorage.setSavedSchedules(
+      currentSavedSchedules.copyWith(
+        teacherIDs: [...currentSavedSchedules.teacherIDs]..remove(teacherID),
+      ),
+    );
+  }
+
+  Future<void> addRoomSchedule(int roomID) async {
+    final currentSavedSchedules = await savedSchedules.first;
+    _settingsStorage.setSavedSchedules(
+      currentSavedSchedules.copyWith(
+        roomIDs: [...currentSavedSchedules.roomIDs, roomID],
+      ),
+    );
+
+    // FIXME: Change to rooms
+    return fetchEventsForGroup(
+      roomID,
+      DateTime.now().startOfSemester,
+      DateTime.now().endOfSemester,
+    );
+  }
+
+  Future<void> removeRoomSchedule(int roomID) async {
+    final currentSavedSchedules = await savedSchedules.first;
+    _settingsStorage.setSavedSchedules(
+      currentSavedSchedules.copyWith(
+        roomIDs: [...currentSavedSchedules.roomIDs]..remove(roomID),
+      ),
     );
   }
 
@@ -198,9 +264,7 @@ class UniversityRepository {
       final subjects = _subjectsStreamController.value;
       final groups = _groupsStreamController.value;
       final teachers = _teachersStreamController.value;
-
-      // TODO: Fix issues with rooms
-      // final rooms = _roomsStreamController.value;
+      final rooms = _roomsStreamController.value;
 
       for (final eventData in eventsData) {
         subjects
@@ -220,6 +284,11 @@ class UniversityRepository {
                   eventData.event.relations.teachers.contains(teacher.id),
             )
             .forEach((teacher) => teacher.events.add(eventData.event.id));
+
+        rooms
+            .firstWhereOrNull((room) => eventData.event.roomID == room.id)
+            ?.events
+            .add(eventData.event.id);
       }
 
       final events = <Event>[
@@ -231,9 +300,6 @@ class UniversityRepository {
         ),
       ];
       _eventsStreamController.add(events);
-      // _subjectsStreamController.add(subjects);
-      // _groupsStreamController.add(groups);
-      // _teachersStreamController.add(teachers);
     });
   }
 }

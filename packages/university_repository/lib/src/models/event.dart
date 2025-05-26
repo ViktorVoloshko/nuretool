@@ -28,7 +28,7 @@ class Event extends Equatable {
       endTime = event.endTime,
       isFetched = event.isFetched,
       baseType = event.baseType!.fromDBModel(),
-      room = event.relations.room,
+      room = event.roomID,
       groups = event.relations.groups,
       teachers = event.relations.teachers;
 
@@ -51,11 +51,8 @@ class Event extends Equatable {
     isFetched: isFetched,
     baseType: Value(baseType.toDBModel()),
     typeID: Value.absentIfNull(type?.id),
-    relations: db.EventRelations(
-      groups: groups,
-      teachers: teachers,
-      room: room,
-    ),
+    roomID: Value.absentIfNull(room),
+    relations: db.EventRelations(groups: groups, teachers: teachers),
   );
 
   Event copyWith({
@@ -152,10 +149,7 @@ extension ApiToDBEvent on api.Event {
     isFetched: true,
     baseType: Value(_fromIDBase(type ~/ 10)),
     typeID: Value(type),
-    relations: db.EventRelations(
-      groups: groups,
-      teachers: teachers,
-      room: roomID,
-    ),
+    roomID: Value.absentIfNull(roomID),
+    relations: db.EventRelations(groups: groups, teachers: teachers),
   );
 }

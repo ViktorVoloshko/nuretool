@@ -16,12 +16,7 @@ EventRelations _$EventRelationsFromJson(Map<String, dynamic> json) =>
           (json['teachers'] as List<dynamic>)
               .map((e) => (e as num).toInt())
               .toList(),
-      room: (json['room'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$EventRelationsToJson(EventRelations instance) =>
-    <String, dynamic>{
-      'groups': instance.groups,
-      'teachers': instance.teachers,
-      'room': instance.room,
-    };
+    <String, dynamic>{'groups': instance.groups, 'teachers': instance.teachers};
