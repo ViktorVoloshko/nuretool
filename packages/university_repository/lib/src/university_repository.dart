@@ -111,6 +111,22 @@ class UniversityRepository {
     return _driftDB.saveRooms(rooms);
   }
 
+  Future<void> deleteGroupEvents(int groupID) => _driftDB.deleteEvents(
+    _groupsStreamController.value
+        .firstWhere((group) => group.id == groupID)
+        .events,
+  );
+
+  Future<void> deleteTeacherEvents(int teacherID) => _driftDB.deleteEvents(
+    _teachersStreamController.value
+        .firstWhere((teacher) => teacher.id == teacherID)
+        .events,
+  );
+
+  Future<void> deleteRoomEvents(int roomID) => _driftDB.deleteEvents(
+    _roomsStreamController.value.firstWhere((room) => room.id == roomID).events,
+  );
+
   Future<void> fetchEventsForGroup(
     int groupID,
     DateTime from,
@@ -121,6 +137,60 @@ class UniversityRepository {
       from.millisecondsSinceEpoch ~/ 1000,
       to.millisecondsSinceEpoch ~/ 1000,
     );
+
+    await deleteGroupEvents(groupID);
+
+    await _driftDB.saveSubjects(subjects.map((e) => e.toDBModel()));
+    return _driftDB.saveApiEvents(
+      events.map(
+        (e) => e.toDBModel(
+          _roomsStreamController.value
+              .firstWhereOrNull((room) => room.name == e.auditory)
+              ?.id,
+        ),
+      ),
+      types.map((e) => e.toDBModel()),
+    );
+  }
+
+  Future<void> fetchEventsForTeacher(
+    int teacherID,
+    DateTime from,
+    DateTime to,
+  ) async {
+    final (:events, :subjects, :types) = await _eventsApi.fetchEventsForTeacher(
+      teacherID,
+      from.millisecondsSinceEpoch ~/ 1000,
+      to.millisecondsSinceEpoch ~/ 1000,
+    );
+
+    await deleteTeacherEvents(teacherID);
+
+    _driftDB.saveSubjects(subjects.map((e) => e.toDBModel()));
+    return _driftDB.saveApiEvents(
+      events.map(
+        (e) => e.toDBModel(
+          _roomsStreamController.value
+              .firstWhereOrNull((room) => room.name == e.auditory)
+              ?.id,
+        ),
+      ),
+      types.map((e) => e.toDBModel()),
+    );
+  }
+
+  Future<void> fetchEventsForRoom(
+    int roomID,
+    DateTime from,
+    DateTime to,
+  ) async {
+    final (:events, :subjects, :types) = await _eventsApi.fetchEventsForRoom(
+      roomID,
+      from.millisecondsSinceEpoch ~/ 1000,
+      to.millisecondsSinceEpoch ~/ 1000,
+    );
+
+    await deleteRoomEvents(roomID);
 
     _driftDB.saveSubjects(subjects.map((e) => e.toDBModel()));
     return _driftDB.saveApiEvents(
@@ -159,7 +229,10 @@ class UniversityRepository {
 
   Future<void> removeGroupSchedule(int groupID) async {
     final currentSavedSchedules = await savedSchedules.first;
-    _settingsStorage.setSavedSchedules(
+
+    deleteGroupEvents(groupID);
+
+    return _settingsStorage.setSavedSchedules(
       currentSavedSchedules.copyWith(
         groupIDs: [...currentSavedSchedules.groupIDs]..remove(groupID),
       ),
@@ -168,23 +241,26 @@ class UniversityRepository {
 
   Future<void> addTeacherSchedule(int teacherID) async {
     final currentSavedSchedules = await savedSchedules.first;
-    _settingsStorage.setSavedSchedules(
-      currentSavedSchedules.copyWith(
-        teacherIDs: [...currentSavedSchedules.teacherIDs, teacherID],
-      ),
-    );
 
-    // FIXME: Change to teachers
-    return fetchEventsForGroup(
+    fetchEventsForTeacher(
       teacherID,
       DateTime.now().startOfSemester,
       DateTime.now().endOfSemester,
+    );
+
+    return _settingsStorage.setSavedSchedules(
+      currentSavedSchedules.copyWith(
+        teacherIDs: [...currentSavedSchedules.teacherIDs, teacherID],
+      ),
     );
   }
 
   Future<void> removeTeacherSchedule(int teacherID) async {
     final currentSavedSchedules = await savedSchedules.first;
-    _settingsStorage.setSavedSchedules(
+
+    deleteTeacherEvents(teacherID);
+
+    return _settingsStorage.setSavedSchedules(
       currentSavedSchedules.copyWith(
         teacherIDs: [...currentSavedSchedules.teacherIDs]..remove(teacherID),
       ),
@@ -193,23 +269,26 @@ class UniversityRepository {
 
   Future<void> addRoomSchedule(int roomID) async {
     final currentSavedSchedules = await savedSchedules.first;
-    _settingsStorage.setSavedSchedules(
-      currentSavedSchedules.copyWith(
-        roomIDs: [...currentSavedSchedules.roomIDs, roomID],
-      ),
-    );
 
-    // FIXME: Change to rooms
-    return fetchEventsForGroup(
+    fetchEventsForRoom(
       roomID,
       DateTime.now().startOfSemester,
       DateTime.now().endOfSemester,
+    );
+
+    return _settingsStorage.setSavedSchedules(
+      currentSavedSchedules.copyWith(
+        roomIDs: [...currentSavedSchedules.roomIDs, roomID],
+      ),
     );
   }
 
   Future<void> removeRoomSchedule(int roomID) async {
     final currentSavedSchedules = await savedSchedules.first;
-    _settingsStorage.setSavedSchedules(
+
+    deleteRoomEvents(roomID);
+
+    return _settingsStorage.setSavedSchedules(
       currentSavedSchedules.copyWith(
         roomIDs: [...currentSavedSchedules.roomIDs]..remove(roomID),
       ),
