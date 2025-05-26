@@ -52,7 +52,7 @@ class DriftDB extends _$DriftDB {
     batch.insertAllOnConflictUpdate(this.events, events);
   });
 
-  Future<void> deleteEvents(List<int> eventIDs) => batch(
+  Future<void> deleteEvents(Iterable<int> eventIDs) => batch(
     (batch) => batch.deleteWhere(events, (event) => event.id.isIn(eventIDs)),
   );
 
@@ -61,6 +61,14 @@ class DriftDB extends _$DriftDB {
 
   Future<void> saveSubjects(Iterable<SubjectsCompanion> subjects) => batch(
     (batch) => batch.insertAllOnConflictUpdate(this.subjects, subjects),
+  );
+
+  Future<int> deleteSubject(int subjectID) =>
+      (delete(subjects)..where((subject) => subject.id.equals(subjectID))).go();
+
+  Future<void> deleteSubjects(Iterable<int> subjectIDs) => batch(
+    (batch) =>
+        batch.deleteWhere(subjects, (subject) => subject.id.isIn(subjectIDs)),
   );
 
   Future<void> saveGroups(Iterable<GroupsCompanion> groups) =>

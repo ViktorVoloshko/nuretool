@@ -111,23 +111,12 @@ class UniversityRepository {
     return _driftDB.saveRooms(rooms);
   }
 
-  Future<void> deleteGroupEvents(int groupID) => _driftDB.deleteEvents(
-    _groupsStreamController.value
-        .firstWhere((group) => group.id == groupID)
-        .events,
-  );
+  Future<void> setUserGroupID(int groupID) =>
+      _settingsStorage.setUserGroupID(groupID);
 
-  Future<void> deleteTeacherEvents(int teacherID) => _driftDB.deleteEvents(
-    _teachersStreamController.value
-        .firstWhere((teacher) => teacher.id == teacherID)
-        .events,
-  );
+  Future<void> saveEvent(Event event) => _driftDB.saveEvent(event.toDBModel());
 
-  Future<void> deleteRoomEvents(int roomID) => _driftDB.deleteEvents(
-    _roomsStreamController.value.firstWhere((room) => room.id == roomID).events,
-  );
-
-  Future<void> fetchEventsForGroup(
+  Future<void> updateGroupEvents(
     int groupID,
     DateTime from,
     DateTime to,
@@ -138,7 +127,7 @@ class UniversityRepository {
       to.millisecondsSinceEpoch ~/ 1000,
     );
 
-    await deleteGroupEvents(groupID);
+    await _deleteGroupEvents(groupID);
 
     await _driftDB.saveSubjects(subjects.map((e) => e.toDBModel()));
     return _driftDB.saveApiEvents(
@@ -153,7 +142,7 @@ class UniversityRepository {
     );
   }
 
-  Future<void> fetchEventsForTeacher(
+  Future<void> updateTeacherEvents(
     int teacherID,
     DateTime from,
     DateTime to,
@@ -164,7 +153,7 @@ class UniversityRepository {
       to.millisecondsSinceEpoch ~/ 1000,
     );
 
-    await deleteTeacherEvents(teacherID);
+    await _deleteTeacherEvents(teacherID);
 
     _driftDB.saveSubjects(subjects.map((e) => e.toDBModel()));
     return _driftDB.saveApiEvents(
@@ -179,18 +168,14 @@ class UniversityRepository {
     );
   }
 
-  Future<void> fetchEventsForRoom(
-    int roomID,
-    DateTime from,
-    DateTime to,
-  ) async {
+  Future<void> updateRoomEvents(int roomID, DateTime from, DateTime to) async {
     final (:events, :subjects, :types) = await _eventsApi.fetchEventsForRoom(
       roomID,
       from.millisecondsSinceEpoch ~/ 1000,
       to.millisecondsSinceEpoch ~/ 1000,
     );
 
-    await deleteRoomEvents(roomID);
+    await _deleteRoomEvents(roomID);
 
     _driftDB.saveSubjects(subjects.map((e) => e.toDBModel()));
     return _driftDB.saveApiEvents(
@@ -204,13 +189,6 @@ class UniversityRepository {
       types.map((e) => e.toDBModel()),
     );
   }
-
-  Future<void> saveEvent(Event event) => _driftDB.saveEvent(event.toDBModel());
-
-  // TODO: Delete event
-
-  Future<void> setUserGroupID(int groupID) =>
-      _settingsStorage.setUserGroupID(groupID);
 
   Future<void> addGroupSchedule(int groupID) async {
     final currentSavedSchedules = await savedSchedules.first;
@@ -220,7 +198,7 @@ class UniversityRepository {
       ),
     );
 
-    return fetchEventsForGroup(
+    return updateGroupEvents(
       groupID,
       DateTime.now().startOfSemester,
       DateTime.now().endOfSemester,
@@ -230,69 +208,106 @@ class UniversityRepository {
   Future<void> removeGroupSchedule(int groupID) async {
     final currentSavedSchedules = await savedSchedules.first;
 
-    deleteGroupEvents(groupID);
-
-    return _settingsStorage.setSavedSchedules(
+    _settingsStorage.setSavedSchedules(
       currentSavedSchedules.copyWith(
         groupIDs: {...currentSavedSchedules.groupIDs}..remove(groupID),
       ),
     );
+
+    return _deleteGroupEvents(groupID);
   }
 
   Future<void> addTeacherSchedule(int teacherID) async {
     final currentSavedSchedules = await savedSchedules.first;
 
-    fetchEventsForTeacher(
-      teacherID,
-      DateTime.now().startOfSemester,
-      DateTime.now().endOfSemester,
-    );
-
-    return _settingsStorage.setSavedSchedules(
+    _settingsStorage.setSavedSchedules(
       currentSavedSchedules.copyWith(
         teacherIDs: {...currentSavedSchedules.teacherIDs, teacherID},
       ),
+    );
+
+    return updateTeacherEvents(
+      teacherID,
+      DateTime.now().startOfSemester,
+      DateTime.now().endOfSemester,
     );
   }
 
   Future<void> removeTeacherSchedule(int teacherID) async {
     final currentSavedSchedules = await savedSchedules.first;
 
-    deleteTeacherEvents(teacherID);
-
-    return _settingsStorage.setSavedSchedules(
+    _settingsStorage.setSavedSchedules(
       currentSavedSchedules.copyWith(
         teacherIDs: {...currentSavedSchedules.teacherIDs}..remove(teacherID),
       ),
     );
+
+    return _deleteTeacherEvents(teacherID);
   }
 
   Future<void> addRoomSchedule(int roomID) async {
     final currentSavedSchedules = await savedSchedules.first;
 
-    fetchEventsForRoom(
-      roomID,
-      DateTime.now().startOfSemester,
-      DateTime.now().endOfSemester,
-    );
-
-    return _settingsStorage.setSavedSchedules(
+    _settingsStorage.setSavedSchedules(
       currentSavedSchedules.copyWith(
         roomIDs: {...currentSavedSchedules.roomIDs, roomID},
       ),
+    );
+
+    return updateRoomEvents(
+      roomID,
+      DateTime.now().startOfSemester,
+      DateTime.now().endOfSemester,
     );
   }
 
   Future<void> removeRoomSchedule(int roomID) async {
     final currentSavedSchedules = await savedSchedules.first;
 
-    deleteRoomEvents(roomID);
+    _deleteRoomEvents(roomID);
 
     return _settingsStorage.setSavedSchedules(
       currentSavedSchedules.copyWith(
         roomIDs: {...currentSavedSchedules.roomIDs}..remove(roomID),
       ),
     );
+  }
+
+  Future<void> _deleteGroupEvents(int groupID) async {
+    return _driftDB.deleteEvents(
+      _eventsStreamController.value
+          .where((event) => event.groups.contains(groupID))
+          .map((e) => e.id),
+    );
+  }
+
+  Future<void> _deleteTeacherEvents(int teacherID) async {
+    return _driftDB.deleteEvents(
+      _eventsStreamController.value
+          .where((event) => event.teachers.contains(teacherID))
+          .map((e) => e.id),
+    );
+  }
+
+  Future<void> _deleteRoomEvents(int roomID) async {
+    return _driftDB.deleteEvents(
+      _eventsStreamController.value
+          .where((event) => event.room == roomID)
+          .map((e) => e.id),
+    );
+  }
+
+  Future<void> _deleteObsoleteSubjects() async {
+    final obsoleteSubjects =
+        List<Subject>.from(
+          _subjectsStreamController.value,
+        ).map((e) => e.id).toList();
+
+    for (final event in _eventsStreamController.value) {
+      obsoleteSubjects.remove(event.subject);
+    }
+
+    _driftDB.deleteSubjects(obsoleteSubjects);
   }
 
   Future<dynamic> dispose() async {
@@ -340,36 +355,6 @@ class UniversityRepository {
     _eventsSubscription = _driftDB.loadEvents().asBroadcastStream().listen((
       eventsData,
     ) {
-      final subjects = _subjectsStreamController.value;
-      final groups = _groupsStreamController.value;
-      final teachers = _teachersStreamController.value;
-      final rooms = _roomsStreamController.value;
-
-      for (final eventData in eventsData) {
-        subjects
-            .firstWhere((subject) => subject.id == eventData.event.subject)
-            .events
-            .add(eventData.event.id);
-
-        groups
-            .where(
-              (group) => eventData.event.relations.groups.contains(group.id),
-            )
-            .forEach((group) => group.events.add(eventData.event.id));
-
-        teachers
-            .where(
-              (teacher) =>
-                  eventData.event.relations.teachers.contains(teacher.id),
-            )
-            .forEach((teacher) => teacher.events.add(eventData.event.id));
-
-        rooms
-            .firstWhereOrNull((room) => eventData.event.roomID == room.id)
-            ?.events
-            .add(eventData.event.id);
-      }
-
       final events = <Event>[
         ...eventsData.map(
           (e) => Event.fromDBModel(
@@ -379,6 +364,7 @@ class UniversityRepository {
         ),
       ];
       _eventsStreamController.add(events);
+      _deleteObsoleteSubjects();
     });
   }
 }

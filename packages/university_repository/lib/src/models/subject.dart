@@ -10,19 +10,16 @@ class Subject extends Equatable {
     required this.id,
     required this.title,
     required this.shortTitle,
-    required this.events,
   });
 
   Subject.fromDBModel(db.Subject subject)
     : id = subject.id,
       title = subject.title,
-      shortTitle = subject.shortTitle,
-      events = [];
+      shortTitle = subject.shortTitle;
 
   final int id;
   final String title;
   final String shortTitle;
-  final List<int> events;
 
   db.SubjectsCompanion toDBModel() => db.SubjectsCompanion.insert(
     id: Value(id),
@@ -31,7 +28,7 @@ class Subject extends Equatable {
   );
 
   @override
-  List<Object?> get props => [id, title, shortTitle, events];
+  List<Object?> get props => [id, title, shortTitle];
 }
 
 extension ApiToDBSubject on api.Subject {

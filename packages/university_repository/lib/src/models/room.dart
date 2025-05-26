@@ -4,14 +4,12 @@ import 'package:rooms_api/rooms_api.dart' as api;
 import 'package:drift_db/drift_db.dart' as db;
 
 class Room extends Equatable {
-  const Room({required this.id, required this.name, required this.events});
+  const Room({required this.id, required this.name});
 
-  Room.fromDBModel(db.Room room)
-    : this(id: room.id, name: room.name, events: []);
+  Room.fromDBModel(db.Room room) : this(id: room.id, name: room.name);
 
   final int id;
   final String name;
-  final List<int> events;
 
   db.RoomsCompanion toDBModel() =>
       db.RoomsCompanion.insert(id: Value(id), name: name);

@@ -10,21 +10,14 @@ class Teacher extends Equatable {
     required this.id,
     required this.name,
     required this.shortName,
-    required this.events,
   });
 
   Teacher.fromDBModel(db.Teacher teacher)
-    : this(
-        id: teacher.id,
-        name: teacher.name,
-        shortName: teacher.shortName,
-        events: [],
-      );
+    : this(id: teacher.id, name: teacher.name, shortName: teacher.shortName);
 
   final int id;
   final String name;
   final String shortName;
-  final List<int> events;
 
   db.TeachersCompanion toDBModel() => db.TeachersCompanion.insert(
     id: Value(id),
@@ -33,7 +26,7 @@ class Teacher extends Equatable {
   );
 
   @override
-  List<Object?> get props => [id, name, shortName, events];
+  List<Object?> get props => [id, name, shortName];
 }
 
 extension ApiToDBTeacher on api.Teacher {

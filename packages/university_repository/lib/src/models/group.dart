@@ -6,20 +6,18 @@ import 'package:drift_db/drift_db.dart' as db;
 
 @immutable
 class Group extends Equatable {
-  const Group({required this.id, required this.name, required this.events});
+  const Group({required this.id, required this.name});
 
-  Group.fromDBModel(db.Group group)
-    : this(id: group.id, name: group.name, events: []);
+  Group.fromDBModel(db.Group group) : this(id: group.id, name: group.name);
 
   final int id;
   final String name;
-  final List<int> events;
 
   db.GroupsCompanion toDBModel() =>
       db.GroupsCompanion.insert(id: Value(id), name: name);
 
   @override
-  List<Object?> get props => [id, name, events];
+  List<Object?> get props => [id, name];
 }
 
 extension ApiToDBGroup on api.Group {
