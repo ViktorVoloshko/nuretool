@@ -34,6 +34,7 @@ class AppPage extends StatelessWidget {
     required TeachersApi teachersApi,
     required RoomsApi roomsApi,
     required DriftDB driftDB,
+    required SettingsStorage settingsStorage,
   })
   createUniversityRepository;
   final TasksRepository Function({required DriftDB driftDB})
@@ -56,6 +57,7 @@ class AppPage extends StatelessWidget {
           create:
               (_) => createUniversityRepository(
                 driftDB: driftDB,
+                settingsStorage: settingsStorage,
                 eventsApi: eventsApi,
                 groupsApi: groupsApi,
                 teachersApi: teachersApi,
