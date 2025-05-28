@@ -6,6 +6,7 @@ final class SchedulesViewState extends Equatable {
     required this.teacherSchedules,
     required this.roomSchedules,
     required this.userGroupID,
+    required this.updating,
   });
 
   final List<Group> groupSchedules;
@@ -13,17 +14,20 @@ final class SchedulesViewState extends Equatable {
   final List<Room> roomSchedules;
 
   final int? userGroupID;
+  final bool updating;
 
   SchedulesViewState copyWith({
     List<Group>? groupSchedules,
     List<Teacher>? teacherSchedules,
     List<Room>? roomSchedules,
     int? userGroupID,
+    bool? updating,
   }) => SchedulesViewState(
     groupSchedules: groupSchedules ?? this.groupSchedules,
     teacherSchedules: teacherSchedules ?? this.teacherSchedules,
     roomSchedules: roomSchedules ?? this.roomSchedules,
     userGroupID: userGroupID ?? this.userGroupID,
+    updating: updating ?? this.updating,
   );
 
   @override
@@ -32,5 +36,6 @@ final class SchedulesViewState extends Equatable {
     teacherSchedules,
     roomSchedules,
     userGroupID,
+    updating,
   ];
 }

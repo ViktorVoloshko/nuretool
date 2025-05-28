@@ -19,6 +19,7 @@ class SchedulesViewCubit extends Cubit<SchedulesViewState> {
            teacherSchedules: const [],
            roomSchedules: const [],
            userGroupID: null,
+           updating: false,
          ),
        ) {
     _init();
@@ -29,12 +30,15 @@ class SchedulesViewCubit extends Cubit<SchedulesViewState> {
   late final StreamSubscription<SavedSchedules> _schedulesSubscription;
   late final StreamSubscription<int?> _userGroupSubscription;
 
-  void updateGroupSchedule(int groupID) =>
-      _universityRepository.updateGroupSchedule(
-        groupID,
-        DateTime.now().startOfSemester,
-        DateTime.now().endOfSemester,
-      );
+  Future<void> updateGroupSchedule(int groupID) async {
+    emit(state.copyWith(updating: true));
+    await _universityRepository.updateGroupSchedule(
+      groupID,
+      DateTime.now().startOfSemester,
+      DateTime.now().endOfSemester,
+    );
+    emit(state.copyWith(updating: false));
+  }
 
   void removeGroupSchedule(int groupID) =>
       _universityRepository.removeGroupSchedule(groupID);

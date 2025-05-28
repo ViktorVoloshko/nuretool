@@ -38,124 +38,127 @@ class SchedulesViewView extends StatelessWidget {
     return BlocBuilder<SchedulesViewCubit, SchedulesViewState>(
       builder: (context, state) {
         return Scaffold(
-          body: CustomScrollView(
-            slivers: [
-              SliverAppBar.large(
-                title: Text(AppLocalizations.of(context)!.schedulesManage),
-                actions: [
-                  IconButton(
-                    icon: Icon(Icons.refresh),
-                    onPressed: () async {
-                      // FIXME: Add autoupdate and remove this MMM
-                      final repo = context.read<UniversityRepository>();
-                      await Future.wait([
-                        repo.fetchGroups(),
-                        repo.fetchTeachers(),
-                        repo.fetchRooms(),
-                      ]);
-                    },
+          body: ControlledRefreshIndicator(
+            child: CustomScrollView(
+              slivers: [
+                SliverAppBar.large(
+                  title: Text(AppLocalizations.of(context)!.schedulesManage),
+                  actions: [
+                    IconButton(
+                      icon: Icon(Icons.refresh),
+                      onPressed: () async {
+                        // FIXME: Add autoupdate and remove this MMM
+                        final repo = context.read<UniversityRepository>();
+                        await Future.wait([
+                          repo.fetchGroups(),
+                          repo.fetchTeachers(),
+                          repo.fetchRooms(),
+                        ]);
+                      },
+                    ),
+                  ],
+                ),
+                SliverToBoxAdapter(
+                  child: SchedulesTypesDivider(
+                    typeName: AppLocalizations.of(context)!.groups,
+                    onAdd:
+                        () => Navigator.push(
+                          context,
+                          EntitySelectionPage.route(
+                            tab: EntitySelectionTab.groups,
+                          ),
+                        ),
                   ),
-                ],
-              ),
-              SliverToBoxAdapter(
-                child: SchedulesTypesDivider(
-                  typeName: AppLocalizations.of(context)!.groups,
-                  onAdd:
-                      () => Navigator.push(
-                        context,
-                        EntitySelectionPage.route(
-                          tab: EntitySelectionTab.groups,
-                        ),
+                ),
+                SliverList.builder(
+                  itemCount: state.groupSchedules.length,
+                  itemBuilder:
+                      (context, index) => SchedulesListItem(
+                        title: state.groupSchedules[index].name,
+                        // lastUpdated: state.groupSchedules[index].lastUpdated,
+                        deleteProhibited:
+                            state.userGroupID == state.groupSchedules[index].id,
+                        updateProhibited: state.updating,
+                        onRefresh:
+                            () => context
+                                .read<SchedulesViewCubit>()
+                                .updateGroupSchedule(
+                                  state.groupSchedules[index].id,
+                                ),
+                        onDelete:
+                            () => context
+                                .read<SchedulesViewCubit>()
+                                .removeGroupSchedule(
+                                  state.groupSchedules[index].id,
+                                ),
                       ),
                 ),
-              ),
-              SliverList.builder(
-                itemCount: state.groupSchedules.length,
-                itemBuilder:
-                    (context, index) => SchedulesListItem(
-                      title: state.groupSchedules[index].name,
-                      // lastUpdated: state.groupSchedules[index].lastUpdated,
-                      deleteProhibited:
-                          state.userGroupID == state.groupSchedules[index].id,
-                      onRefresh:
-                          () => context
-                              .read<SchedulesViewCubit>()
-                              .updateGroupSchedule(
-                                state.groupSchedules[index].id,
-                              ),
-                      onDelete:
-                          () => context
-                              .read<SchedulesViewCubit>()
-                              .removeGroupSchedule(
-                                state.groupSchedules[index].id,
-                              ),
-                    ),
-              ),
-              SliverToBoxAdapter(
-                child: SchedulesTypesDivider(
-                  typeName: AppLocalizations.of(context)!.teachers,
-                  onAdd:
-                      () => Navigator.push(
-                        context,
-                        EntitySelectionPage.route(
-                          tab: EntitySelectionTab.teachers,
+                SliverToBoxAdapter(
+                  child: SchedulesTypesDivider(
+                    typeName: AppLocalizations.of(context)!.teachers,
+                    onAdd:
+                        () => Navigator.push(
+                          context,
+                          EntitySelectionPage.route(
+                            tab: EntitySelectionTab.teachers,
+                          ),
                         ),
+                  ),
+                ),
+                SliverList.builder(
+                  itemCount: state.teacherSchedules.length,
+                  itemBuilder:
+                      (context, index) => SchedulesListItem(
+                        title: state.teacherSchedules[index].name,
+                        // lastUpdated: state.teacherSchedules[index].lastUpdated,
+                        onRefresh:
+                            () => context
+                                .read<SchedulesViewCubit>()
+                                .updateTeacherSchedule(
+                                  state.teacherSchedules[index].id,
+                                ),
+                        onDelete:
+                            () => context
+                                .read<SchedulesViewCubit>()
+                                .removeTeacherSchedule(
+                                  state.teacherSchedules[index].id,
+                                ),
                       ),
                 ),
-              ),
-              SliverList.builder(
-                itemCount: state.teacherSchedules.length,
-                itemBuilder:
-                    (context, index) => SchedulesListItem(
-                      title: state.teacherSchedules[index].name,
-                      // lastUpdated: state.teacherSchedules[index].lastUpdated,
-                      onRefresh:
-                          () => context
-                              .read<SchedulesViewCubit>()
-                              .updateTeacherSchedule(
-                                state.teacherSchedules[index].id,
-                              ),
-                      onDelete:
-                          () => context
-                              .read<SchedulesViewCubit>()
-                              .removeTeacherSchedule(
-                                state.teacherSchedules[index].id,
-                              ),
-                    ),
-              ),
-              SliverToBoxAdapter(
-                child: SchedulesTypesDivider(
-                  typeName: AppLocalizations.of(context)!.rooms,
-                  onAdd:
-                      () => Navigator.push(
-                        context,
-                        EntitySelectionPage.route(
-                          tab: EntitySelectionTab.rooms,
+                SliverToBoxAdapter(
+                  child: SchedulesTypesDivider(
+                    typeName: AppLocalizations.of(context)!.rooms,
+                    onAdd:
+                        () => Navigator.push(
+                          context,
+                          EntitySelectionPage.route(
+                            tab: EntitySelectionTab.rooms,
+                          ),
                         ),
+                  ),
+                ),
+                SliverList.builder(
+                  itemCount: state.roomSchedules.length,
+                  itemBuilder:
+                      (context, index) => SchedulesListItem(
+                        title: state.roomSchedules[index].name,
+                        // lastUpdated: state.roomSchedules[index].lastUpdated,
+                        onRefresh:
+                            () => context
+                                .read<SchedulesViewCubit>()
+                                .updateRoomSchedule(
+                                  state.roomSchedules[index].id,
+                                ),
+                        onDelete:
+                            () => context
+                                .read<SchedulesViewCubit>()
+                                .removeRoomSchedule(
+                                  state.roomSchedules[index].id,
+                                ),
                       ),
                 ),
-              ),
-              SliverList.builder(
-                itemCount: state.roomSchedules.length,
-                itemBuilder:
-                    (context, index) => SchedulesListItem(
-                      title: state.roomSchedules[index].name,
-                      // lastUpdated: state.roomSchedules[index].lastUpdated,
-                      onRefresh:
-                          () => context
-                              .read<SchedulesViewCubit>()
-                              .updateRoomSchedule(
-                                state.roomSchedules[index].id,
-                              ),
-                      onDelete:
-                          () => context
-                              .read<SchedulesViewCubit>()
-                              .removeRoomSchedule(
-                                state.roomSchedules[index].id,
-                              ),
-                    ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
