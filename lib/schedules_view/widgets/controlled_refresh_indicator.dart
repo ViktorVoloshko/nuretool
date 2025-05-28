@@ -6,12 +6,12 @@ import '../cubit/schedules_view_cubit.dart';
 class ControlledRefreshIndicator extends StatefulWidget {
   const ControlledRefreshIndicator({
     super.key,
-    this.checkStateEvery = Durations.short4,
     required this.child,
+    this.checkStateEvery = Durations.short4,
   });
 
-  final Duration checkStateEvery;
   final Widget child;
+  final Duration checkStateEvery;
 
   @override
   State<ControlledRefreshIndicator> createState() =>
