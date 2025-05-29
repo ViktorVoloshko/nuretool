@@ -6,26 +6,26 @@ part of 'schedule_selection.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ScheduleSelection _$ScheduleSelectionFromJson(Map<String, dynamic> json) =>
-    $checkedCreate('ScheduleSelection', json, ($checkedConvert) {
-      final val = ScheduleSelection(
+ScheduleData _$ScheduleDataFromJson(Map<String, dynamic> json) =>
+    $checkedCreate('ScheduleData', json, ($checkedConvert) {
+      final val = ScheduleData(
         id: $checkedConvert('id', (v) => (v as num).toInt()),
         type: $checkedConvert(
           'type',
-          (v) => $enumDecode(_$ScheduleSelectionTypeEnumMap, v),
+          (v) => $enumDecode(_$ScheduleTypeEnumMap, v),
         ),
       );
       return val;
     });
 
-Map<String, dynamic> _$ScheduleSelectionToJson(ScheduleSelection instance) =>
+Map<String, dynamic> _$ScheduleDataToJson(ScheduleData instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'type': _$ScheduleSelectionTypeEnumMap[instance.type]!,
+      'type': _$ScheduleTypeEnumMap[instance.type]!,
     };
 
-const _$ScheduleSelectionTypeEnumMap = {
-  ScheduleSelectionType.group: 'group',
-  ScheduleSelectionType.teacher: 'teacher',
-  ScheduleSelectionType.room: 'room',
+const _$ScheduleTypeEnumMap = {
+  ScheduleType.group: 'group',
+  ScheduleType.teacher: 'teacher',
+  ScheduleType.room: 'room',
 };

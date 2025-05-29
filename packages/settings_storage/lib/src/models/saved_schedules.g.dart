@@ -6,41 +6,20 @@ part of 'saved_schedules.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-SavedSchedules _$SavedSchedulesFromJson(
-  Map<String, dynamic> json,
-) => $checkedCreate(
-  'SavedSchedules',
-  json,
-  ($checkedConvert) {
-    final val = SavedSchedules(
-      groupIDs: $checkedConvert(
-        'saved_groups_ids',
-        (v) =>
-            (v as List<dynamic>?)?.map((e) => (e as num).toInt()).toSet() ?? {},
-      ),
-      teacherIDs: $checkedConvert(
-        'saved_teachers_ids',
-        (v) =>
-            (v as List<dynamic>?)?.map((e) => (e as num).toInt()).toSet() ?? {},
-      ),
-      roomIDs: $checkedConvert(
-        'saved_rooms_ids',
-        (v) =>
-            (v as List<dynamic>?)?.map((e) => (e as num).toInt()).toSet() ?? {},
-      ),
-    );
-    return val;
-  },
-  fieldKeyMap: const {
-    'groupIDs': 'saved_groups_ids',
-    'teacherIDs': 'saved_teachers_ids',
-    'roomIDs': 'saved_rooms_ids',
-  },
-);
+SavedSchedules _$SavedSchedulesFromJson(Map<String, dynamic> json) =>
+    $checkedCreate('SavedSchedules', json, ($checkedConvert) {
+      final val = SavedSchedules(
+        schedules: $checkedConvert(
+          'schedules',
+          (v) =>
+              (v as List<dynamic>?)
+                  ?.map((e) => ScheduleData.fromJson(e as Map<String, dynamic>))
+                  .toSet() ??
+              {},
+        ),
+      );
+      return val;
+    });
 
 Map<String, dynamic> _$SavedSchedulesToJson(SavedSchedules instance) =>
-    <String, dynamic>{
-      'saved_groups_ids': instance.groupIDs.toList(),
-      'saved_teachers_ids': instance.teacherIDs.toList(),
-      'saved_rooms_ids': instance.roomIDs.toList(),
-    };
+    <String, dynamic>{'schedules': instance.schedules.toList()};

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:settings_storage/settings_storage.dart';
 import 'package:university_repository/university_repository.dart';
 
 part 'entity_selection_state.dart';
@@ -42,14 +43,17 @@ class EntitySelectionCubit extends Cubit<EntitySelectionState> {
   void setSearchValue(String searchValue) =>
       emit(state.copyWith(searchFilter: searchValue));
 
-  void addGroupSchedule(int groupID) =>
-      _universityRepository.addGroupSchedule(groupID);
+  void addSchedule(ScheduleData schedule) =>
+      _universityRepository.addSchedule(schedule);
 
-  void addTeacherSchedule(int groupID) =>
-      _universityRepository.addTeacherSchedule(groupID);
+  // void addGroupSchedule(int groupID) =>
+  //     _universityRepository.addSchedule(groupID);
 
-  void addRoomSchedule(int groupID) =>
-      _universityRepository.addRoomSchedule(groupID);
+  // void addTeacherSchedule(int groupID) =>
+  //     _universityRepository.addTeacherSchedule(groupID);
+
+  // void addRoomSchedule(int groupID) =>
+  //     _universityRepository.addRoomSchedule(groupID);
 
   void setUserGroup(int groupID) =>
       _universityRepository.setUserGroupID(groupID);

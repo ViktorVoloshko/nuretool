@@ -6,19 +6,19 @@ part 'schedule_selection.g.dart';
 
 @immutable
 @JsonSerializable()
-class ScheduleSelection extends Equatable {
-  const ScheduleSelection({required this.id, required this.type});
+class ScheduleData extends Equatable {
+  const ScheduleData({required this.id, required this.type});
 
-  factory ScheduleSelection.fromJson(Map<String, dynamic> json) =>
-      _$ScheduleSelectionFromJson(json);
+  factory ScheduleData.fromJson(Map<String, dynamic> json) =>
+      _$ScheduleDataFromJson(json);
 
   final int id;
-  final ScheduleSelectionType type;
+  final ScheduleType type;
 
   @override
   List<Object?> get props => [id, type];
 
-  Map<String, dynamic> toJson() => _$ScheduleSelectionToJson(this);
+  Map<String, dynamic> toJson() => _$ScheduleDataToJson(this);
 }
 
-enum ScheduleSelectionType { group, teacher, room }
+enum ScheduleType { group, teacher, room }

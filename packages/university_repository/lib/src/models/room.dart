@@ -1,15 +1,13 @@
 import 'package:drift/drift.dart';
-import 'package:equatable/equatable.dart';
 import 'package:rooms_api/rooms_api.dart' as api;
 import 'package:drift_db/drift_db.dart' as db;
 
-class Room extends Equatable {
-  const Room({required this.id, required this.name});
+import 'models.dart';
+
+class Room extends Entity {
+  const Room({required super.id, required super.name});
 
   Room.fromDBModel(db.Room room) : this(id: room.id, name: room.name);
-
-  final int id;
-  final String name;
 
   db.RoomsCompanion toDBModel() =>
       db.RoomsCompanion.insert(id: Value(id), name: name);

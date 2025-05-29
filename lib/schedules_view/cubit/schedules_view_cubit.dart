@@ -2,95 +2,68 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:settings_repository/settings_repository.dart';
 import 'package:settings_storage/settings_storage.dart';
 import 'package:university_repository/university_repository.dart';
 
 part 'schedules_view_state.dart';
 
 class SchedulesViewCubit extends Cubit<SchedulesViewState> {
-  SchedulesViewCubit({
-    required UniversityRepository universityRepository,
-    required SettingsRepository settingsRepository,
-  }) : _universityRepository = universityRepository,
-       super(
-         SchedulesViewState(
-           groupSchedules: const [],
-           teacherSchedules: const [],
-           roomSchedules: const [],
-           userGroupID: null,
-           updating: false,
-         ),
-       ) {
+  SchedulesViewCubit({required UniversityRepository universityRepository})
+    : _universityRepository = universityRepository,
+      super(
+        SchedulesViewState(
+          schedules: const [],
+          userGroupID: null,
+          updating: null,
+        ),
+      ) {
     _init();
   }
 
   final UniversityRepository _universityRepository;
 
   late final StreamSubscription<SavedSchedules> _schedulesSubscription;
+  late final StreamSubscription<ScheduleData?> _updatingSubscription;
   late final StreamSubscription<int?> _userGroupSubscription;
 
-  Future<void> updateGroupSchedule(int groupID) async {
-    emit(state.copyWith(updating: true));
-    await _universityRepository.updateGroupSchedule(
-      groupID,
-      DateTime.now().startOfSemester,
-      DateTime.now().endOfSemester,
-    );
-    emit(state.copyWith(updating: false));
+  Future<void> updateSchedule(ScheduleData schedule) =>
+      _universityRepository.updateSchedule(schedule);
+
+  Future<void> removeSchedule(ScheduleData schedule) =>
+      _universityRepository.removeSchedule(schedule);
+
+  Future<String> _getEntityName(ScheduleData schedule) async {
+    final groups = await _universityRepository.groups.first;
+    final teachers = await _universityRepository.teachers.first;
+    final rooms = await _universityRepository.rooms.first;
+
+    return switch (schedule.type) {
+      ScheduleType.group => groups.firstWhere((e) => e.id == schedule.id),
+      ScheduleType.teacher => teachers.firstWhere((e) => e.id == schedule.id),
+      ScheduleType.room => rooms.firstWhere((e) => e.id == schedule.id),
+    }.name;
   }
-
-  void removeGroupSchedule(int groupID) =>
-      _universityRepository.removeGroupSchedule(groupID);
-
-  void updateTeacherSchedule(int teacherID) =>
-      _universityRepository.updateTeacherSchedule(
-        teacherID,
-        DateTime.now().startOfSemester,
-        DateTime.now().endOfSemester,
-      );
-
-  void removeTeacherSchedule(int teacherID) =>
-      _universityRepository.removeTeacherSchedule(teacherID);
-
-  void updateRoomSchedule(int roomID) =>
-      _universityRepository.updateRoomSchedule(
-        roomID,
-        DateTime.now().startOfSemester,
-        DateTime.now().endOfSemester,
-      );
-
-  void removeRoomSchedule(int roomID) =>
-      _universityRepository.removeRoomSchedule(roomID);
 
   void _init() {
     _schedulesSubscription = _universityRepository.savedSchedules.listen((
-      schedules,
+      event,
     ) async {
-      final groups =
-          (await _universityRepository.groups.first)
-              .where((element) => schedules.groupIDs.contains(element.id))
-              .toList();
-      final teachers =
-          (await _universityRepository.teachers.first)
-              .where((element) => schedules.teacherIDs.contains(element.id))
-              .toList();
-      final rooms =
-          (await _universityRepository.rooms.first)
-              .where((element) => schedules.roomIDs.contains(element.id))
-              .toList();
+      final result = <ScheduleInfo>[];
+      for (final schedule in event.schedules) {
+        result.add((schedule: schedule, name: await _getEntityName(schedule)));
+      }
 
-      emit(
-        state.copyWith(
-          groupSchedules: groups,
-          teacherSchedules: teachers,
-          roomSchedules: rooms,
-        ),
-      );
+      emit(state.copyWith(schedules: result, updating: state.updating));
     });
 
+    _updatingSubscription = _universityRepository.updatingSchedule.listen(
+      (event) => emit(state.copyWith(updating: event)),
+    );
+
     _userGroupSubscription = _universityRepository.userGroupID.listen(
-      (userGroupID) => emit(state.copyWith(userGroupID: userGroupID)),
+      (userGroupID) => emit(
+        state.copyWith(userGroupID: userGroupID, updating: state.updating),
+      ),
     );
   }
 
@@ -99,6 +72,7 @@ class SchedulesViewCubit extends Cubit<SchedulesViewState> {
     Future.wait([
       _schedulesSubscription.cancel(),
       _userGroupSubscription.cancel(),
+      _updatingSubscription.cancel(),
     ]);
     return super.close();
   }

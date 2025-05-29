@@ -1,17 +1,15 @@
-import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:drift/drift.dart';
 import 'package:groups_api/groups_api.dart' as api;
 import 'package:drift_db/drift_db.dart' as db;
 
+import 'models.dart';
+
 @immutable
-class Group extends Equatable {
-  const Group({required this.id, required this.name});
+class Group extends Entity {
+  const Group({required super.id, required super.name});
 
   Group.fromDBModel(db.Group group) : this(id: group.id, name: group.name);
-
-  final int id;
-  final String name;
 
   db.GroupsCompanion toDBModel() =>
       db.GroupsCompanion.insert(id: Value(id), name: name);

@@ -21,7 +21,7 @@ class SchedulesTypesDivider extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               typeName,
-              style: Theme.of(context).textTheme.titleSmall,
+              style: Theme.of(context).textTheme.labelLarge,
             ),
           ),
           Expanded(child: Divider()),

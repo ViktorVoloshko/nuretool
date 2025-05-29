@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:settings_storage/settings_storage.dart';
 
 import '../cubit/entity_selection_cubit.dart';
 
@@ -18,8 +19,11 @@ class EntitySelectionTeachersView extends StatelessWidget {
                   (context, index) => ListTile(
                     title: Text(state.filteredTeachers[index].name),
                     onTap: () {
-                      context.read<EntitySelectionCubit>().addTeacherSchedule(
-                        state.filteredTeachers[index].id,
+                      context.read<EntitySelectionCubit>().addSchedule(
+                        ScheduleData(
+                          id: state.filteredTeachers[index].id,
+                          type: ScheduleType.teacher,
+                        ),
                       );
                       Navigator.pop(context);
                     },

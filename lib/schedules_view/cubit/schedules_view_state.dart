@@ -1,41 +1,28 @@
 part of 'schedules_view_cubit.dart';
 
+typedef ScheduleInfo = ({ScheduleData schedule, String name});
+
 final class SchedulesViewState extends Equatable {
   const SchedulesViewState({
-    required this.groupSchedules,
-    required this.teacherSchedules,
-    required this.roomSchedules,
+    required this.schedules,
     required this.userGroupID,
     required this.updating,
   });
 
-  final List<Group> groupSchedules;
-  final List<Teacher> teacherSchedules;
-  final List<Room> roomSchedules;
-
+  final List<ScheduleInfo> schedules;
   final int? userGroupID;
-  final bool updating;
+  final ScheduleData? updating;
 
   SchedulesViewState copyWith({
-    List<Group>? groupSchedules,
-    List<Teacher>? teacherSchedules,
-    List<Room>? roomSchedules,
+    List<ScheduleInfo>? schedules,
     int? userGroupID,
-    bool? updating,
+    required ScheduleData? updating,
   }) => SchedulesViewState(
-    groupSchedules: groupSchedules ?? this.groupSchedules,
-    teacherSchedules: teacherSchedules ?? this.teacherSchedules,
-    roomSchedules: roomSchedules ?? this.roomSchedules,
+    schedules: schedules ?? this.schedules,
     userGroupID: userGroupID ?? this.userGroupID,
-    updating: updating ?? this.updating,
+    updating: updating,
   );
 
   @override
-  List<Object?> get props => [
-    groupSchedules,
-    teacherSchedules,
-    roomSchedules,
-    userGroupID,
-    updating,
-  ];
+  List<Object?> get props => [schedules, userGroupID, updating];
 }
