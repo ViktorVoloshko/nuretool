@@ -14,7 +14,7 @@ class TaskViewBloc extends Bloc<TaskViewEvent, TaskViewState> {
   }
 
   final TasksRepository _tasksRepository;
-  late final int supertaskID;
+  late final int _supertaskID;
 
   Future<void> _onSubscriptionRequested(
     TaskViewSubscriptionRequested event,
@@ -22,7 +22,7 @@ class TaskViewBloc extends Bloc<TaskViewEvent, TaskViewState> {
   ) async {
     emit(const TaskViewLoading());
 
-    supertaskID = event.supertaskID;
+    _supertaskID = event.supertaskID;
 
     await emit.forEach(
       _tasksRepository.tasks,
@@ -61,7 +61,7 @@ class TaskViewBloc extends Bloc<TaskViewEvent, TaskViewState> {
           type: event.type,
           deadline: event.deadline,
         ),
-        supertaskID,
+        _supertaskID,
       );
     }
   }
