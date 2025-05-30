@@ -29,17 +29,20 @@ class EntitySelectionCubit extends Cubit<EntitySelectionState> {
   _updateStatusSubscription;
 
   void requestSubscription() {
-    _groupsSubscription = _universityRepository.groups.listen(
-      (groups) => emit(state.copyWith(groups: groups)),
-    );
+    _groupsSubscription = _universityRepository.groups.listen((groups) {
+      if (groups.isEmpty && !state.updating) updateEntities();
+      emit(state.copyWith(groups: groups));
+    });
 
-    _teachersSubscription = _universityRepository.teachers.listen(
-      (teachers) => emit(state.copyWith(teachers: teachers)),
-    );
+    _teachersSubscription = _universityRepository.teachers.listen((teachers) {
+      if (teachers.isEmpty && !state.updating) updateEntities();
+      emit(state.copyWith(teachers: teachers));
+    });
 
-    _roomsSubscription = _universityRepository.rooms.listen(
-      (rooms) => emit(state.copyWith(rooms: rooms)),
-    );
+    _roomsSubscription = _universityRepository.rooms.listen((rooms) {
+      if (rooms.isEmpty && !state.updating) updateEntities();
+      emit(state.copyWith(rooms: rooms));
+    });
 
     _updateStatusSubscription = _universityRepository.updateStatus.listen(
       (status) => emit(state.copyWith(updating: status.$1)),

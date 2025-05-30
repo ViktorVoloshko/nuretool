@@ -70,6 +70,8 @@ class UniversityRepository {
   late final StreamSubscription<List<db.Subject>> _subjectsSubscription;
 
   Future<void> fetchEntities() async {
+    if (_updatingScheduleStreamController.value.$1) return;
+
     _updatingScheduleStreamController.add((true, null));
 
     await fetchGroups();
