@@ -25,6 +25,8 @@ class EntitySelectionCubit extends Cubit<EntitySelectionState> {
   late final StreamSubscription<List<Group>> _groupsSubscription;
   late final StreamSubscription<List<Teacher>> _teachersSubscription;
   late final StreamSubscription<List<Room>> _roomsSubscription;
+  late final StreamSubscription<(bool, ScheduleData?)>
+  _updateStatusSubscription;
 
   void requestSubscription() {
     _groupsSubscription = _universityRepository.groups.listen(
@@ -38,7 +40,13 @@ class EntitySelectionCubit extends Cubit<EntitySelectionState> {
     _roomsSubscription = _universityRepository.rooms.listen(
       (rooms) => emit(state.copyWith(rooms: rooms)),
     );
+
+    _updateStatusSubscription = _universityRepository.updateStatus.listen(
+      (status) => emit(state.copyWith(updating: status.$1)),
+    );
   }
+
+  void updateEntities() => _universityRepository.fetchEntities();
 
   void setSearchValue(String searchValue) =>
       emit(state.copyWith(searchFilter: searchValue));
@@ -55,6 +63,7 @@ class EntitySelectionCubit extends Cubit<EntitySelectionState> {
       _groupsSubscription.cancel(),
       _teachersSubscription.cancel(),
       _roomsSubscription.cancel(),
+      _updateStatusSubscription.cancel(),
     ]);
     return super.close();
   }

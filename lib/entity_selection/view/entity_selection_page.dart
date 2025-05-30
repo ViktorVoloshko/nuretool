@@ -39,9 +39,23 @@ class EntitySelectionView extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return BlocBuilder<EntitySelectionCubit, EntitySelectionState>(
-      buildWhen:
-          (previous, current) => current.searchFilter != previous.searchFilter,
       builder: (context, state) {
+        final tabs = [
+          const EntitySelectionGroupsView(),
+          if (!state.userGroupSelection) ...[
+            const EntitySelectionTeachersView(),
+            const EntitySelectionRoomsView(),
+          ],
+        ];
+
+        final loadingTabs = [
+          const Center(child: CircularProgressIndicator()),
+          if (!state.userGroupSelection) ...[
+            const Center(child: CircularProgressIndicator()),
+            const Center(child: CircularProgressIndicator()),
+          ],
+        ];
+
         return DefaultTabController(
           initialIndex: state.initialTab.index,
           length: state.userGroupSelection ? 1 : 3,
@@ -57,6 +71,14 @@ class EntitySelectionView extends StatelessWidget {
                   prefixIcon: Icon(Icons.search),
                 ),
               ),
+              actions: [
+                IconButton(
+                  icon: Icon(Icons.refresh),
+                  onPressed:
+                      () =>
+                          context.read<EntitySelectionCubit>().updateEntities(),
+                ),
+              ],
               bottom: TabBar(
                 tabs: [
                   Tab(text: l10n.groups, icon: Icon(Icons.people)),
@@ -67,15 +89,7 @@ class EntitySelectionView extends StatelessWidget {
                 ],
               ),
             ),
-            body: TabBarView(
-              children: [
-                const EntitySelectionGroupsView(),
-                if (!state.userGroupSelection) ...[
-                  const EntitySelectionTeachersView(),
-                  const EntitySelectionRoomsView(),
-                ],
-              ],
-            ),
+            body: TabBarView(children: state.updating ? loadingTabs : tabs),
           ),
         );
       },

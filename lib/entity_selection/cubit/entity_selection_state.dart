@@ -8,12 +8,14 @@ final class EntitySelectionState extends Equatable {
     this.searchFilter = '',
     this.initialTab = EntitySelectionTab.groups,
     this.userGroupSelection = false,
+    this.updating = false,
   });
 
   final List<Group> groups;
   final List<Teacher> teachers;
   final List<Room> rooms;
   final String searchFilter;
+  final bool updating;
 
   final EntitySelectionTab initialTab;
   final bool userGroupSelection;
@@ -30,6 +32,7 @@ final class EntitySelectionState extends Equatable {
     List<Teacher>? teachers,
     List<Room>? rooms,
     String? searchFilter,
+    bool? updating,
   }) => EntitySelectionState(
     groups: groups ?? this.groups,
     teachers: teachers ?? this.teachers,
@@ -37,6 +40,7 @@ final class EntitySelectionState extends Equatable {
     searchFilter: searchFilter ?? this.searchFilter,
     initialTab: initialTab,
     userGroupSelection: userGroupSelection,
+    updating: updating ?? this.updating,
   );
 
   @override
@@ -47,6 +51,7 @@ final class EntitySelectionState extends Equatable {
     searchFilter,
     initialTab,
     userGroupSelection,
+    updating,
   ];
 }
 
