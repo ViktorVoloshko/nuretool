@@ -6,23 +6,23 @@ final class SchedulesViewState extends Equatable {
   const SchedulesViewState({
     required this.schedules,
     required this.userGroupID,
-    required this.updating,
+    required this.updateStatus,
   });
 
   final List<ScheduleInfo> schedules;
   final int? userGroupID;
-  final ScheduleData? updating;
+  final (bool, ScheduleData?) updateStatus;
 
   SchedulesViewState copyWith({
     List<ScheduleInfo>? schedules,
     int? userGroupID,
-    required ScheduleData? updating,
+    required (bool, ScheduleData?) updateStatus,
   }) => SchedulesViewState(
     schedules: schedules ?? this.schedules,
     userGroupID: userGroupID ?? this.userGroupID,
-    updating: updating,
+    updateStatus: updateStatus,
   );
 
   @override
-  List<Object?> get props => [schedules, userGroupID, updating];
+  List<Object?> get props => [schedules, userGroupID, updateStatus];
 }

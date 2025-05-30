@@ -47,8 +47,8 @@ class UniversityRepository {
       BehaviorSubject<List<Room>>.seeded(const []);
   final BehaviorSubject<List<Subject>> _subjectsStreamController =
       BehaviorSubject<List<Subject>>.seeded(const []);
-  final BehaviorSubject<ScheduleData?> _updatingScheduleStreamController =
-      BehaviorSubject.seeded(null);
+  final BehaviorSubject<(bool, ScheduleData?)>
+  _updatingScheduleStreamController = BehaviorSubject.seeded((false, null));
 
   Stream<List<Event>> get events => _eventsStreamController.asBroadcastStream();
   Stream<List<Group>> get groups => _groupsStreamController.asBroadcastStream();
@@ -57,7 +57,7 @@ class UniversityRepository {
   Stream<List<Room>> get rooms => _roomsStreamController.asBroadcastStream();
   Stream<List<Subject>> get subjects =>
       _subjectsStreamController.asBroadcastStream();
-  Stream<ScheduleData?> get updatingSchedule =>
+  Stream<(bool, ScheduleData?)> get updateStatus =>
       _updatingScheduleStreamController.asBroadcastStream();
 
   Stream<int?> get userGroupID => _settingsStorage.userGroupID;
@@ -68,6 +68,16 @@ class UniversityRepository {
   late final StreamSubscription<List<db.Teacher>> _teachersSubscription;
   late final StreamSubscription<List<db.Room>> _roomsSubscription;
   late final StreamSubscription<List<db.Subject>> _subjectsSubscription;
+
+  Future<void> fetchEntities() async {
+    _updatingScheduleStreamController.add((true, null));
+
+    await fetchGroups();
+    await fetchTeachers();
+    await fetchRooms();
+
+    _updatingScheduleStreamController.add((false, null));
+  }
 
   Future<void> fetchGroups() async {
     // Since one group may appear multiple times in a JSON, Set is used.
@@ -122,7 +132,7 @@ class UniversityRepository {
   Future<void> saveEvent(Event event) => _driftDB.saveEvent(event.toDBModel());
 
   Future<void> updateSchedule(ScheduleData schedule) async {
-    _updatingScheduleStreamController.add(schedule);
+    _updatingScheduleStreamController.add((true, schedule));
 
     final from = DateTime.now().startOfSemester.millisecondsSinceEpoch ~/ 1000;
     final to = DateTime.now().endOfSemester.millisecondsSinceEpoch ~/ 1000;
@@ -163,7 +173,7 @@ class UniversityRepository {
       // Probably just no events
       return _deleteEvents(schedule);
     } finally {
-      _updatingScheduleStreamController.add(null);
+      _updatingScheduleStreamController.add((false, null));
     }
   }
 

@@ -54,20 +54,6 @@ class SchedulesViewView extends StatelessWidget {
             slivers: [
               SliverAppBar.large(
                 title: Text(AppLocalizations.of(context)!.schedulesManage),
-                actions: [
-                  IconButton(
-                    icon: Icon(Icons.refresh),
-                    onPressed: () async {
-                      // FIXME: Add autoupdate and remove this MMM
-                      final repo = context.read<UniversityRepository>();
-                      await Future.wait([
-                        repo.fetchGroups(),
-                        repo.fetchTeachers(),
-                        repo.fetchRooms(),
-                      ]);
-                    },
-                  ),
-                ],
               ),
               SliverToBoxAdapter(
                 child: SchedulesTypesDivider(
@@ -89,8 +75,9 @@ class SchedulesViewView extends StatelessWidget {
                       // lastUpdated: state.groupSchedules[index].lastUpdated,
                       deleteProhibited:
                           state.userGroupID == groups[index].schedule.id,
-                      updateProhibited: state.updating != null,
-                      isUpdating: state.updating == groups[index].schedule,
+                      updateProhibited: state.updateStatus.$1,
+                      isUpdating:
+                          state.updateStatus.$2 == groups[index].schedule,
                       onRefresh:
                           () => context
                               .read<SchedulesViewCubit>()
@@ -119,8 +106,9 @@ class SchedulesViewView extends StatelessWidget {
                     (context, index) => SchedulesListItem(
                       title: teachers[index].name,
                       // lastUpdated: state.groupSchedules[index].lastUpdated,
-                      updateProhibited: state.updating != null,
-                      isUpdating: state.updating == teachers[index].schedule,
+                      updateProhibited: state.updateStatus.$1,
+                      isUpdating:
+                          state.updateStatus.$2 == teachers[index].schedule,
                       onRefresh:
                           () => context
                               .read<SchedulesViewCubit>()
@@ -149,8 +137,9 @@ class SchedulesViewView extends StatelessWidget {
                     (context, index) => SchedulesListItem(
                       title: rooms[index].name,
                       // lastUpdated: state.groupSchedules[index].lastUpdated,
-                      updateProhibited: state.updating != null,
-                      isUpdating: state.updating == rooms[index].schedule,
+                      updateProhibited: state.updateStatus.$1,
+                      isUpdating:
+                          state.updateStatus.$2 == rooms[index].schedule,
                       onRefresh:
                           () => context
                               .read<SchedulesViewCubit>()

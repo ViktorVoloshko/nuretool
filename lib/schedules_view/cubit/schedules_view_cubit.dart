@@ -14,7 +14,7 @@ class SchedulesViewCubit extends Cubit<SchedulesViewState> {
         SchedulesViewState(
           schedules: const [],
           userGroupID: null,
-          updating: null,
+          updateStatus: (false, null),
         ),
       ) {
     _init();
@@ -23,7 +23,7 @@ class SchedulesViewCubit extends Cubit<SchedulesViewState> {
   final UniversityRepository _universityRepository;
 
   late final StreamSubscription<SavedSchedules> _schedulesSubscription;
-  late final StreamSubscription<ScheduleData?> _updatingSubscription;
+  late final StreamSubscription<(bool, ScheduleData?)> _updateSubscription;
   late final StreamSubscription<int?> _userGroupSubscription;
 
   Future<void> updateSchedule(ScheduleData schedule) =>
@@ -53,16 +53,19 @@ class SchedulesViewCubit extends Cubit<SchedulesViewState> {
         result.add((schedule: schedule, name: await _getEntityName(schedule)));
       }
 
-      emit(state.copyWith(schedules: result, updating: state.updating));
+      emit(state.copyWith(schedules: result, updateStatus: state.updateStatus));
     });
 
-    _updatingSubscription = _universityRepository.updatingSchedule.listen(
-      (event) => emit(state.copyWith(updating: event)),
+    _updateSubscription = _universityRepository.updateStatus.listen(
+      (event) => emit(state.copyWith(updateStatus: event)),
     );
 
     _userGroupSubscription = _universityRepository.userGroupID.listen(
       (userGroupID) => emit(
-        state.copyWith(userGroupID: userGroupID, updating: state.updating),
+        state.copyWith(
+          userGroupID: userGroupID,
+          updateStatus: state.updateStatus,
+        ),
       ),
     );
   }
@@ -72,7 +75,7 @@ class SchedulesViewCubit extends Cubit<SchedulesViewState> {
     Future.wait([
       _schedulesSubscription.cancel(),
       _userGroupSubscription.cancel(),
-      _updatingSubscription.cancel(),
+      _updateSubscription.cancel(),
     ]);
     return super.close();
   }
