@@ -74,6 +74,7 @@ class SchedulesViewView extends StatelessWidget {
                       title: groups[index].name,
                       // lastUpdated: state.groupSchedules[index].lastUpdated,
                       deleteProhibited:
+                          state.updateStatus.$1 ||
                           state.userGroupID == groups[index].schedule.id,
                       updateProhibited: state.updateStatus.$1,
                       isUpdating:
@@ -107,6 +108,7 @@ class SchedulesViewView extends StatelessWidget {
                       title: teachers[index].name,
                       // lastUpdated: state.groupSchedules[index].lastUpdated,
                       updateProhibited: state.updateStatus.$1,
+                      deleteProhibited: state.updateStatus.$1,
                       isUpdating:
                           state.updateStatus.$2 == teachers[index].schedule,
                       onRefresh:
@@ -138,6 +140,7 @@ class SchedulesViewView extends StatelessWidget {
                       title: rooms[index].name,
                       // lastUpdated: state.groupSchedules[index].lastUpdated,
                       updateProhibited: state.updateStatus.$1,
+                      deleteProhibited: state.updateStatus.$1,
                       isUpdating:
                           state.updateStatus.$2 == rooms[index].schedule,
                       onRefresh:
