@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'schedule_selection.dart';
+part of 'schedule_data.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
