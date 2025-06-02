@@ -24,7 +24,7 @@ final class SchedulesViewState extends Equatable {
     schedules: schedules ?? this.schedules,
     userGroupID: userGroupID ?? this.userGroupID,
     updateStatus: updateStatus,
-    selectedSchedule: selectedSchedule,
+    selectedSchedule: selectedSchedule ?? this.selectedSchedule,
   );
 
   @override

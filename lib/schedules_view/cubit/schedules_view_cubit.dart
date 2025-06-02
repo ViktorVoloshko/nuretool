@@ -74,14 +74,14 @@ class SchedulesViewCubit extends Cubit<SchedulesViewState> {
     );
 
     _selectedScheduleSubscription = _universityRepository.selectedSchedule
-        .listen((schedule) {
-          emit(
+        .listen(
+          (schedule) => emit(
             state.copyWith(
               updateStatus: state.updateStatus,
               selectedSchedule: schedule,
             ),
-          );
-        });
+          ),
+        );
   }
 
   @override

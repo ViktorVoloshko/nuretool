@@ -49,7 +49,6 @@ class SchedulesViewView extends StatelessWidget {
                 .where((e) => e.schedule.type == ScheduleType.room)
                 .toList();
 
-        // FIXME: Selected schedule is not shown when opening view
         return Scaffold(
           body: CustomScrollView(
             slivers: [
