@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:settings_storage/settings_storage.dart';
 
 import 'tables/tables.dart';
 import 'models/models.dart';
@@ -38,6 +39,31 @@ class DriftDB extends _$DriftDB {
   Stream<List<Teacher>> loadTeachers() => select(teachers).watch();
   Stream<List<Room>> loadRooms() => select(rooms).watch();
 
+  Stream<List<EventData>> loadScheduleEvents(
+    ScheduleData schedule,
+  ) => switch (schedule.type) {
+    ScheduleType.group => loadEvents().map(
+      (events) =>
+          events
+              .where(
+                (event) => event.event.relations.groups.contains(schedule.id),
+              )
+              .toList(),
+    ),
+    ScheduleType.teacher => loadEvents().map(
+      (events) =>
+          events
+              .where(
+                (event) => event.event.relations.teachers.contains(schedule.id),
+              )
+              .toList(),
+    ),
+    ScheduleType.room => loadEvents().map(
+      (events) =>
+          events.where((event) => event.event.roomID == schedule.id).toList(),
+    ),
+  };
+
   Future<int> saveEvent(EventsCompanion event) =>
       into(events).insertOnConflictUpdate(event);
 
@@ -56,7 +82,14 @@ class DriftDB extends _$DriftDB {
     (batch) => batch.deleteWhere(events, (event) => event.id.isIn(eventIDs)),
   );
 
-  Future<int> deleteFetchedEvents() =>
+  Future<void> deleteFetchedEvents(Iterable<int> eventIDs) => batch(
+    (batch) => batch.deleteWhere(
+      events,
+      (event) => event.isFetched.equals(true) & event.id.isIn(eventIDs),
+    ),
+  );
+
+  Future<int> deleteAllFetchedEvents() =>
       (delete(events)..where((event) => event.isFetched.equals(true))).go();
 
   Future<void> saveSubjects(Iterable<SubjectsCompanion> subjects) => batch(

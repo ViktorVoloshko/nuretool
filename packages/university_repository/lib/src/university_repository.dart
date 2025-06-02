@@ -39,6 +39,8 @@ class UniversityRepository {
 
   final BehaviorSubject<List<Event>> _eventsStreamController =
       BehaviorSubject<List<Event>>.seeded(const []);
+  final BehaviorSubject<List<Event>> _scheduleEventsStreamController =
+      BehaviorSubject<List<Event>>.seeded(const []);
   final BehaviorSubject<List<Group>> _groupsStreamController =
       BehaviorSubject<List<Group>>.seeded(const []);
   final BehaviorSubject<List<Teacher>> _teachersStreamController =
@@ -62,12 +64,16 @@ class UniversityRepository {
 
   Stream<int?> get userGroupID => _settingsStorage.userGroupID;
   Stream<SavedSchedules> get savedSchedules => _settingsStorage.savedSchedules;
+  Stream<ScheduleData?> get selectedSchedule =>
+      _settingsStorage.selectedSchedule;
 
   late final StreamSubscription<List<db.EventData>> _eventsSubscription;
+  StreamSubscription<List<db.EventData>>? _scheduleEventsSubscription;
   late final StreamSubscription<List<db.Group>> _groupsSubscription;
   late final StreamSubscription<List<db.Teacher>> _teachersSubscription;
   late final StreamSubscription<List<db.Room>> _roomsSubscription;
   late final StreamSubscription<List<db.Subject>> _subjectsSubscription;
+  late final StreamSubscription<ScheduleData?> _selectedScheduleSubscrition;
 
   Future<void> fetchEntities() async {
     if (_updatingScheduleStreamController.value.$1) return;
@@ -130,6 +136,9 @@ class UniversityRepository {
 
   Future<void> setUserGroupID(int groupID) =>
       _settingsStorage.setUserGroupID(groupID);
+
+  Future<void> setSelectedSchedule(ScheduleData schedule) =>
+      _settingsStorage.setSelectedSchedule(schedule);
 
   Future<void> saveEvent(Event event) => _driftDB.saveEvent(event.toDBModel());
 
@@ -227,7 +236,7 @@ class UniversityRepository {
       ),
     }.map((e) => e.id);
 
-    return _driftDB.deleteEvents(eventsToDelete);
+    return _driftDB.deleteFetchedEvents(eventsToDelete);
   }
 
   bool _eventSafeToDelete(Event event, SavedSchedules savedSchedules) {
@@ -259,13 +268,17 @@ class UniversityRepository {
       _roomsSubscription.cancel(),
       _teachersSubscription.cancel(),
       _groupsSubscription.cancel(),
+      if (_scheduleEventsSubscription != null)
+        _scheduleEventsSubscription!.cancel(),
       _eventsSubscription.cancel(),
+      _selectedScheduleSubscrition.cancel(),
     ]);
     return Future.wait([
       _subjectsStreamController.close(),
       _roomsStreamController.close(),
       _teachersStreamController.close(),
       _groupsStreamController.close(),
+      _scheduleEventsStreamController.close(),
       _eventsStreamController.close(),
       _updatingScheduleStreamController.close(),
     ]);
@@ -308,6 +321,32 @@ class UniversityRepository {
         ),
       ];
       _eventsStreamController.add(events);
+    });
+
+    _selectedScheduleSubscrition = _settingsStorage.selectedSchedule.listen((
+      schedule,
+    ) {
+      if (_scheduleEventsSubscription != null) {
+        _scheduleEventsSubscription!.cancel();
+      }
+
+      if (schedule == null) {
+        _scheduleEventsStreamController.add(const []);
+      } else {
+        _scheduleEventsSubscription = _driftDB
+            .loadScheduleEvents(schedule)
+            .listen((eventsData) {
+              final events = <Event>[
+                ...eventsData.map(
+                  (e) => Event.fromDBModel(
+                    e.event,
+                    (e.type == null) ? null : EventType.fromDBModel(e.type!),
+                  ),
+                ),
+              ];
+              _scheduleEventsStreamController.add(events);
+            });
+      }
     });
   }
 }

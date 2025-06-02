@@ -16,12 +16,15 @@ class SettingsStorage {
 
   late final BehaviorSubject<int?> _userGroupIDStreamController;
   late final BehaviorSubject<SavedSchedules> _savedSchedulesStreamController;
+  late final BehaviorSubject<ScheduleData?> _selectedScheduleStreamController;
   late final BehaviorSubject<AppTheme> _appThemeStreamController;
 
   Stream<int?> get userGroupID =>
       _userGroupIDStreamController.asBroadcastStream();
   Stream<SavedSchedules> get savedSchedules =>
       _savedSchedulesStreamController.asBroadcastStream();
+  Stream<ScheduleData?> get selectedSchedule =>
+      _selectedScheduleStreamController.asBroadcastStream();
   Stream<AppTheme> get appTheme =>
       _appThemeStreamController.asBroadcastStream();
 
@@ -29,6 +32,8 @@ class SettingsStorage {
   static const kUserGroupID = 'user_group_id';
   @visibleForTesting
   static const kSavedSchedules = 'saved_schedules';
+  @visibleForTesting
+  static const kSelectedSchedule = 'selected_schedule';
   @visibleForTesting
   static const kAppTheme = 'app_theme';
 
@@ -45,6 +50,14 @@ class SettingsStorage {
     );
   }
 
+  Future<void> setSelectedSchedule(ScheduleData schedule) {
+    _selectedScheduleStreamController.add(schedule);
+    return _storage.setString(
+      kSelectedSchedule,
+      json.encode(schedule.toJson()),
+    );
+  }
+
   Future<void> setTheme(AppTheme appTheme) {
     _appThemeStreamController.add(appTheme);
     return _storage.setString(kAppTheme, json.encode(appTheme.toJson()));
@@ -53,6 +66,7 @@ class SettingsStorage {
   Future<void> close() => Future.wait([
     _userGroupIDStreamController.close(),
     _savedSchedulesStreamController.close(),
+    _selectedScheduleStreamController.close(),
     _appThemeStreamController.close(),
   ]);
 
@@ -73,6 +87,17 @@ class SettingsStorage {
     } else {
       _savedSchedulesStreamController = BehaviorSubject<SavedSchedules>.seeded(
         SavedSchedules.fromJson(json.decode(savedSchedulesJson)),
+      );
+    }
+
+    final selectedScheduleJson = _storage.getString(kSelectedSchedule);
+    if (selectedScheduleJson == null) {
+      _selectedScheduleStreamController = BehaviorSubject<ScheduleData?>.seeded(
+        null,
+      );
+    } else {
+      _selectedScheduleStreamController = BehaviorSubject<ScheduleData?>.seeded(
+        ScheduleData.fromJson(json.decode(selectedScheduleJson)),
       );
     }
 
