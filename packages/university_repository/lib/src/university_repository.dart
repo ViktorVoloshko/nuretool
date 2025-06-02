@@ -53,6 +53,8 @@ class UniversityRepository {
   _updatingScheduleStreamController = BehaviorSubject.seeded((false, null));
 
   Stream<List<Event>> get events => _eventsStreamController.asBroadcastStream();
+  Stream<List<Event>> get scheduleEvents =>
+      _scheduleEventsStreamController.asBroadcastStream();
   Stream<List<Group>> get groups => _groupsStreamController.asBroadcastStream();
   Stream<List<Teacher>> get teachers =>
       _teachersStreamController.asBroadcastStream();
