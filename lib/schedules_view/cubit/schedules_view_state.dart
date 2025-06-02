@@ -18,12 +18,12 @@ final class SchedulesViewState extends Equatable {
   SchedulesViewState copyWith({
     List<ScheduleInfo>? schedules,
     int? userGroupID,
-    required (bool, ScheduleData?) updateStatus,
+    (bool, ScheduleData?)? updateStatus,
     ScheduleData? selectedSchedule,
   }) => SchedulesViewState(
     schedules: schedules ?? this.schedules,
     userGroupID: userGroupID ?? this.userGroupID,
-    updateStatus: updateStatus,
+    updateStatus: updateStatus ?? this.updateStatus,
     selectedSchedule: selectedSchedule ?? this.selectedSchedule,
   );
 

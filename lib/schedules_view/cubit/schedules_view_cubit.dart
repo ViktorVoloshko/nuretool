@@ -57,7 +57,7 @@ class SchedulesViewCubit extends Cubit<SchedulesViewState> {
         result.add((schedule: schedule, name: await _getEntityName(schedule)));
       }
 
-      emit(state.copyWith(schedules: result, updateStatus: state.updateStatus));
+      emit(state.copyWith(schedules: result));
     });
 
     _updateSubscription = _universityRepository.updateStatus.listen(
@@ -65,23 +65,11 @@ class SchedulesViewCubit extends Cubit<SchedulesViewState> {
     );
 
     _userGroupSubscription = _universityRepository.userGroupID.listen(
-      (userGroupID) => emit(
-        state.copyWith(
-          userGroupID: userGroupID,
-          updateStatus: state.updateStatus,
-        ),
-      ),
+      (userGroupID) => emit(state.copyWith(userGroupID: userGroupID)),
     );
 
     _selectedScheduleSubscription = _universityRepository.selectedSchedule
-        .listen(
-          (schedule) => emit(
-            state.copyWith(
-              updateStatus: state.updateStatus,
-              selectedSchedule: schedule,
-            ),
-          ),
-        );
+        .listen((schedule) => emit(state.copyWith(selectedSchedule: schedule)));
   }
 
   @override
