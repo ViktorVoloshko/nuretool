@@ -7,6 +7,7 @@ class SchedulesListItem extends StatelessWidget {
     super.key,
     required this.title,
     this.lastUpdated,
+    this.isSelected = false,
     this.onTap,
     required this.onRefresh,
     required this.onDelete,
@@ -17,6 +18,7 @@ class SchedulesListItem extends StatelessWidget {
 
   final String title;
   final DateTime? lastUpdated;
+  final bool isSelected;
   final GestureTapCallback? onTap;
   final GestureTapCallback onRefresh;
   final GestureTapCallback onDelete;
@@ -28,7 +30,10 @@ class SchedulesListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: const EdgeInsets.only(left: 24.0, right: 16.0),
-      title: Text(title),
+      title: Text(
+        title,
+        style: !isSelected ? null : TextStyle(fontWeight: FontWeight.w700),
+      ),
       // subtitle: Text(lastUpdated.toLocalDateFormatString()),
       onTap: onTap,
       trailing: Row(

@@ -49,6 +49,7 @@ class SchedulesViewView extends StatelessWidget {
                 .where((e) => e.schedule.type == ScheduleType.room)
                 .toList();
 
+        // FIXME: Selected schedule is not shown when opening view
         return Scaffold(
           body: CustomScrollView(
             slivers: [
@@ -73,12 +74,18 @@ class SchedulesViewView extends StatelessWidget {
                     (context, index) => SchedulesListItem(
                       title: groups[index].name,
                       // lastUpdated: state.groupSchedules[index].lastUpdated,
+                      isSelected:
+                          state.selectedSchedule == groups[index].schedule,
                       deleteProhibited:
                           state.updateStatus.$1 ||
                           state.userGroupID == groups[index].schedule.id,
                       updateProhibited: state.updateStatus.$1,
                       isUpdating:
                           state.updateStatus.$2 == groups[index].schedule,
+                      onTap:
+                          () => context
+                              .read<SchedulesViewCubit>()
+                              .selectSchedule(groups[index].schedule),
                       onRefresh:
                           () => context
                               .read<SchedulesViewCubit>()
@@ -107,10 +114,16 @@ class SchedulesViewView extends StatelessWidget {
                     (context, index) => SchedulesListItem(
                       title: teachers[index].name,
                       // lastUpdated: state.groupSchedules[index].lastUpdated,
+                      isSelected:
+                          state.selectedSchedule == teachers[index].schedule,
                       updateProhibited: state.updateStatus.$1,
                       deleteProhibited: state.updateStatus.$1,
                       isUpdating:
                           state.updateStatus.$2 == teachers[index].schedule,
+                      onTap:
+                          () => context
+                              .read<SchedulesViewCubit>()
+                              .selectSchedule(teachers[index].schedule),
                       onRefresh:
                           () => context
                               .read<SchedulesViewCubit>()
@@ -139,10 +152,16 @@ class SchedulesViewView extends StatelessWidget {
                     (context, index) => SchedulesListItem(
                       title: rooms[index].name,
                       // lastUpdated: state.groupSchedules[index].lastUpdated,
+                      isSelected:
+                          state.selectedSchedule == rooms[index].schedule,
                       updateProhibited: state.updateStatus.$1,
                       deleteProhibited: state.updateStatus.$1,
                       isUpdating:
                           state.updateStatus.$2 == rooms[index].schedule,
+                      onTap:
+                          () => context
+                              .read<SchedulesViewCubit>()
+                              .selectSchedule(rooms[index].schedule),
                       onRefresh:
                           () => context
                               .read<SchedulesViewCubit>()
