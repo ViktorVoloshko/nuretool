@@ -21,16 +21,22 @@ class CalendarViewBloc extends Bloc<CalendarViewEvent, CalendarViewState> {
 
   final UniversityRepository _universityRepository;
 
-  late final StreamSubscription _subjectsSubscription;
-  late final StreamSubscription _roomsSubscription;
+  late final StreamSubscription<List<Subject>> _subjectsSubscription;
+  late final StreamSubscription<List<Group>> _groupsSubscription;
+  late final StreamSubscription<List<Teacher>> _teachersSubscription;
+  late final StreamSubscription<List<Room>> _roomsSubscription;
 
   List<Subject> _subjects = const [];
+  List<Group> _groups = const [];
+  List<Teacher> _teachers = const [];
   List<Room> _rooms = const [];
 
   @override
   Future<void> close() async {
     await Future.wait([
       _subjectsSubscription.cancel(),
+      _groupsSubscription.cancel(),
+      _teachersSubscription.cancel(),
       _roomsSubscription.cancel(),
     ]);
     return super.close();
@@ -42,6 +48,12 @@ class CalendarViewBloc extends Bloc<CalendarViewEvent, CalendarViewState> {
   ) async {
     _subjectsSubscription = _universityRepository.subjects.listen(
       (subjects) => _subjects = subjects,
+    );
+    _groupsSubscription = _universityRepository.groups.listen(
+      (groups) => _groups = groups,
+    );
+    _teachersSubscription = _universityRepository.teachers.listen(
+      (teachers) => _teachers = teachers,
     );
     _roomsSubscription = _universityRepository.rooms.listen(
       (rooms) => _rooms = rooms,
@@ -69,6 +81,16 @@ class CalendarViewBloc extends Bloc<CalendarViewEvent, CalendarViewState> {
                       subject: _subjects.firstWhere(
                         (subject) => subject.id == e.subject,
                       ),
+                      groups:
+                          _groups
+                              .where((group) => e.groups.contains(e.id))
+                              .toList(),
+                      teachers:
+                          _teachers
+                              .where(
+                                (teacher) => e.teachers.contains(teacher.id),
+                              )
+                              .toList(),
                       room: _rooms.firstWhereOrNull(
                         (room) => room.id == e.room,
                       ),

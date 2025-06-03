@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:university_repository/university_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -6,6 +7,7 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import '../bloc/calendar_view_bloc.dart';
 import '../models/models.dart';
 import '../../schedules_view/schedules_view.dart';
+import '../../event_view/event_view.dart';
 import '../../l10n/app_localizations.dart';
 
 class CalendarViewPage extends StatelessWidget {
@@ -70,15 +72,36 @@ class CalendarViewView extends StatelessWidget {
                       showTodayButton: true,
                       monthViewSettings: MonthViewSettings(showAgenda: true),
                       timeSlotViewSettings: TimeSlotViewSettings(
-                        startHour:
-                            state.start == null
-                                ? 0
-                                : state.start!.hour + 1.floorToDouble(),
-                        endHour:
-                            state.end == null
-                                ? 24
-                                : state.end!.hour + 1.ceilToDouble(),
+                        timeInterval: const Duration(minutes: 60),
+                        timeFormat: DateFormat.Hm().pattern!,
+                        nonWorkingDays: const [DateTime.sunday],
+                        // startHour:
+                        //     state.start == null
+                        //         ? 0
+                        //         : state.start!.hour + state.start!.minute / 60,
+                        // endHour:
+                        //     state.end == null
+                        //         ? 24
+                        //         : state.end!.hour + state.end!.minute / 60,
                       ),
+                      onTap: (calendarTapDetails) {
+                        if (calendarTapDetails.targetElement ==
+                            CalendarElement.appointment) {
+                          showModalBottomSheet(
+                            context: context,
+                            enableDrag: true,
+                            showDragHandle: true,
+                            builder:
+                                (context) => Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: EventViewPage(
+                                    eventData:
+                                        calendarTapDetails.appointments![0],
+                                  ),
+                                ),
+                          );
+                        }
+                      },
                     ),
                   ),
                 ],

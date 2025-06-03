@@ -28,5 +28,5 @@ final class CalendarViewSuccess extends CalendarViewState {
   final TimeOfDay? end;
 
   @override
-  List<Object?> get props => [events];
+  List<Object?> get props => [events, start, end];
 }
