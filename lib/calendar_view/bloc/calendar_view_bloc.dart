@@ -83,7 +83,7 @@ class CalendarViewBloc extends Bloc<CalendarViewEvent, CalendarViewState> {
                       ),
                       groups:
                           _groups
-                              .where((group) => e.groups.contains(e.id))
+                              .where((group) => e.groups.contains(group.id))
                               .toList(),
                       teachers:
                           _teachers
