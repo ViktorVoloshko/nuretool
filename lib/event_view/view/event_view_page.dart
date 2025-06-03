@@ -66,7 +66,7 @@ class EventViewView extends StatelessWidget {
                   EventViewEntry(
                     title: l10n.room,
                     value: eventData.room!.name,
-                    icon: Icons.door_back_door_rounded,
+                    icon: Icons.sensor_door,
                   ),
                 EventViewEntry(
                   title: l10n.time,
