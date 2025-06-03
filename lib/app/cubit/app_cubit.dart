@@ -20,7 +20,7 @@ class AppCubit extends Cubit<AppState> {
 
   void init() {
     _subscription = _settingsRepository.appTheme.listen(
-      (event) => emit(state.copyWith(event)),
+      (appTheme) => emit(state.copyWith(theme: appTheme)),
     );
   }
 

@@ -22,6 +22,7 @@ class CistApi
           dio ??
           Dio(
             BaseOptions(
+              connectTimeout: const Duration(seconds: 10),
               responseType: ResponseType.plain,
               responseDecoder:
                   (responseBytes, _, _) =>

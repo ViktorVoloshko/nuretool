@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:university_repository/university_repository.dart';
 
 import '../cubit/home_cubit.dart';
 import '../../calendar_view/calendar_view.dart';
@@ -12,7 +13,13 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(create: (_) => HomeCubit(), child: HomeView());
+    return BlocProvider(
+      create:
+          (_) => HomeCubit(
+            universityRepository: context.read<UniversityRepository>(),
+          )..init(),
+      child: HomeView(),
+    );
   }
 }
 
@@ -27,13 +34,22 @@ class HomeView extends StatelessWidget {
 
     return Scaffold(
       body: SafeArea(
-        child: IndexedStack(
-          index: selectedTab.index,
-          children: const [
-            CalendarViewPage(),
-            TasksOverviewPage(),
-            MoreViewPage(),
-          ],
+        child: BlocListener<HomeCubit, HomeState>(
+          listenWhen: (previous, current) => current.errorMessage != null,
+          listener: (context, state) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.errorMessage!)));
+            context.read<HomeCubit>().clearErrorMessage();
+          },
+          child: IndexedStack(
+            index: selectedTab.index,
+            children: const [
+              CalendarViewPage(),
+              TasksOverviewPage(),
+              MoreViewPage(),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: NavigationBar(
