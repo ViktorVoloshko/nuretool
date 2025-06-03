@@ -45,7 +45,11 @@ class CistApi
     try {
       json = jsonDecode(response.data!) as Map<String, dynamic>;
     } catch (_) {
-      throw groups_api.GroupsRequestFailure();
+      if (response.data!.contains('ORA')) {
+        throw groups_api.GroupsRequestFailure();
+      } else {
+        return [];
+      }
     }
 
     final List<groups_api.Faculty> result = [];
