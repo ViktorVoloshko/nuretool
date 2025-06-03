@@ -30,6 +30,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get time => 'Time';
 
   @override
+  String get start => 'Start';
+
+  @override
+  String get end => 'End';
+
+  @override
   String get today => 'Today';
 
   @override
@@ -73,6 +79,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get supertasksError => 'Error retrieving tasks';
 
   @override
+  String get noSubjectError => 'No subject';
+
+  @override
+  String get noTimeError => 'No time';
+
+  @override
+  String get noTypeError => 'No type';
+
+  @override
   String get supertasksEdit => 'Edit task';
 
   @override
@@ -98,6 +113,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get laboratory => 'Laboratory';
+
+  @override
+  String get consultation => 'Consultation';
 
   @override
   String get test => 'Test';

@@ -136,6 +136,18 @@ abstract class AppLocalizations {
   /// **'Time'**
   String get time;
 
+  /// No description provided for @start.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get start;
+
+  /// No description provided for @end.
+  ///
+  /// In en, this message translates to:
+  /// **'End'**
+  String get end;
+
   /// No description provided for @today.
   ///
   /// In en, this message translates to:
@@ -214,6 +226,24 @@ abstract class AppLocalizations {
   /// **'Error retrieving tasks'**
   String get supertasksError;
 
+  /// No description provided for @noSubjectError.
+  ///
+  /// In en, this message translates to:
+  /// **'No subject'**
+  String get noSubjectError;
+
+  /// No description provided for @noTimeError.
+  ///
+  /// In en, this message translates to:
+  /// **'No time'**
+  String get noTimeError;
+
+  /// No description provided for @noTypeError.
+  ///
+  /// In en, this message translates to:
+  /// **'No type'**
+  String get noTypeError;
+
   /// No description provided for @supertasksEdit.
   ///
   /// In en, this message translates to:
@@ -267,6 +297,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Laboratory'**
   String get laboratory;
+
+  /// No description provided for @consultation.
+  ///
+  /// In en, this message translates to:
+  /// **'Consultation'**
+  String get consultation;
 
   /// No description provided for @test.
   ///
