@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tasks_repository/tasks_repository.dart';
 
-import '../../l10n/app_localizations.dart';
-
 class TaskTypeSelectionWidget extends StatelessWidget {
   const TaskTypeSelectionWidget({
     super.key,
@@ -21,23 +19,23 @@ class TaskTypeSelectionWidget extends StatelessWidget {
       segments: [
         ButtonSegment<TaskType?>(
           value: null,
-          label: Text(AppLocalizations.of(context)!.none),
+          label: Icon(Icons.not_interested),
         ),
         ButtonSegment<TaskType?>(
           value: TaskType.practice,
-          label: Text(AppLocalizations.of(context)!.practice),
+          label: Icon(Icons.drive_file_rename_outline),
         ),
         ButtonSegment<TaskType?>(
           value: TaskType.laboratory,
-          label: Text(AppLocalizations.of(context)!.laboratory),
+          label: Icon(Icons.science),
         ),
         ButtonSegment<TaskType?>(
           value: TaskType.test,
-          label: Text(AppLocalizations.of(context)!.test),
+          label: Icon(Icons.task_alt),
         ),
         ButtonSegment<TaskType?>(
           value: TaskType.exam,
-          label: Text(AppLocalizations.of(context)!.exam),
+          label: Icon(Icons.fact_check),
         ),
       ],
     );
