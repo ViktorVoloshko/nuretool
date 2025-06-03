@@ -8,6 +8,7 @@ import '../bloc/calendar_view_bloc.dart';
 import '../models/models.dart';
 import '../../schedules_view/schedules_view.dart';
 import '../../event_view/event_view.dart';
+import '../../event_edit/event_edit.dart';
 import '../../l10n/app_localizations.dart';
 
 class CalendarViewPage extends StatelessWidget {
@@ -102,21 +103,42 @@ class CalendarViewView extends StatelessWidget {
                           );
                         }
                       },
+                      onLongPress: (calendarLongPressDetails) {
+                        if (calendarLongPressDetails.targetElement ==
+                                CalendarElement.appointment &&
+                            !calendarLongPressDetails
+                                .appointments![0]
+                                .event
+                                .isFetched) {
+                          EventEditPage.open(
+                            context,
+                            state.schedule!,
+                            state.events.map((e) => e.subject).toSet().toList(),
+                            calendarLongPressDetails.appointments![0].event,
+                          );
+                        }
+                      },
                     ),
                   ),
                 ],
               ),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: FloatingActionButton(
-                    heroTag: UniqueKey(),
-                    child: Icon(Icons.add),
-                    onPressed: () {},
+              if (state.schedule != null)
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: FloatingActionButton(
+                      heroTag: UniqueKey(),
+                      child: Icon(Icons.add),
+                      onPressed:
+                          () => EventEditPage.open(
+                            context,
+                            state.schedule!,
+                            state.events.map((e) => e.subject).toSet().toList(),
+                          ),
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         };

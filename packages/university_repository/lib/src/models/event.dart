@@ -9,7 +9,7 @@ import 'models.dart';
 @immutable
 class Event extends Equatable {
   const Event({
-    required this.id,
+    this.id,
     required this.subject,
     required this.startTime,
     required this.endTime,
@@ -32,7 +32,7 @@ class Event extends Equatable {
       groups = event.relations.groups,
       teachers = event.relations.teachers;
 
-  final int id;
+  final int? id;
   final int subject;
   final DateTime startTime;
   final DateTime endTime;
@@ -44,7 +44,7 @@ class Event extends Equatable {
   final int? room;
 
   db.EventsCompanion toDBModel() => db.EventsCompanion.insert(
-    id: Value(id),
+    id: Value.absentIfNull(id),
     subject: subject,
     startTime: startTime,
     endTime: endTime,

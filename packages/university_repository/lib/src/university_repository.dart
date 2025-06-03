@@ -144,6 +144,8 @@ class UniversityRepository {
 
   Future<void> saveEvent(Event event) => _driftDB.saveEvent(event.toDBModel());
 
+  Future<void> deleteEvent(int eventID) => _driftDB.deleteEvent(eventID);
+
   Future<void> updateSchedule(ScheduleData schedule) async {
     _updatingScheduleStreamController.add((true, schedule));
 
@@ -238,7 +240,7 @@ class UniversityRepository {
       ),
     }.map((e) => e.id);
 
-    return _driftDB.deleteFetchedEvents(eventsToDelete);
+    return _driftDB.deleteFetchedEvents(eventsToDelete as Iterable<int>);
   }
 
   bool _eventSafeToDelete(Event event, SavedSchedules savedSchedules) {

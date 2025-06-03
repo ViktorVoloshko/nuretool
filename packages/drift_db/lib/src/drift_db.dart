@@ -78,6 +78,9 @@ class DriftDB extends _$DriftDB {
     batch.insertAllOnConflictUpdate(this.events, events);
   });
 
+  Future<void> deleteEvent(int eventID) =>
+      (delete(events)..where((event) => event.id.equals(eventID))).go();
+
   Future<void> deleteEvents(Iterable<int> eventIDs) => batch(
     (batch) => batch.deleteWhere(events, (event) => event.id.isIn(eventIDs)),
   );
