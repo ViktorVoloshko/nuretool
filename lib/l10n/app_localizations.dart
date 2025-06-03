@@ -124,6 +124,18 @@ abstract class AppLocalizations {
   /// **'Search'**
   String get search;
 
+  /// No description provided for @type.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get type;
+
+  /// No description provided for @time.
+  ///
+  /// In en, this message translates to:
+  /// **'Time'**
+  String get time;
+
   /// No description provided for @today.
   ///
   /// In en, this message translates to:
@@ -171,6 +183,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Teachers'**
   String get teachers;
+
+  /// No description provided for @room.
+  ///
+  /// In en, this message translates to:
+  /// **'Room'**
+  String get room;
 
   /// No description provided for @rooms.
   ///

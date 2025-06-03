@@ -24,6 +24,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get search => 'Search';
 
   @override
+  String get type => 'Type';
+
+  @override
+  String get time => 'Time';
+
+  @override
   String get today => 'Today';
 
   @override
@@ -50,6 +56,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get teachers => 'Teachers';
+
+  @override
+  String get room => 'Room';
 
   @override
   String get rooms => 'Rooms';
