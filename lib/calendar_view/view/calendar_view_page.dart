@@ -69,6 +69,16 @@ class CalendarViewView extends StatelessWidget {
                       firstDayOfWeek: 1,
                       showTodayButton: true,
                       monthViewSettings: MonthViewSettings(showAgenda: true),
+                      timeSlotViewSettings: TimeSlotViewSettings(
+                        startHour:
+                            state.start == null
+                                ? 0
+                                : state.start!.hour + 1.floorToDouble(),
+                        endHour:
+                            state.end == null
+                                ? 24
+                                : state.end!.hour + 1.ceilToDouble(),
+                      ),
                     ),
                   ),
                 ],

@@ -21,9 +21,11 @@ final class CalendarViewFailure extends CalendarViewState {
 }
 
 final class CalendarViewSuccess extends CalendarViewState {
-  const CalendarViewSuccess({required this.events});
+  const CalendarViewSuccess({required this.events, this.start, this.end});
 
   final List<EventData> events;
+  final TimeOfDay? start;
+  final TimeOfDay? end;
 
   @override
   List<Object?> get props => [events];

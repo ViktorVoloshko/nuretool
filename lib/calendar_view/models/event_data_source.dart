@@ -33,12 +33,12 @@ class EventDataSource extends CalendarDataSource {
   Color getColor(int index) => switch ((appointments! as List<EventData>)[index]
       .event
       .baseType) {
-    EventBaseType.lecture => Colors.amber,
-    EventBaseType.practice => Colors.lightGreen,
-    EventBaseType.laboratory => Colors.purple,
-    EventBaseType.consultation => Colors.blueGrey,
-    EventBaseType.test => Colors.blue,
-    EventBaseType.exam => Colors.red,
-    EventBaseType.project => Colors.pinkAccent,
+    EventBaseType.lecture => Colors.amber.shade900,
+    EventBaseType.practice => Colors.lightGreen.shade900,
+    EventBaseType.laboratory => Colors.purple.shade900,
+    EventBaseType.consultation => Colors.blueGrey.shade900,
+    EventBaseType.test => Colors.blue.shade900,
+    EventBaseType.exam => Colors.red.shade900,
+    EventBaseType.project => Colors.pink.shade900,
   };
 }
