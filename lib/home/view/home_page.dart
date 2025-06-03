@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../cubit/home_cubit.dart';
+import '../../calendar_view/calendar_view.dart';
 import '../../tasks_overview/tasks_overview.dart';
 import '../../more_view/more_view.dart';
 import '../../l10n/app_localizations.dart';
@@ -28,7 +29,11 @@ class HomeView extends StatelessWidget {
       body: SafeArea(
         child: IndexedStack(
           index: selectedTab.index,
-          children: const [Placeholder(), TasksOverviewPage(), MoreViewPage()],
+          children: const [
+            CalendarViewPage(),
+            TasksOverviewPage(),
+            MoreViewPage(),
+          ],
         ),
       ),
       bottomNavigationBar: NavigationBar(

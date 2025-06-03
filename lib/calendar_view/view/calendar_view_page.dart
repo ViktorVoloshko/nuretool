@@ -1,0 +1,93 @@
+import 'package:flutter/material.dart';
+import 'package:university_repository/university_repository.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
+
+import '../bloc/calendar_view_bloc.dart';
+import '../models/models.dart';
+import '../../schedules_view/schedules_view.dart';
+import '../../l10n/app_localizations.dart';
+
+class CalendarViewPage extends StatelessWidget {
+  const CalendarViewPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create:
+          (context) => CalendarViewBloc(
+            universityRepository: context.read<UniversityRepository>(),
+          )..add(const CalendarViewSubscriptionRequested()),
+      child: const CalendarViewView(),
+    );
+  }
+}
+
+class CalendarViewView extends StatelessWidget {
+  const CalendarViewView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CalendarViewBloc, CalendarViewState>(
+      builder: (context, state) {
+        return switch (state) {
+          CalendarViewInitial() => const Center(
+            child: CircularProgressIndicator(),
+          ),
+          CalendarViewFailure() => const Center(
+            child: CircularProgressIndicator(),
+          ),
+          CalendarViewSuccess() => Stack(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  AppBar(
+                    title: Text(AppLocalizations.of(context)!.calendar),
+                    actions: [
+                      IconButton(
+                        icon: Icon(Icons.calendar_today),
+                        onPressed:
+                            () => Navigator.push(
+                              context,
+                              SchedulesViewPage.route(),
+                            ),
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    child: SfCalendar(
+                      dataSource: EventDataSource(state.events),
+                      view: CalendarView.week,
+                      allowViewNavigation: true,
+                      showNavigationArrow: true,
+                      allowedViews: [
+                        CalendarView.schedule,
+                        CalendarView.week,
+                        CalendarView.month,
+                      ],
+                      firstDayOfWeek: 1,
+                      showTodayButton: true,
+                      monthViewSettings: MonthViewSettings(showAgenda: true),
+                    ),
+                  ),
+                ],
+              ),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: FloatingActionButton(
+                    heroTag: UniqueKey(),
+                    child: Icon(Icons.add),
+                    onPressed: () {},
+                  ),
+                ),
+              ),
+            ],
+          ),
+        };
+      },
+    );
+  }
+}

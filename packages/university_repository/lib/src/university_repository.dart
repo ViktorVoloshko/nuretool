@@ -287,33 +287,31 @@ class UniversityRepository {
   }
 
   Future<void> _init() async {
-    _subjectsSubscription = _driftDB.loadSubjects().asBroadcastStream().listen(
+    _subjectsSubscription = _driftDB.loadSubjects().listen(
       (subjects) => _subjectsStreamController.add(
         subjects.map((e) => Subject.fromDBModel(e)).toList(),
       ),
     );
 
-    _groupsSubscription = _driftDB.loadGroups().asBroadcastStream().listen(
+    _groupsSubscription = _driftDB.loadGroups().listen(
       (groups) => _groupsStreamController.add(
         groups.map((e) => Group.fromDBModel(e)).toList(),
       ),
     );
 
-    _teachersSubscription = _driftDB.loadTeachers().asBroadcastStream().listen(
+    _teachersSubscription = _driftDB.loadTeachers().listen(
       (teachers) => _teachersStreamController.add(
         teachers.map((e) => Teacher.fromDBModel(e)).toList(),
       ),
     );
 
-    _roomsSubscription = _driftDB.loadRooms().asBroadcastStream().listen(
+    _roomsSubscription = _driftDB.loadRooms().listen(
       (rooms) => _roomsStreamController.add(
         rooms.map((e) => Room.fromDBModel(e)).toList(),
       ),
     );
 
-    _eventsSubscription = _driftDB.loadEvents().asBroadcastStream().listen((
-      eventsData,
-    ) {
+    _eventsSubscription = _driftDB.loadEvents().listen((eventsData) {
       final events = <Event>[
         ...eventsData.map(
           (e) => Event.fromDBModel(

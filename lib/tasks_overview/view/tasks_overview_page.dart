@@ -107,6 +107,7 @@ class TasksOverviewView extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: FloatingActionButton(
+                  heroTag: UniqueKey(),
                   child: Icon(Icons.add),
                   onPressed:
                       () => context.read<TasksOverviewBloc>().add(
