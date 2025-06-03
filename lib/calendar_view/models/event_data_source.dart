@@ -12,7 +12,16 @@ class EventDataSource extends CalendarDataSource {
   @override
   String getSubject(int index) {
     final eventData = (appointments! as List<EventData>)[index];
-    return '${eventData.subject.shortTitle} ${eventData.room?.name}';
+    final sb = StringBuffer();
+    sb.write(eventData.subject.shortTitle);
+    if (eventData.room != null) {
+      sb.writeAll([' ', eventData.room!.name]);
+    }
+    if (eventData.event.type != null) {
+      sb.writeAll([' ', eventData.event.type!.shortName]);
+    }
+
+    return sb.toString();
   }
 
   @override
