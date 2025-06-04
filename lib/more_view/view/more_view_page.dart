@@ -41,6 +41,13 @@ class MoreViewView extends StatelessWidget {
             SliverList.list(
               children: [
                 Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: Text(
+                    l10n.theme,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                ),
+                Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SegmentedButton(
                     selected: <AppThemeMode>{state.appTheme.appThemeMode},
@@ -62,6 +69,14 @@ class MoreViewView extends StatelessWidget {
                         label: Text(l10n.dark),
                       ),
                     ],
+                  ),
+                ),
+                const Divider(),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: Text(
+                    l10n.defaultCalendarMode,
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ),
                 Padding(
@@ -88,8 +103,9 @@ class MoreViewView extends StatelessWidget {
                     ],
                   ),
                 ),
+                const Divider(),
                 MoreViewItem(
-                  title: AppLocalizations.of(context)!.myGroup,
+                  title: l10n.myGroup,
                   subtitle: state.userGroup?.name,
                   onTap:
                       () => Navigator.push(
@@ -102,7 +118,7 @@ class MoreViewView extends StatelessWidget {
                   icon: Icon(Icons.people),
                 ),
                 MoreViewItem(
-                  title: AppLocalizations.of(context)!.schedulesManage,
+                  title: l10n.schedulesManage,
                   onTap:
                       () => Navigator.push(context, SchedulesViewPage.route()),
                   icon: Icon(Icons.calendar_today),

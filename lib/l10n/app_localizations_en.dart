@@ -142,6 +142,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addSubtasks => 'Add subtasks';
 
   @override
+  String get theme => 'Theme';
+
+  @override
+  String get defaultCalendarMode => 'Default calendar mode';
+
+  @override
   String get system => 'System';
 
   @override

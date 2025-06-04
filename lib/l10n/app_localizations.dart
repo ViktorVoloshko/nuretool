@@ -346,6 +346,18 @@ abstract class AppLocalizations {
   /// **'Add subtasks'**
   String get addSubtasks;
 
+  /// No description provided for @theme.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get theme;
+
+  /// No description provided for @defaultCalendarMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Default calendar mode'**
+  String get defaultCalendarMode;
+
   /// No description provided for @system.
   ///
   /// In en, this message translates to:
