@@ -46,7 +46,10 @@ class CalendarViewView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   AppBar(
-                    title: Text(AppLocalizations.of(context)!.calendar),
+                    title: Text(
+                      state.scheduleName ??
+                          AppLocalizations.of(context)!.calendar,
+                    ),
                     actions: [
                       IconButton(
                         icon: Icon(Icons.calendar_today),

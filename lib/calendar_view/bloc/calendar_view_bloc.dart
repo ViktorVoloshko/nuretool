@@ -31,18 +31,7 @@ class CalendarViewBloc extends Bloc<CalendarViewEvent, CalendarViewState> {
   List<Teacher> _teachers = const [];
   List<Room> _rooms = const [];
   ScheduleData? _schedule;
-
-  @override
-  Future<void> close() async {
-    await Future.wait([
-      _subjectsSubscription.cancel(),
-      _groupsSubscription.cancel(),
-      _teachersSubscription.cancel(),
-      _roomsSubscription.cancel(),
-      _selectedScheduleSubscription.cancel(),
-    ]);
-    return super.close();
-  }
+  String? _scheduleName;
 
   void _onSubscriptionRequested(
     CalendarViewSubscriptionRequested event,
@@ -51,23 +40,30 @@ class CalendarViewBloc extends Bloc<CalendarViewEvent, CalendarViewState> {
     _subjectsSubscription = _universityRepository.subjects.listen(
       (subjects) => _subjects = subjects,
     );
-    _groupsSubscription = _universityRepository.groups.listen(
-      (groups) => _groups = groups,
-    );
-    _teachersSubscription = _universityRepository.teachers.listen(
-      (teachers) => _teachers = teachers,
-    );
-    _roomsSubscription = _universityRepository.rooms.listen(
-      (rooms) => _rooms = rooms,
-    );
+    _groupsSubscription = _universityRepository.groups.listen((groups) {
+      _groups = groups;
+      _updateScheduleName();
+    });
+    _teachersSubscription = _universityRepository.teachers.listen((teachers) {
+      _teachers = teachers;
+      _updateScheduleName();
+    });
+    _roomsSubscription = _universityRepository.rooms.listen((rooms) {
+      _rooms = rooms;
+      _updateScheduleName();
+    });
     _selectedScheduleSubscription = _universityRepository.selectedSchedule
-        .listen((schedule) => _schedule = schedule);
+        .listen((schedule) {
+          _schedule = schedule;
+          _updateScheduleName();
+        });
 
     await emit.forEach(
       _universityRepository.scheduleEvents,
       onData:
           (events) => CalendarViewSuccess(
             schedule: _schedule,
+            scheduleName: _scheduleName,
             events:
                 events
                     .map(
@@ -96,5 +92,32 @@ class CalendarViewBloc extends Bloc<CalendarViewEvent, CalendarViewState> {
       onError:
           (error, stackTrace) => CalendarViewFailure(message: error.toString()),
     );
+  }
+
+  void _updateScheduleName() =>
+      _scheduleName =
+          _schedule == null
+              ? null
+              : switch (_schedule!.type) {
+                ScheduleType.group =>
+                  _groups.firstWhereOrNull((e) => e.id == _schedule!.id)?.name,
+                ScheduleType.teacher =>
+                  _teachers
+                      .firstWhereOrNull((e) => e.id == _schedule!.id)
+                      ?.name,
+                ScheduleType.room =>
+                  _rooms.firstWhereOrNull((e) => e.id == _schedule!.id)?.name,
+              };
+
+  @override
+  Future<void> close() async {
+    await Future.wait([
+      _subjectsSubscription.cancel(),
+      _groupsSubscription.cancel(),
+      _teachersSubscription.cancel(),
+      _roomsSubscription.cancel(),
+      _selectedScheduleSubscription.cancel(),
+    ]);
+    return super.close();
   }
 }
