@@ -364,6 +364,24 @@ abstract class AppLocalizations {
   /// **'Dark'**
   String get dark;
 
+  /// No description provided for @schedule.
+  ///
+  /// In en, this message translates to:
+  /// **'Schedule'**
+  String get schedule;
+
+  /// No description provided for @week.
+  ///
+  /// In en, this message translates to:
+  /// **'Week'**
+  String get week;
+
+  /// No description provided for @month.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get month;
+
   /// No description provided for @updateError.
   ///
   /// In en, this message translates to:

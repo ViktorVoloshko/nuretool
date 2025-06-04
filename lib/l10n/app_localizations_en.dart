@@ -151,5 +151,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dark => 'Dark';
 
   @override
+  String get schedule => 'Schedule';
+
+  @override
+  String get week => 'Week';
+
+  @override
+  String get month => 'Month';
+
+  @override
   String get updateError => 'Update failed';
 }

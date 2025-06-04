@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
+import 'package:settings_repository/settings_repository.dart';
 import 'package:settings_storage/settings_storage.dart';
 import 'package:university_repository/university_repository.dart';
 
@@ -12,13 +13,17 @@ part 'calendar_view_event.dart';
 part 'calendar_view_state.dart';
 
 class CalendarViewBloc extends Bloc<CalendarViewEvent, CalendarViewState> {
-  CalendarViewBloc({required UniversityRepository universityRepository})
-    : _universityRepository = universityRepository,
-      super(CalendarViewInitial()) {
+  CalendarViewBloc({
+    required UniversityRepository universityRepository,
+    required SettingsRepository settingsRepository,
+  }) : _universityRepository = universityRepository,
+       _settingsRepository = settingsRepository,
+       super(CalendarViewInitial()) {
     on<CalendarViewSubscriptionRequested>(_onSubscriptionRequested);
   }
 
   final UniversityRepository _universityRepository;
+  final SettingsRepository _settingsRepository;
 
   late final StreamSubscription<List<Subject>> _subjectsSubscription;
   late final StreamSubscription<List<Group>> _groupsSubscription;
@@ -58,12 +63,18 @@ class CalendarViewBloc extends Bloc<CalendarViewEvent, CalendarViewState> {
           _updateScheduleName();
         });
 
-    await emit.forEach(
-      _universityRepository.scheduleEvents,
-      onData:
-          (events) => CalendarViewSuccess(
+    await Future.wait([
+      emit.forEach(
+        _settingsRepository.defaultCalendarMode,
+        onData: (calendarMode) => state.copyWith(calendarMode: calendarMode),
+      ),
+      emit.forEach(
+        _universityRepository.scheduleEvents,
+        onData: (events) {
+          return CalendarViewSuccess(
             schedule: _schedule,
             scheduleName: _scheduleName,
+            calendarMode: state.calendarMode,
             events:
                 events
                     .map(
@@ -88,10 +99,13 @@ class CalendarViewBloc extends Bloc<CalendarViewEvent, CalendarViewState> {
                       ),
                     )
                     .toList(),
-          ),
-      onError:
-          (error, stackTrace) => CalendarViewFailure(message: error.toString()),
-    );
+          );
+        },
+        onError:
+            (error, stackTrace) =>
+                CalendarViewFailure(message: error.toString()),
+      ),
+    ]);
   }
 
   void _updateScheduleName() =>

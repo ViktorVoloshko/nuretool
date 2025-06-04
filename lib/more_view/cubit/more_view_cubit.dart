@@ -15,7 +15,12 @@ class MoreViewCubit extends Cubit<MoreViewState> {
     required UniversityRepository universityRepository,
   }) : _settingsRepository = settingsRepository,
        _universityRepository = universityRepository,
-       super(MoreViewState(appTheme: AppTheme.defaultValues())) {
+       super(
+         MoreViewState(
+           appTheme: AppTheme.defaultValues(),
+           calendarMode: CalendarMode.week,
+         ),
+       ) {
     init();
   }
 
@@ -25,10 +30,21 @@ class MoreViewCubit extends Cubit<MoreViewState> {
   late final StreamSubscription<AppTheme> _themeSubscription;
   late final StreamSubscription<int?> _userGroupSubscription;
   late final StreamSubscription<List<Group>> _groupsSubscription;
+  late final StreamSubscription<CalendarMode> _calendarModeSubscription;
+
+  void setThemeMode(AppThemeMode themeMode) => _settingsRepository.setTheme(
+    state.appTheme.copyWith(appThemeMode: themeMode),
+  );
+
+  void setCalendarMode(CalendarMode calendarMode) =>
+      _settingsRepository.setDefaultCalendarMode(calendarMode);
 
   void init() {
     _themeSubscription = _settingsRepository.appTheme.listen(
       (appTheme) => emit(state.copyWith(appTheme: appTheme)),
+    );
+    _calendarModeSubscription = _settingsRepository.defaultCalendarMode.listen(
+      (calendarMode) => emit(state.copyWith(calendarMode: calendarMode)),
     );
     _userGroupSubscription = _universityRepository.userGroupID.listen(
       (groupID) async => emit(
@@ -50,15 +66,13 @@ class MoreViewCubit extends Cubit<MoreViewState> {
     });
   }
 
-  void setThemeMode(AppThemeMode themeMode) async => _settingsRepository
-      .setTheme(state.appTheme.copyWith(appThemeMode: themeMode));
-
   @override
   Future<void> close() {
     Future.wait([
       _groupsSubscription.cancel(),
       _themeSubscription.cancel(),
       _userGroupSubscription.cancel(),
+      _calendarModeSubscription.cancel(),
     ]);
     return super.close();
   }

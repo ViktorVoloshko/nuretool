@@ -18,6 +18,7 @@ class SettingsStorage {
   late final BehaviorSubject<SavedSchedules> _savedSchedulesStreamController;
   late final BehaviorSubject<ScheduleData?> _selectedScheduleStreamController;
   late final BehaviorSubject<AppTheme> _appThemeStreamController;
+  late final BehaviorSubject<CalendarMode> _defaultCalendarModeStreamController;
 
   Stream<int?> get userGroupID =>
       _userGroupIDStreamController.asBroadcastStream();
@@ -27,6 +28,8 @@ class SettingsStorage {
       _selectedScheduleStreamController.asBroadcastStream();
   Stream<AppTheme> get appTheme =>
       _appThemeStreamController.asBroadcastStream();
+  Stream<CalendarMode> get defaultCalendarMode =>
+      _defaultCalendarModeStreamController.asBroadcastStream();
 
   @visibleForTesting
   static const kUserGroupID = 'user_group_id';
@@ -36,6 +39,8 @@ class SettingsStorage {
   static const kSelectedSchedule = 'selected_schedule';
   @visibleForTesting
   static const kAppTheme = 'app_theme';
+  @visibleForTesting
+  static const kDefaultCalendarMode = 'default_calendar_mode';
 
   Future<void> setUserGroupID(int groupID) {
     _userGroupIDStreamController.add(groupID);
@@ -63,11 +68,17 @@ class SettingsStorage {
     return _storage.setString(kAppTheme, json.encode(appTheme.toJson()));
   }
 
+  Future<void> setDefaultCalendarMode(CalendarMode mode) {
+    _defaultCalendarModeStreamController.add(mode);
+    return _storage.setInt(kDefaultCalendarMode, mode.index);
+  }
+
   Future<void> close() => Future.wait([
     _userGroupIDStreamController.close(),
     _savedSchedulesStreamController.close(),
     _selectedScheduleStreamController.close(),
     _appThemeStreamController.close(),
+    _defaultCalendarModeStreamController.close(),
   ]);
 
   void _init() {
@@ -114,6 +125,18 @@ class SettingsStorage {
       _appThemeStreamController = BehaviorSubject<AppTheme>.seeded(
         AppTheme.fromJson(json.decode(appThemeJson)),
       );
+    }
+
+    final calendarModeInt = _storage.getInt(kDefaultCalendarMode);
+    if (calendarModeInt == null) {
+      _defaultCalendarModeStreamController =
+          BehaviorSubject<CalendarMode>.seeded(CalendarMode.week);
+      _storage.setInt(kDefaultCalendarMode, CalendarMode.week.index);
+    } else {
+      _defaultCalendarModeStreamController =
+          BehaviorSubject<CalendarMode>.seeded(
+            CalendarMode.values[calendarModeInt],
+          );
     }
   }
 }

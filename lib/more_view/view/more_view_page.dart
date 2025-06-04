@@ -31,11 +31,13 @@ class MoreViewView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return BlocBuilder<MoreViewCubit, MoreViewState>(
       builder: (context, state) {
         return CustomScrollView(
           slivers: [
-            SliverAppBar.large(title: Text(AppLocalizations.of(context)!.more)),
+            SliverAppBar.large(title: Text(l10n.more)),
             SliverList.list(
               children: [
                 Padding(
@@ -49,15 +51,39 @@ class MoreViewView extends StatelessWidget {
                     segments: <ButtonSegment<AppThemeMode>>[
                       ButtonSegment(
                         value: AppThemeMode.system,
-                        label: Text(AppLocalizations.of(context)!.system),
+                        label: Text(l10n.system),
                       ),
                       ButtonSegment(
                         value: AppThemeMode.light,
-                        label: Text(AppLocalizations.of(context)!.light),
+                        label: Text(l10n.light),
                       ),
                       ButtonSegment(
                         value: AppThemeMode.dark,
-                        label: Text(AppLocalizations.of(context)!.dark),
+                        label: Text(l10n.dark),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SegmentedButton(
+                    selected: <CalendarMode>{state.calendarMode},
+                    onSelectionChanged:
+                        (selected) => context
+                            .read<MoreViewCubit>()
+                            .setCalendarMode(selected.first),
+                    segments: <ButtonSegment<CalendarMode>>[
+                      ButtonSegment(
+                        value: CalendarMode.schedule,
+                        label: Text(l10n.schedule),
+                      ),
+                      ButtonSegment(
+                        value: CalendarMode.week,
+                        label: Text(l10n.week),
+                      ),
+                      ButtonSegment(
+                        value: CalendarMode.month,
+                        label: Text(l10n.month),
                       ),
                     ],
                   ),

@@ -111,6 +111,12 @@
     "@light": {},
     "dark": "Dark",
     "@dark": {},
+    "schedule": "Schedule",
+    "@schedule": {},
+    "week": "Week",
+    "@week": {},
+    "month": "Month",
+    "@month": {},
     "updateError": "Update failed",
     "@updateError": {}
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:settings_repository/settings_repository.dart';
+import 'package:settings_storage/settings_storage.dart';
 import 'package:university_repository/university_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -20,6 +22,7 @@ class CalendarViewPage extends StatelessWidget {
       create:
           (context) => CalendarViewBloc(
             universityRepository: context.read<UniversityRepository>(),
+            settingsRepository: context.read<SettingsRepository>(),
           )..add(const CalendarViewSubscriptionRequested()),
       child: const CalendarViewView(),
     );
@@ -64,7 +67,7 @@ class CalendarViewView extends StatelessWidget {
                   Expanded(
                     child: SfCalendar(
                       dataSource: EventDataSource(state.events),
-                      view: CalendarView.week,
+                      view: state.calendarMode.calendarView(),
                       allowViewNavigation: true,
                       showNavigationArrow: true,
                       allowedViews: [
@@ -148,4 +151,12 @@ class CalendarViewView extends StatelessWidget {
       },
     );
   }
+}
+
+extension on CalendarMode {
+  CalendarView calendarView() => switch (this) {
+    CalendarMode.schedule => CalendarView.schedule,
+    CalendarMode.week => CalendarView.week,
+    CalendarMode.month => CalendarView.month,
+  };
 }
