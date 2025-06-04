@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -46,11 +47,7 @@ class CistApi
     try {
       json = jsonDecode(response.data!) as Map<String, dynamic>;
     } catch (_) {
-      if (response.data!.contains('ORA')) {
-        throw groups_api.GroupsRequestFailure();
-      } else {
-        return [];
-      }
+      throw groups_api.GroupsRequestFailure();
     }
 
     final List<groups_api.Faculty> result = [];
@@ -138,7 +135,11 @@ class CistApi
     try {
       json = jsonDecode(response.data!) as Map<String, dynamic>;
     } catch (_) {
-      throw EventsRequestFailure();
+      if (response.data!.contains('ORA')) {
+        throw EventsRequestFailure();
+      } else {
+        return (events: <Event>[], subjects: <Subject>[], types: <EventType>[]);
+      }
     }
 
     final List<Event> events = [];
@@ -181,7 +182,11 @@ class CistApi
     try {
       json = jsonDecode(response.data!) as Map<String, dynamic>;
     } catch (_) {
-      throw EventsRequestFailure();
+      if (response.data!.contains('ORA')) {
+        throw EventsRequestFailure();
+      } else {
+        return (events: <Event>[], subjects: <Subject>[], types: <EventType>[]);
+      }
     }
 
     final List<Event> events = [];
@@ -220,7 +225,11 @@ class CistApi
     try {
       json = jsonDecode(response.data!) as Map<String, dynamic>;
     } catch (_) {
-      throw EventsRequestFailure();
+      if (response.data!.contains('ORA')) {
+        throw EventsRequestFailure();
+      } else {
+        return (events: <Event>[], subjects: <Subject>[], types: <EventType>[]);
+      }
     }
 
     final List<Event> events = [];

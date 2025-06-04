@@ -180,6 +180,8 @@ class UniversityRepository {
         ),
       };
 
+      _errorStreamController.add(null);
+
       await _deleteEvents(schedule);
 
       await _driftDB.saveSubjects(subjects.map((e) => e.toDBModel()));
@@ -195,7 +197,10 @@ class UniversityRepository {
       );
     } on EventsRequestFailure {
       // Probably just no events
+      _errorStreamController.add(null);
       return _deleteEvents(schedule);
+    } catch (e) {
+      _errorStreamController.add(UniversityRepositoryError.updateError);
     } finally {
       _updatingScheduleStreamController.add((false, null));
     }
@@ -228,30 +233,30 @@ class UniversityRepository {
     final events = _eventsStreamController.value;
     final savedSchedules = await _settingsStorage.savedSchedules.first;
 
-    final eventsToDelete = switch (schedule.type) {
-      ScheduleType.group => events.where(
-        (event) =>
-            event.groups.contains(schedule.id) && !safe
-                ? true
-                : _eventSafeToDelete(event, savedSchedules),
-      ),
-      ScheduleType.teacher => events.where(
-        (event) =>
-            event.teachers.contains(schedule.id) && !safe
-                ? true
-                : _eventSafeToDelete(event, savedSchedules),
-      ),
-      ScheduleType.room => events.where(
-        (event) =>
-            event.room == schedule.id && !safe
-                ? true
-                : _eventSafeToDelete(event, savedSchedules),
-      ),
-    }.map((e) => e.id);
+    final eventsToDelete = List<int>.from(
+      switch (schedule.type) {
+        ScheduleType.group => events.where(
+          (event) =>
+              event.groups.contains(schedule.id) && !safe
+                  ? true
+                  : _eventSafeToDelete(event, savedSchedules),
+        ),
+        ScheduleType.teacher => events.where(
+          (event) =>
+              event.teachers.contains(schedule.id) && !safe
+                  ? true
+                  : _eventSafeToDelete(event, savedSchedules),
+        ),
+        ScheduleType.room => events.where(
+          (event) =>
+              event.room == schedule.id && !safe
+                  ? true
+                  : _eventSafeToDelete(event, savedSchedules),
+        ),
+      }.map((e) => e.id),
+    );
 
-    final sanitizedListToDelete = List<int>.from(eventsToDelete);
-
-    return _driftDB.deleteFetchedEvents(sanitizedListToDelete);
+    return _driftDB.deleteFetchedEvents(eventsToDelete);
   }
 
   bool _eventSafeToDelete(Event event, SavedSchedules savedSchedules) {
