@@ -98,9 +98,13 @@ class AppView extends StatelessWidget {
         return MaterialApp(
           supportedLocales: AppLocalizations.supportedLocales,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
-          themeMode: state.theme.appThemeMode.toThemeMode(),
-          theme: ThemeData.light(),
-          darkTheme: ThemeData.dark(),
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: state.theme.color.toColorSeed(),
+              brightness: state.theme.themeMode.toBrightness(),
+            ),
+          ),
+          // darkTheme: ThemeData.dark(),
           home: const HomePage(),
         );
       },
@@ -108,10 +112,22 @@ class AppView extends StatelessWidget {
   }
 }
 
-extension AppThemeModeToThemeMode on AppThemeMode {
-  ThemeMode toThemeMode() => switch (this) {
-    AppThemeMode.system => ThemeMode.system,
-    AppThemeMode.light => ThemeMode.light,
-    AppThemeMode.dark => ThemeMode.dark,
+extension on AppThemeMode {
+  Brightness toBrightness() => switch (this) {
+    AppThemeMode.system =>
+      WidgetsBinding.instance.platformDispatcher.platformBrightness,
+    AppThemeMode.light => Brightness.light,
+    AppThemeMode.dark => Brightness.dark,
+  };
+}
+
+extension on AppThemeColor {
+  MaterialAccentColor toColorSeed() => switch (this) {
+    AppThemeColor.red => Colors.redAccent,
+    AppThemeColor.blue => Colors.blueAccent,
+    AppThemeColor.green => Colors.greenAccent,
+    AppThemeColor.yellow => Colors.yellowAccent,
+    AppThemeColor.orange => Colors.orangeAccent,
+    AppThemeColor.purple => Colors.purpleAccent,
   };
 }

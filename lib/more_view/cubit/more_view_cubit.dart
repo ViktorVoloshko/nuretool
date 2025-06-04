@@ -33,8 +33,11 @@ class MoreViewCubit extends Cubit<MoreViewState> {
   late final StreamSubscription<CalendarMode> _calendarModeSubscription;
 
   void setThemeMode(AppThemeMode themeMode) => _settingsRepository.setTheme(
-    state.appTheme.copyWith(appThemeMode: themeMode),
+    state.appTheme.copyWith(themeMode: themeMode),
   );
+
+  void setAppColor(AppThemeColor appColor) =>
+      _settingsRepository.setTheme(state.appTheme.copyWith(color: appColor));
 
   void setCalendarMode(CalendarMode calendarMode) =>
       _settingsRepository.setDefaultCalendarMode(calendarMode);

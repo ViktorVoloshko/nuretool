@@ -148,6 +148,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get defaultCalendarMode => 'Default calendar mode';
 
   @override
+  String get accentColor => 'Accent color';
+
+  @override
   String get system => 'System';
 
   @override
@@ -164,6 +167,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get month => 'Month';
+
+  @override
+  String get blue => 'Blue';
+
+  @override
+  String get red => 'Red';
+
+  @override
+  String get green => 'Green';
+
+  @override
+  String get yellow => 'Yellow';
+
+  @override
+  String get orange => 'Orange';
+
+  @override
+  String get purple => 'Purple';
 
   @override
   String get updateError => 'Update failed';

@@ -50,7 +50,7 @@ class MoreViewView extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SegmentedButton(
-                    selected: <AppThemeMode>{state.appTheme.appThemeMode},
+                    selected: <AppThemeMode>{state.appTheme.themeMode},
                     onSelectionChanged:
                         (selected) => context
                             .read<MoreViewCubit>()
@@ -71,7 +71,6 @@ class MoreViewView extends StatelessWidget {
                     ],
                   ),
                 ),
-                const Divider(),
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
                   child: Text(
@@ -99,6 +98,54 @@ class MoreViewView extends StatelessWidget {
                       ButtonSegment(
                         value: CalendarMode.month,
                         label: Text(l10n.month),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: Text(
+                    l10n.accentColor,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: DropdownMenu(
+                    expandedInsets: EdgeInsets.zero,
+                    requestFocusOnTap: false,
+                    leadingIcon: Icon(Icons.color_lens),
+                    inputDecorationTheme: InputDecorationTheme(
+                      border: InputBorder.none,
+                    ),
+                    initialSelection: state.appTheme.color,
+                    onSelected:
+                        (value) =>
+                            context.read<MoreViewCubit>().setAppColor(value!),
+                    dropdownMenuEntries: [
+                      DropdownMenuEntry(
+                        value: AppThemeColor.blue,
+                        label: l10n.blue,
+                      ),
+                      DropdownMenuEntry(
+                        value: AppThemeColor.red,
+                        label: l10n.red,
+                      ),
+                      DropdownMenuEntry(
+                        value: AppThemeColor.green,
+                        label: l10n.green,
+                      ),
+                      DropdownMenuEntry(
+                        value: AppThemeColor.yellow,
+                        label: l10n.yellow,
+                      ),
+                      DropdownMenuEntry(
+                        value: AppThemeColor.orange,
+                        label: l10n.orange,
+                      ),
+                      DropdownMenuEntry(
+                        value: AppThemeColor.purple,
+                        label: l10n.purple,
                       ),
                     ],
                   ),
