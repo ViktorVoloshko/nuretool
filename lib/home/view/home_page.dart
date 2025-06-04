@@ -31,15 +31,19 @@ class HomeView extends StatelessWidget {
     final selectedTab = context.select<HomeCubit, HomeTab>(
       (cubit) => cubit.state.tab,
     );
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       body: SafeArea(
         child: BlocListener<HomeCubit, HomeState>(
-          listenWhen: (previous, current) => current.errorMessage != null,
+          listenWhen:
+              (previous, current) => current.universityRepositoryError != null,
           listener: (context, state) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.errorMessage!)));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.universityRepositoryError!.toMessage(l10n)),
+              ),
+            );
             context.read<HomeCubit>().clearErrorMessage();
           },
           child: IndexedStack(
@@ -60,20 +64,26 @@ class HomeView extends StatelessWidget {
           NavigationDestination(
             icon: Icon(Icons.calendar_today_outlined),
             selectedIcon: Icon(Icons.calendar_today),
-            label: AppLocalizations.of(context)!.calendar,
+            label: l10n.calendar,
           ),
           NavigationDestination(
             icon: Icon(Icons.check_box_outlined),
             selectedIcon: Icon(Icons.check_box),
-            label: AppLocalizations.of(context)!.tasks,
+            label: l10n.tasks,
           ),
           NavigationDestination(
             icon: Icon(Icons.more_horiz_outlined),
             selectedIcon: Icon(Icons.more_horiz),
-            label: AppLocalizations.of(context)!.more,
+            label: l10n.more,
           ),
         ],
       ),
     );
   }
+}
+
+extension on UniversityRepositoryError {
+  String toMessage(AppLocalizations l10n) => switch (this) {
+    UniversityRepositoryError.updateError => l10n.updateError,
+  };
 }

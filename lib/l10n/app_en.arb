@@ -110,5 +110,7 @@
     "light": "Light",
     "@light": {},
     "dark": "Dark",
-    "@dark": {}
+    "@dark": {},
+    "updateError": "Update failed",
+    "@updateError": {}
 }

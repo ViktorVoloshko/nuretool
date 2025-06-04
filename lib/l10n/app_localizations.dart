@@ -363,6 +363,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Dark'**
   String get dark;
+
+  /// No description provided for @updateError.
+  ///
+  /// In en, this message translates to:
+  /// **'Update failed'**
+  String get updateError;
 }
 
 class _AppLocalizationsDelegate

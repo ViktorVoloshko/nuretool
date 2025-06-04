@@ -51,7 +51,7 @@ class UniversityRepository {
       BehaviorSubject<List<Subject>>.seeded(const []);
   final BehaviorSubject<(bool, ScheduleData?)>
   _updatingScheduleStreamController = BehaviorSubject.seeded((false, null));
-  final BehaviorSubject<String?> _errorMessageStreamController =
+  final BehaviorSubject<UniversityRepositoryError?> _errorStreamController =
       BehaviorSubject.seeded(null);
 
   Stream<List<Event>> get events => _eventsStreamController.asBroadcastStream();
@@ -65,8 +65,8 @@ class UniversityRepository {
       _subjectsStreamController.asBroadcastStream();
   Stream<(bool, ScheduleData?)> get updateStatus =>
       _updatingScheduleStreamController.asBroadcastStream();
-  Stream<String?> get errorMessage =>
-      _errorMessageStreamController.asBroadcastStream();
+  Stream<UniversityRepositoryError?> get error =>
+      _errorStreamController.asBroadcastStream();
 
   Stream<int?> get userGroupID => _settingsStorage.userGroupID;
   Stream<SavedSchedules> get savedSchedules => _settingsStorage.savedSchedules;
@@ -90,8 +90,9 @@ class UniversityRepository {
       await fetchGroups();
       await fetchTeachers();
       await fetchRooms();
+      _errorStreamController.add(null);
     } catch (e) {
-      _errorMessageStreamController.add(e.toString());
+      _errorStreamController.add(UniversityRepositoryError.updateError);
     }
 
     _updatingScheduleStreamController.add((false, null));
@@ -293,7 +294,7 @@ class UniversityRepository {
       _scheduleEventsStreamController.close(),
       _eventsStreamController.close(),
       _updatingScheduleStreamController.close(),
-      _errorMessageStreamController.close(),
+      _errorStreamController.close(),
     ]);
   }
 

@@ -4,14 +4,22 @@ enum HomeTab { calendar, tasks, more }
 
 @immutable
 final class HomeState extends Equatable {
-  const HomeState({this.tab = HomeTab.calendar, this.errorMessage});
+  const HomeState({
+    this.tab = HomeTab.calendar,
+    this.universityRepositoryError,
+  });
 
   final HomeTab tab;
-  final String? errorMessage;
+  final UniversityRepositoryError? universityRepositoryError;
 
-  HomeState copyWith({HomeTab? tab, required String? errorMessage}) =>
-      HomeState(tab: tab ?? this.tab, errorMessage: errorMessage);
+  HomeState copyWith({
+    HomeTab? tab,
+    required UniversityRepositoryError? universityRepositoryError,
+  }) => HomeState(
+    tab: tab ?? this.tab,
+    universityRepositoryError: universityRepositoryError,
+  );
 
   @override
-  List<Object?> get props => [tab, errorMessage];
+  List<Object?> get props => [tab, universityRepositoryError];
 }

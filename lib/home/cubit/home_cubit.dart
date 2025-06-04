@@ -14,18 +14,26 @@ class HomeCubit extends Cubit<HomeState> {
 
   final UniversityRepository _universityRepository;
 
-  late final StreamSubscription<String?> _errorMessageSubscription;
+  late final StreamSubscription<UniversityRepositoryError?>
+  _errorMessageSubscription;
 
   void init() {
-    _errorMessageSubscription = _universityRepository.errorMessage.listen(
-      (errorMessage) => emit(state.copyWith(errorMessage: errorMessage)),
+    _errorMessageSubscription = _universityRepository.error.listen(
+      (universityRepositoryError) => emit(
+        state.copyWith(universityRepositoryError: universityRepositoryError),
+      ),
     );
   }
 
-  void setTab(HomeTab tab) =>
-      emit(state.copyWith(tab: tab, errorMessage: state.errorMessage));
+  void setTab(HomeTab tab) => emit(
+    state.copyWith(
+      tab: tab,
+      universityRepositoryError: state.universityRepositoryError,
+    ),
+  );
 
-  void clearErrorMessage() => emit(state.copyWith(errorMessage: null));
+  void clearErrorMessage() =>
+      emit(state.copyWith(universityRepositoryError: null));
 
   @override
   Future<void> close() {
