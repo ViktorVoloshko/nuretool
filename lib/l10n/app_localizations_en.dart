@@ -30,6 +30,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get time => 'Time';
 
   @override
+  String get date => 'Date';
+
+  @override
   String get start => 'Start';
 
   @override

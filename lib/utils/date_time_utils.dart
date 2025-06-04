@@ -1,8 +1,10 @@
 import 'package:intl/intl.dart';
 
 extension DateTimeUtils on DateTime {
-  String toLocalDateFormatString() =>
+  String toLocalDateTimeFormatString() =>
       DateFormat.yMMMMEEEEd().add_jm().format(this);
+
+  String toLocalDateFormatString() => DateFormat.yMMMMEEEEd().format(this);
 
   String toLocalTimeFormatSring() => DateFormat.jm().format(this);
 

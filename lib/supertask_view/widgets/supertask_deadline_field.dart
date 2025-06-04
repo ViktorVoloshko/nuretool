@@ -26,7 +26,7 @@ class _SupertaskDeadlineFieldState extends State<SupertaskDeadlineField> {
     _textController.text =
         widget.deadline == null
             ? ''
-            : widget.deadline!.toLocalDateFormatString();
+            : widget.deadline!.toLocalDateTimeFormatString();
   }
 
   @override
@@ -64,7 +64,8 @@ class _SupertaskDeadlineFieldState extends State<SupertaskDeadlineField> {
         );
 
         setState(
-          () => _textController.text = newDeadline.toLocalDateFormatString(),
+          () =>
+              _textController.text = newDeadline.toLocalDateTimeFormatString(),
         );
 
         widget.onDeadlineChanged(newDeadline);

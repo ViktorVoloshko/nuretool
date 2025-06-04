@@ -136,6 +136,12 @@ abstract class AppLocalizations {
   /// **'Time'**
   String get time;
 
+  /// No description provided for @date.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get date;
+
   /// No description provided for @start.
   ///
   /// In en, this message translates to:

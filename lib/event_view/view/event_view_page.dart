@@ -71,8 +71,19 @@ class EventViewView extends StatelessWidget {
                 EventViewEntry(
                   title: l10n.time,
                   value:
-                      '${state.eventData!.event.startTime.toLocalTimeFormatSring()} - ${state.eventData!.event.endTime.toLocalTimeFormatSring()}',
+                      '${state.eventData!.event.startTime.toLocalTimeFormatSring()}- ${state.eventData!.event.endTime.toLocalTimeFormatSring()}',
                   icon: Icons.timelapse,
+                ),
+                EventViewEntry(
+                  title: l10n.date,
+                  value:
+                      eventData.event.startTime
+                                  .differenceInDays(eventData.event.endTime)
+                                  .inDays ==
+                              0
+                          ? eventData.event.startTime.toLocalDateFormatString()
+                          : '${eventData.event.startTime.toLocalDateFormatString()} - ${eventData.event.endTime.toLocalDateFormatString()}',
+                  icon: Icons.calendar_today,
                 ),
               ],
             );

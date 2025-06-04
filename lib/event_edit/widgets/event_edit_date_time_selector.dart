@@ -32,7 +32,7 @@ class _EventEditDateTimeSelectorState extends State<EventEditDateTimeSelector> {
     _textController.text =
         widget.dateTime == null
             ? ''
-            : widget.dateTime!.toLocalDateFormatString();
+            : widget.dateTime!.toLocalDateTimeFormatString();
   }
 
   @override
@@ -70,7 +70,8 @@ class _EventEditDateTimeSelectorState extends State<EventEditDateTimeSelector> {
         );
 
         setState(
-          () => _textController.text = newDateTime.toLocalDateFormatString(),
+          () =>
+              _textController.text = newDateTime.toLocalDateTimeFormatString(),
         );
 
         widget.onDateTimeChanged(newDateTime);
