@@ -21,11 +21,26 @@ final class EntitySelectionState extends Equatable {
   final bool userGroupSelection;
 
   List<Group> get filteredGroups =>
-      groups.where((group) => group.name.contains(searchFilter)).toList();
+      groups
+          .where(
+            (group) =>
+                group.name.toLowerCase().contains(searchFilter.toLowerCase()),
+          )
+          .toList();
   List<Teacher> get filteredTeachers =>
-      teachers.where((teacher) => teacher.name.contains(searchFilter)).toList();
+      teachers
+          .where(
+            (teacher) =>
+                teacher.name.toLowerCase().contains(searchFilter.toLowerCase()),
+          )
+          .toList();
   List<Room> get filteredRooms =>
-      rooms.where((room) => room.name.contains(searchFilter)).toList();
+      rooms
+          .where(
+            (room) =>
+                room.name.toLowerCase().contains(searchFilter.toLowerCase()),
+          )
+          .toList();
 
   EntitySelectionState copyWith({
     List<Group>? groups,
