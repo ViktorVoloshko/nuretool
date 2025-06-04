@@ -249,7 +249,9 @@ class UniversityRepository {
       ),
     }.map((e) => e.id);
 
-    return _driftDB.deleteFetchedEvents(eventsToDelete as Iterable<int>);
+    final sanitizedListToDelete = List<int>.from(eventsToDelete);
+
+    return _driftDB.deleteFetchedEvents(sanitizedListToDelete);
   }
 
   bool _eventSafeToDelete(Event event, SavedSchedules savedSchedules) {
