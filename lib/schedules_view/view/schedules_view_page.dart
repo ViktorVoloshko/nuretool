@@ -25,7 +25,13 @@ class SchedulesViewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SchedulesViewView();
+    return BlocListener<SchedulesViewCubit, SchedulesViewState>(
+      listener: (context, state) => Navigator.maybePop(context),
+      listenWhen:
+          (previous, current) =>
+              previous != current && current.scheduleSelected,
+      child: const SchedulesViewView(),
+    );
   }
 }
 

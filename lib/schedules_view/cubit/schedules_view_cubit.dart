@@ -33,8 +33,10 @@ class SchedulesViewCubit extends Cubit<SchedulesViewState> {
   Future<void> removeSchedule(ScheduleData schedule) =>
       _universityRepository.removeSchedule(schedule);
 
-  Future<void> selectSchedule(ScheduleData schedule) =>
-      _universityRepository.setSelectedSchedule(schedule);
+  Future<void> selectSchedule(ScheduleData schedule) {
+    emit(state.copyWith(scheduleSelected: true));
+    return _universityRepository.setSelectedSchedule(schedule);
+  }
 
   Future<String> _getEntityName(ScheduleData schedule) async {
     final groups = await _universityRepository.groups.first;
