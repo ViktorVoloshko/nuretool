@@ -16,6 +16,7 @@ class EventEditTypeSelection extends StatelessWidget {
     return SegmentedButton<EventBaseType?>(
       selected: {selected},
       onSelectionChanged: onSelectionChanged,
+      showSelectedIcon: false,
       segments: [
         ButtonSegment<EventBaseType>(
           value: EventBaseType.lecture,
