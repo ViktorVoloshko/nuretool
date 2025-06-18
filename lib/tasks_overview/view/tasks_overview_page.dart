@@ -50,10 +50,22 @@ class TasksOverviewView extends StatelessWidget {
                   title: Text(AppLocalizations.of(context)!.tasks),
                   actions: [
                     IconButton(
-                      onPressed:
-                          () => context.read<TasksOverviewBloc>().add(
-                            TasksOverviewGenerationRequested(),
-                          ),
+                      onPressed: () {
+                        final bloc = context.read<TasksOverviewBloc>();
+                        showDialog(
+                          context: context,
+                          builder:
+                              (context) => TaskGenerationConfirmation(
+                                onYes: () {
+                                  bloc.add(
+                                    const TasksOverviewGenerationRequested(),
+                                  );
+                                  Navigator.pop(context);
+                                },
+                                onNo: () => Navigator.pop(context),
+                              ),
+                        );
+                      },
                       icon: Icon(Icons.refresh),
                     ),
                   ],

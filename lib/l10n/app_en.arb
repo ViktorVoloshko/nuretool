@@ -144,5 +144,13 @@
     "updateError": "Update failed",
     "@updateError": {},
     "updateOngoing": "Wait until updating is over",
-    "@updateOngoing": {}
+    "@updateOngoing": {},
+    "tasksGenerationTitle": "Are you sure you want to regenerate tasks?",
+    "@tasksGenerationTitle": {},
+    "tasksGenerationContent": "You will lose all your tracked progress.",
+    "@tasksGenerationContent": {},
+    "yes": "Yes",
+    "@yes": {},
+    "no": "No",
+    "@no": {}
 }

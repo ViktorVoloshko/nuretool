@@ -199,4 +199,17 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get updateOngoing => 'Зачекайте доки завершиться оновлення';
+
+  @override
+  String get tasksGenerationTitle =>
+      'Ви впевнені що хочете перегенерувати задачі?';
+
+  @override
+  String get tasksGenerationContent => 'Ви втратите весь прогрес.';
+
+  @override
+  String get yes => 'Так';
+
+  @override
+  String get no => 'Ні';
 }

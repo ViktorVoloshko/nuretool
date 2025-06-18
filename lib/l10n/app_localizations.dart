@@ -471,6 +471,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Wait until updating is over'**
   String get updateOngoing;
+
+  /// No description provided for @tasksGenerationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to regenerate tasks?'**
+  String get tasksGenerationTitle;
+
+  /// No description provided for @tasksGenerationContent.
+  ///
+  /// In en, this message translates to:
+  /// **'You will lose all your tracked progress.'**
+  String get tasksGenerationContent;
+
+  /// No description provided for @yes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get yes;
+
+  /// No description provided for @no.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get no;
 }
 
 class _AppLocalizationsDelegate

@@ -200,4 +200,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get updateOngoing => 'Wait until updating is over';
+
+  @override
+  String get tasksGenerationTitle =>
+      'Are you sure you want to regenerate tasks?';
+
+  @override
+  String get tasksGenerationContent =>
+      'You will lose all your tracked progress.';
+
+  @override
+  String get yes => 'Yes';
+
+  @override
+  String get no => 'No';
 }
