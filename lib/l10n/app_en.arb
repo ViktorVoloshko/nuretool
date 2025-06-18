@@ -42,6 +42,8 @@
             }
         }
     },
+    "confirm": "Confirm",
+    "@confirm": {},
     "schedulesManage": "Manage schedules",
     "@schedulesManage": {},
     "groups": "Groups",

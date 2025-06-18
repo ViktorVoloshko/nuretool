@@ -188,6 +188,12 @@ abstract class AppLocalizations {
   /// **'{days} days from now'**
   String daysFromNow(int days);
 
+  /// No description provided for @confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirm;
+
   /// No description provided for @schedulesManage.
   ///
   /// In en, this message translates to:

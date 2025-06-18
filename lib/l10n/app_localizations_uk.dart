@@ -58,6 +58,9 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String get confirm => 'Підтвердити';
+
+  @override
   String get schedulesManage => 'Керування розкладами';
 
   @override

@@ -58,6 +58,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get confirm => 'Confirm';
+
+  @override
   String get schedulesManage => 'Manage schedules';
 
   @override

@@ -79,7 +79,7 @@ class EventEditView extends StatelessWidget {
                             ),
                       ),
                     FilledButton.icon(
-                      label: Text('Confirm'),
+                      label: Text(AppLocalizations.of(context)!.confirm),
                       icon: Icon(Icons.check),
                       onPressed:
                           () => context.read<EventEditBloc>().add(
