@@ -55,12 +55,11 @@ class SettingsStorage {
     );
   }
 
-  Future<void> setSelectedSchedule(ScheduleData schedule) {
+  Future<void> setSelectedSchedule(ScheduleData? schedule) {
     _selectedScheduleStreamController.add(schedule);
-    return _storage.setString(
-      kSelectedSchedule,
-      json.encode(schedule.toJson()),
-    );
+    return schedule == null
+        ? _storage.remove(kSelectedSchedule)
+        : _storage.setString(kSelectedSchedule, json.encode(schedule.toJson()));
   }
 
   Future<void> setTheme(AppTheme appTheme) {

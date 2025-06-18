@@ -79,7 +79,7 @@ class UniversityRepository {
   late final StreamSubscription<List<db.Teacher>> _teachersSubscription;
   late final StreamSubscription<List<db.Room>> _roomsSubscription;
   late final StreamSubscription<List<db.Subject>> _subjectsSubscription;
-  late final StreamSubscription<ScheduleData?> _selectedScheduleSubscrition;
+  late final StreamSubscription<ScheduleData?> _selectedScheduleSubscription;
 
   Future<void> fetchEntities() async {
     if (_updatingScheduleStreamController.value.$1) return;
@@ -226,6 +226,10 @@ class UniversityRepository {
       ),
     );
 
+    if (schedule == await selectedSchedule.first) {
+      _settingsStorage.setSelectedSchedule(null);
+    }
+
     return _deleteEvents(schedule, true);
   }
 
@@ -291,7 +295,7 @@ class UniversityRepository {
       if (_scheduleEventsSubscription != null)
         _scheduleEventsSubscription!.cancel(),
       _eventsSubscription.cancel(),
-      _selectedScheduleSubscrition.cancel(),
+      _selectedScheduleSubscription.cancel(),
     ]);
     return Future.wait([
       _subjectsStreamController.close(),
@@ -342,7 +346,7 @@ class UniversityRepository {
       _eventsStreamController.add(events);
     });
 
-    _selectedScheduleSubscrition = _settingsStorage.selectedSchedule.listen((
+    _selectedScheduleSubscription = _settingsStorage.selectedSchedule.listen((
       schedule,
     ) {
       if (_scheduleEventsSubscription != null) {
