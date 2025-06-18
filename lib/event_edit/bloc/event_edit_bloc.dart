@@ -26,7 +26,7 @@ class EventEditBloc extends Bloc<EventEditEvent, EventEditState> {
       startTime: event.initialEvent?.startTime ?? DateTime.now(),
       endTime:
           event.initialEvent?.endTime ??
-          DateTime.now().add(const Duration(minutes: 95)),
+          DateTime.now().add(const Duration(minutes: 60)),
       type: event.initialEvent?.baseType,
       schedule: event.schedule,
       availableSubjects: event.availableSubjects,
