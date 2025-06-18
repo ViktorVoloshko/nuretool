@@ -79,7 +79,7 @@ class EventEditView extends StatelessWidget {
                             ),
                       ),
                     FilledButton.icon(
-                      label: Text(AppLocalizations.of(context)!.confirm),
+                      label: Text(l10n.confirm),
                       icon: Icon(Icons.check),
                       onPressed:
                           () => context.read<EventEditBloc>().add(
@@ -124,10 +124,12 @@ class EventEditView extends StatelessWidget {
                         EventEditDataChanged(endTime: value),
                       ),
                   hintText: l10n.end,
-                  errorText:
-                      state.error == EventEditError.noDateTime
-                          ? l10n.noTimeError
-                          : null,
+                  errorText: switch (state.error) {
+                    EventEditError.noDateTime => l10n.noTimeError,
+                    EventEditError.dateTimeStartAfterEnd =>
+                      l10n.startAfterEndError,
+                    _ => null,
+                  },
                   showIcon: false,
                 ),
                 EventEditTypeSelection(

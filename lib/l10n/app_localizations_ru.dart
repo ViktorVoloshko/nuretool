@@ -85,13 +85,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get supertasksError => 'Ошибка получения задач';
 
   @override
-  String get noSubjectError => 'Нет предмета';
+  String get noSubjectError => 'Отсутствует предмет';
 
   @override
-  String get noTimeError => 'Нету времени';
+  String get noTimeError => 'Отсутствует время';
 
   @override
-  String get noTypeError => 'Нету типа';
+  String get startAfterEndError => 'Начало не может быть после конца';
+
+  @override
+  String get noTypeError => 'Отсутствует тип';
 
   @override
   String get supertasksEdit => 'Редактировать задачу';

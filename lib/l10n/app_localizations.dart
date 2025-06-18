@@ -256,6 +256,12 @@ abstract class AppLocalizations {
   /// **'No time'**
   String get noTimeError;
 
+  /// No description provided for @startAfterEndError.
+  ///
+  /// In en, this message translates to:
+  /// **'Start can\'t be after end'**
+  String get startAfterEndError;
+
   /// No description provided for @noTypeError.
   ///
   /// In en, this message translates to:

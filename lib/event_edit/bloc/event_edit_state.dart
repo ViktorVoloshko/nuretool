@@ -63,4 +63,4 @@ final class EventEditState extends Equatable {
 
 enum EventEditStatus { initial, ready, saved }
 
-enum EventEditError { noSubject, noDateTime, noType }
+enum EventEditError { noSubject, noDateTime, dateTimeStartAfterEnd, noType }

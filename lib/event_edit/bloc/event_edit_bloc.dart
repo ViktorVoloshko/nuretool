@@ -84,6 +84,8 @@ class EventEditBloc extends Bloc<EventEditEvent, EventEditState> {
     if (state.subjectID == null) return EventEditError.noSubject;
     if (state.startTime == null || state.endTime == null) {
       return EventEditError.noDateTime;
+    } else if (state.startTime!.isAfter(state.endTime!)) {
+      return EventEditError.dateTimeStartAfterEnd;
     }
     if (state.type == null) return EventEditError.noType;
     return null;

@@ -85,13 +85,16 @@ class AppLocalizationsUk extends AppLocalizations {
   String get supertasksError => 'Помилка отримання задач';
 
   @override
-  String get noSubjectError => 'Немає предмету';
+  String get noSubjectError => 'Відсутній предмет';
 
   @override
-  String get noTimeError => 'Немає часу';
+  String get noTimeError => 'Відсутній час';
 
   @override
-  String get noTypeError => 'Немає типу';
+  String get startAfterEndError => 'Початок не може бути після кінця';
+
+  @override
+  String get noTypeError => 'Відсутній тип';
 
   @override
   String get supertasksEdit => 'Редагувати задачу';

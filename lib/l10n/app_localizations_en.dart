@@ -91,6 +91,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noTimeError => 'No time';
 
   @override
+  String get startAfterEndError => 'Start can\'t be after end';
+
+  @override
   String get noTypeError => 'No type';
 
   @override

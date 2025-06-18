@@ -64,6 +64,8 @@
     "@noSubjectError": {},
     "noTimeError": "No time",
     "@noTimeError": {},
+    "startAfterEndError": "Start can't be after end",
+    "@startAfterEndError": {},
     "noTypeError": "No type",
     "@noTypeError": {},
     "supertasksEdit": "Edit task",
