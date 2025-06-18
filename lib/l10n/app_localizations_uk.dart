@@ -193,4 +193,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get updateError => 'Помилка оновлення';
+
+  @override
+  String get updateOngoing => 'Зачекайте доки завершиться оновлення';
 }

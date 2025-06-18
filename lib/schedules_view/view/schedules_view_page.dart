@@ -65,12 +65,14 @@ class SchedulesViewView extends StatelessWidget {
                 child: SchedulesTypesDivider(
                   typeName: AppLocalizations.of(context)!.groups,
                   onAdd:
-                      () => Navigator.push(
-                        context,
-                        EntitySelectionPage.route(
-                          tab: EntitySelectionTab.groups,
-                        ),
-                      ),
+                      state.updateStatus.$1
+                          ? null
+                          : () => Navigator.push(
+                            context,
+                            EntitySelectionPage.route(
+                              tab: EntitySelectionTab.groups,
+                            ),
+                          ),
                 ),
               ),
               SliverList.builder(
@@ -82,7 +84,7 @@ class SchedulesViewView extends StatelessWidget {
                       isSelected:
                           state.selectedSchedule == groups[index].schedule,
                       deleteProhibited:
-                          state.updateStatus.$1 ||
+                          state.updateStatus.$2 == groups[index].schedule ||
                           state.userGroupID == groups[index].schedule.id,
                       updateProhibited: state.updateStatus.$1,
                       isUpdating:
@@ -105,12 +107,14 @@ class SchedulesViewView extends StatelessWidget {
                 child: SchedulesTypesDivider(
                   typeName: AppLocalizations.of(context)!.teachers,
                   onAdd:
-                      () => Navigator.push(
-                        context,
-                        EntitySelectionPage.route(
-                          tab: EntitySelectionTab.teachers,
-                        ),
-                      ),
+                      state.updateStatus.$1
+                          ? null
+                          : () => Navigator.push(
+                            context,
+                            EntitySelectionPage.route(
+                              tab: EntitySelectionTab.teachers,
+                            ),
+                          ),
                 ),
               ),
               SliverList.builder(
@@ -122,7 +126,8 @@ class SchedulesViewView extends StatelessWidget {
                       isSelected:
                           state.selectedSchedule == teachers[index].schedule,
                       updateProhibited: state.updateStatus.$1,
-                      deleteProhibited: state.updateStatus.$1,
+                      deleteProhibited:
+                          state.updateStatus.$2 == teachers[index].schedule,
                       isUpdating:
                           state.updateStatus.$2 == teachers[index].schedule,
                       onTap:
@@ -143,12 +148,14 @@ class SchedulesViewView extends StatelessWidget {
                 child: SchedulesTypesDivider(
                   typeName: AppLocalizations.of(context)!.rooms,
                   onAdd:
-                      () => Navigator.push(
-                        context,
-                        EntitySelectionPage.route(
-                          tab: EntitySelectionTab.rooms,
-                        ),
-                      ),
+                      state.updateStatus.$1
+                          ? null
+                          : () => Navigator.push(
+                            context,
+                            EntitySelectionPage.route(
+                              tab: EntitySelectionTab.rooms,
+                            ),
+                          ),
                 ),
               ),
               SliverList.builder(
@@ -160,7 +167,8 @@ class SchedulesViewView extends StatelessWidget {
                       isSelected:
                           state.selectedSchedule == rooms[index].schedule,
                       updateProhibited: state.updateStatus.$1,
-                      deleteProhibited: state.updateStatus.$1,
+                      deleteProhibited:
+                          state.updateStatus.$2 == rooms[index].schedule,
                       isUpdating:
                           state.updateStatus.$2 == rooms[index].schedule,
                       onTap:

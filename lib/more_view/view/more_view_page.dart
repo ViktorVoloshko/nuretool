@@ -155,13 +155,18 @@ class MoreViewView extends StatelessWidget {
                   title: l10n.myGroup,
                   subtitle: state.userGroup?.name,
                   onTap:
-                      () => Navigator.push(
-                        context,
-                        EntitySelectionPage.route(
-                          tab: EntitySelectionTab.groups,
-                          userGroupSelection: true,
-                        ),
-                      ),
+                      () =>
+                          state.isUpdating
+                              ? ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(l10n.updateOngoing)),
+                              )
+                              : Navigator.push(
+                                context,
+                                EntitySelectionPage.route(
+                                  tab: EntitySelectionTab.groups,
+                                  userGroupSelection: true,
+                                ),
+                              ),
                   icon: Icon(Icons.people),
                 ),
                 MoreViewItem(

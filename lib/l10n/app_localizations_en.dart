@@ -194,4 +194,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get updateError => 'Update failed';
+
+  @override
+  String get updateOngoing => 'Wait until updating is over';
 }

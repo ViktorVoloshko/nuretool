@@ -140,5 +140,7 @@
     "purple": "Purple",
     "@purple": {},
     "updateError": "Update failed",
-    "@updateError": {}
+    "@updateError": {},
+    "updateOngoing": "Wait until updating is over",
+    "@updateOngoing": {}
 }

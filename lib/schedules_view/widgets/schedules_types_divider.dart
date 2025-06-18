@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 
 class SchedulesTypesDivider extends StatelessWidget {
-  const SchedulesTypesDivider({
-    super.key,
-    required this.typeName,
-    required this.onAdd,
-  });
+  const SchedulesTypesDivider({super.key, required this.typeName, this.onAdd});
 
   final String typeName;
-  final GestureTapCallback onAdd;
+  final GestureTapCallback? onAdd;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +21,9 @@ class SchedulesTypesDivider extends StatelessWidget {
             ),
           ),
           Expanded(child: Divider()),
-          IconButton(onPressed: onAdd, icon: Icon(Icons.add)),
+          if (onAdd != null)
+            IconButton(onPressed: onAdd, icon: Icon(Icons.add)),
+          if (onAdd == null) SizedBox(height: 40.0, width: 20.0),
         ],
       ),
     );

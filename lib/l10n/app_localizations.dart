@@ -457,6 +457,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Update failed'**
   String get updateError;
+
+  /// No description provided for @updateOngoing.
+  ///
+  /// In en, this message translates to:
+  /// **'Wait until updating is over'**
+  String get updateOngoing;
 }
 
 class _AppLocalizationsDelegate
