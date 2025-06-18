@@ -72,15 +72,16 @@ class EntitySelectionView extends StatelessWidget {
                 ),
               ),
               actions: [
-                if (!state.updating)
-                  IconButton(
-                    icon: Icon(Icons.refresh),
-                    onPressed:
-                        () =>
-                            context
-                                .read<EntitySelectionCubit>()
-                                .updateEntities(),
-                  ),
+                IconButton(
+                  icon: Icon(Icons.refresh),
+                  onPressed:
+                      state.updating
+                          ? null
+                          : () =>
+                              context
+                                  .read<EntitySelectionCubit>()
+                                  .updateEntities(),
+                ),
               ],
               bottom: TabBar(
                 tabs: [
