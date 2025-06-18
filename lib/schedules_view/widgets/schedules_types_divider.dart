@@ -21,9 +21,7 @@ class SchedulesTypesDivider extends StatelessWidget {
             ),
           ),
           Expanded(child: Divider()),
-          if (onAdd != null)
-            IconButton(onPressed: onAdd, icon: Icon(Icons.add)),
-          if (onAdd == null) SizedBox(height: 40.0, width: 20.0),
+          IconButton(onPressed: onAdd, icon: Icon(Icons.add)),
         ],
       ),
     );

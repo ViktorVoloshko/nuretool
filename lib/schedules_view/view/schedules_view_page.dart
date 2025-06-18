@@ -83,10 +83,6 @@ class SchedulesViewView extends StatelessWidget {
                       // lastUpdated: state.groupSchedules[index].lastUpdated,
                       isSelected:
                           state.selectedSchedule == groups[index].schedule,
-                      deleteProhibited:
-                          state.updateStatus.$2 == groups[index].schedule ||
-                          state.userGroupID == groups[index].schedule.id,
-                      updateProhibited: state.updateStatus.$1,
                       isUpdating:
                           state.updateStatus.$2 == groups[index].schedule,
                       onTap:
@@ -94,13 +90,18 @@ class SchedulesViewView extends StatelessWidget {
                               .read<SchedulesViewCubit>()
                               .selectSchedule(groups[index].schedule),
                       onRefresh:
-                          () => context
-                              .read<SchedulesViewCubit>()
-                              .updateSchedule(groups[index].schedule),
+                          state.updateStatus.$1
+                              ? null
+                              : () => context
+                                  .read<SchedulesViewCubit>()
+                                  .updateSchedule(groups[index].schedule),
                       onDelete:
-                          () => context
-                              .read<SchedulesViewCubit>()
-                              .removeSchedule(groups[index].schedule),
+                          state.updateStatus.$2 == groups[index].schedule ||
+                                  state.userGroupID == groups[index].schedule.id
+                              ? null
+                              : () => context
+                                  .read<SchedulesViewCubit>()
+                                  .removeSchedule(groups[index].schedule),
                     ),
               ),
               SliverToBoxAdapter(
@@ -125,9 +126,6 @@ class SchedulesViewView extends StatelessWidget {
                       // lastUpdated: state.groupSchedules[index].lastUpdated,
                       isSelected:
                           state.selectedSchedule == teachers[index].schedule,
-                      updateProhibited: state.updateStatus.$1,
-                      deleteProhibited:
-                          state.updateStatus.$2 == teachers[index].schedule,
                       isUpdating:
                           state.updateStatus.$2 == teachers[index].schedule,
                       onTap:
@@ -135,13 +133,17 @@ class SchedulesViewView extends StatelessWidget {
                               .read<SchedulesViewCubit>()
                               .selectSchedule(teachers[index].schedule),
                       onRefresh:
-                          () => context
-                              .read<SchedulesViewCubit>()
-                              .updateSchedule(teachers[index].schedule),
+                          state.updateStatus.$1
+                              ? null
+                              : () => context
+                                  .read<SchedulesViewCubit>()
+                                  .updateSchedule(teachers[index].schedule),
                       onDelete:
-                          () => context
-                              .read<SchedulesViewCubit>()
-                              .removeSchedule(teachers[index].schedule),
+                          state.updateStatus.$2 == teachers[index].schedule
+                              ? null
+                              : () => context
+                                  .read<SchedulesViewCubit>()
+                                  .removeSchedule(teachers[index].schedule),
                     ),
               ),
               SliverToBoxAdapter(
@@ -166,9 +168,6 @@ class SchedulesViewView extends StatelessWidget {
                       // lastUpdated: state.groupSchedules[index].lastUpdated,
                       isSelected:
                           state.selectedSchedule == rooms[index].schedule,
-                      updateProhibited: state.updateStatus.$1,
-                      deleteProhibited:
-                          state.updateStatus.$2 == rooms[index].schedule,
                       isUpdating:
                           state.updateStatus.$2 == rooms[index].schedule,
                       onTap:
@@ -176,13 +175,17 @@ class SchedulesViewView extends StatelessWidget {
                               .read<SchedulesViewCubit>()
                               .selectSchedule(rooms[index].schedule),
                       onRefresh:
-                          () => context
-                              .read<SchedulesViewCubit>()
-                              .updateSchedule(rooms[index].schedule),
+                          state.updateStatus.$1
+                              ? null
+                              : () => context
+                                  .read<SchedulesViewCubit>()
+                                  .updateSchedule(rooms[index].schedule),
                       onDelete:
-                          () => context
-                              .read<SchedulesViewCubit>()
-                              .removeSchedule(rooms[index].schedule),
+                          state.updateStatus.$2 == rooms[index].schedule
+                              ? null
+                              : () => context
+                                  .read<SchedulesViewCubit>()
+                                  .removeSchedule(rooms[index].schedule),
                     ),
               ),
             ],
