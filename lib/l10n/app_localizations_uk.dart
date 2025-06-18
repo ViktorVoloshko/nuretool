@@ -9,7 +9,7 @@ class AppLocalizationsUk extends AppLocalizations {
   AppLocalizationsUk([String locale = 'uk']) : super(locale);
 
   @override
-  String get none => 'Ніякий';
+  String get none => 'Відсутній';
 
   @override
   String get calendar => 'Календар';
@@ -33,7 +33,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get date => 'Дата';
 
   @override
-  String get start => 'Початой';
+  String get start => 'Початок';
 
   @override
   String get end => 'Кінець';
@@ -54,7 +54,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String daysFromNow(int days) {
-    return 'через $days днів';
+    return 'Через $days днів';
   }
 
   @override
@@ -94,7 +94,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get noTypeError => 'Немає типу';
 
   @override
-  String get supertasksEdit => 'Редаугвати задачу';
+  String get supertasksEdit => 'Редагувати задачу';
 
   @override
   String get subtasks => 'Підзадачі';
