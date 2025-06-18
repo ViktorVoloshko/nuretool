@@ -20,6 +20,7 @@ class CalendarViewBloc extends Bloc<CalendarViewEvent, CalendarViewState> {
        _settingsRepository = settingsRepository,
        super(CalendarViewInitial()) {
     on<CalendarViewSubscriptionRequested>(_onSubscriptionRequested);
+    on<CalendarViewUpdateRequested>(_onUpdateRequested);
   }
 
   final UniversityRepository _universityRepository;
@@ -30,6 +31,8 @@ class CalendarViewBloc extends Bloc<CalendarViewEvent, CalendarViewState> {
   late final StreamSubscription<List<Teacher>> _teachersSubscription;
   late final StreamSubscription<List<Room>> _roomsSubscription;
   late final StreamSubscription<ScheduleData?> _selectedScheduleSubscription;
+  late final StreamSubscription<(bool, ScheduleData?)>
+  _updateStatusSubscription;
 
   List<Subject> _subjects = const [];
   List<Group> _groups = const [];
@@ -37,6 +40,11 @@ class CalendarViewBloc extends Bloc<CalendarViewEvent, CalendarViewState> {
   List<Room> _rooms = const [];
   ScheduleData? _schedule;
   String? _scheduleName;
+
+  void _onUpdateRequested(
+    CalendarViewUpdateRequested event,
+    Emitter<CalendarViewState> emit,
+  ) => _universityRepository.updateSchedule(event.schedule);
 
   void _onSubscriptionRequested(
     CalendarViewSubscriptionRequested event,
@@ -62,6 +70,13 @@ class CalendarViewBloc extends Bloc<CalendarViewEvent, CalendarViewState> {
           _schedule = schedule;
           _updateScheduleName();
         });
+    _updateStatusSubscription = _universityRepository.updateStatus.listen((
+      status,
+    ) {
+      if (state is CalendarViewSuccess) {
+        emit((state as CalendarViewSuccess).copyWith(isUpdating: status.$1));
+      }
+    });
 
     await Future.wait([
       emit.forEach(
@@ -75,6 +90,10 @@ class CalendarViewBloc extends Bloc<CalendarViewEvent, CalendarViewState> {
             schedule: _schedule,
             scheduleName: _scheduleName,
             calendarMode: state.calendarMode,
+            isUpdating:
+                (state is! CalendarViewSuccess)
+                    ? false
+                    : (state as CalendarViewSuccess).isUpdating,
             events:
                 events
                     .map(
@@ -131,6 +150,7 @@ class CalendarViewBloc extends Bloc<CalendarViewEvent, CalendarViewState> {
       _teachersSubscription.cancel(),
       _roomsSubscription.cancel(),
       _selectedScheduleSubscription.cancel(),
+      _updateStatusSubscription.cancel(),
     ]);
     return super.close();
   }

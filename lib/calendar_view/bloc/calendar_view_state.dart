@@ -41,11 +41,13 @@ final class CalendarViewSuccess extends CalendarViewState {
     required this.schedule,
     this.scheduleName,
     super.calendarMode,
+    required this.isUpdating,
   });
 
   final List<EventData> events;
   final ScheduleData? schedule;
   final String? scheduleName;
+  final bool isUpdating;
 
   @override
   CalendarViewSuccess copyWith({
@@ -53,13 +55,21 @@ final class CalendarViewSuccess extends CalendarViewState {
     ScheduleData? schedule,
     String? scheduleName,
     CalendarMode? calendarMode,
+    bool? isUpdating,
   }) => CalendarViewSuccess(
     events: events ?? this.events,
     schedule: schedule ?? this.schedule,
     scheduleName: scheduleName ?? this.scheduleName,
     calendarMode: calendarMode ?? this.calendarMode,
+    isUpdating: isUpdating ?? this.isUpdating,
   );
 
   @override
-  List<Object?> get props => [events, schedule, scheduleName, calendarMode];
+  List<Object?> get props => [
+    events,
+    schedule,
+    scheduleName,
+    calendarMode,
+    isUpdating,
+  ];
 }

@@ -10,3 +10,12 @@ sealed class CalendarViewEvent extends Equatable {
 final class CalendarViewSubscriptionRequested extends CalendarViewEvent {
   const CalendarViewSubscriptionRequested();
 }
+
+final class CalendarViewUpdateRequested extends CalendarViewEvent {
+  const CalendarViewUpdateRequested({required this.schedule});
+
+  final ScheduleData schedule;
+
+  @override
+  List<Object> get props => [schedule];
+}

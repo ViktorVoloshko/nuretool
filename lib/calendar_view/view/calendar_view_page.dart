@@ -54,6 +54,25 @@ class CalendarViewView extends StatelessWidget {
                           AppLocalizations.of(context)!.calendar,
                     ),
                     actions: [
+                      if (state.isUpdating)
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: SizedBox(
+                            height: 16.0,
+                            width: 16.0,
+                            child: Center(child: CircularProgressIndicator()),
+                          ),
+                        ),
+                      if (!state.isUpdating && state.schedule != null)
+                        IconButton(
+                          icon: Icon(Icons.refresh),
+                          onPressed:
+                              () => context.read<CalendarViewBloc>().add(
+                                CalendarViewUpdateRequested(
+                                  schedule: state.schedule!,
+                                ),
+                              ),
+                        ),
                       IconButton(
                         icon: Icon(Icons.calendar_today),
                         onPressed:
