@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:tasks_repository/tasks_repository.dart';
@@ -22,15 +24,37 @@ class TasksOverviewBloc extends Bloc<TasksOverviewEvent, TasksOverviewState> {
   final TasksRepository _tasksRepository;
   final UniversityRepository _universityRepository;
 
+  int? _userGroupID;
+
+  late final StreamSubscription<int?> _userGroupIDSubscription;
+
   Future<void> _onSubscriptionRequested(
     TasksOverviewSubscriptionRequested event,
     Emitter<TasksOverviewState> emit,
   ) async {
     emit(const TasksOverviewLoading());
 
+    _userGroupIDSubscription = _universityRepository.userGroupID.listen((
+      userGroupID,
+    ) {
+      _userGroupID = userGroupID;
+      if (state is TasksOverviewSuccess) {
+        emit(
+          TasksOverviewSuccess(
+            tasks: (state as TasksOverviewSuccess).tasks,
+            userGroupID: _userGroupID,
+          ),
+        );
+      }
+    });
+
     await emit.forEach(
       _tasksRepository.tasks,
-      onData: (supertasks) => TasksOverviewSuccess(tasks: supertasks),
+      onData:
+          (supertasks) => TasksOverviewSuccess(
+            tasks: supertasks,
+            userGroupID: _userGroupID,
+          ),
       onError: (error, _) => TasksOverviewFailure(message: error.toString()),
     );
   }
@@ -92,6 +116,7 @@ class TasksOverviewBloc extends Bloc<TasksOverviewEvent, TasksOverviewState> {
   ) async => emit(
     TasksOverviewSupertaskCreated(
       tasks: (state as TasksOverviewSuccess).tasks,
+      userGroupID: (state as TasksOverviewSuccess).userGroupID,
       supertaskID: await _tasksRepository.saveSupertask(
         Supertask(
           title: 'New task',
@@ -150,6 +175,12 @@ class TasksOverviewBloc extends Bloc<TasksOverviewEvent, TasksOverviewState> {
     }
 
     return result;
+  }
+
+  @override
+  Future<void> close() {
+    _userGroupIDSubscription.cancel();
+    return super.close();
   }
 }
 

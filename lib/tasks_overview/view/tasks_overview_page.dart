@@ -50,22 +50,26 @@ class TasksOverviewView extends StatelessWidget {
                   title: Text(AppLocalizations.of(context)!.tasks),
                   actions: [
                     IconButton(
-                      onPressed: () {
-                        final bloc = context.read<TasksOverviewBloc>();
-                        showDialog(
-                          context: context,
-                          builder:
-                              (context) => TaskGenerationConfirmation(
-                                onYes: () {
-                                  bloc.add(
-                                    const TasksOverviewGenerationRequested(),
-                                  );
-                                  Navigator.pop(context);
-                                },
-                                onNo: () => Navigator.pop(context),
-                              ),
-                        );
-                      },
+                      onPressed:
+                          (state is TasksOverviewSuccess &&
+                                  state.userGroupID == null)
+                              ? null
+                              : () {
+                                final bloc = context.read<TasksOverviewBloc>();
+                                showDialog(
+                                  context: context,
+                                  builder:
+                                      (context) => TaskGenerationConfirmation(
+                                        onYes: () {
+                                          bloc.add(
+                                            const TasksOverviewGenerationRequested(),
+                                          );
+                                          Navigator.pop(context);
+                                        },
+                                        onNo: () => Navigator.pop(context),
+                                      ),
+                                );
+                              },
                       icon: Icon(Icons.refresh),
                     ),
                   ],

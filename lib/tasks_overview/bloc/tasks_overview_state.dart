@@ -25,17 +25,19 @@ final class TasksOverviewFailure extends TasksOverviewState {
 }
 
 final class TasksOverviewSuccess extends TasksOverviewState {
-  const TasksOverviewSuccess({required this.tasks});
+  const TasksOverviewSuccess({required this.tasks, required this.userGroupID});
 
   final List<Supertask> tasks;
+  final int? userGroupID;
 
   @override
-  List<Object?> get props => [tasks];
+  List<Object?> get props => [tasks, userGroupID];
 }
 
 final class TasksOverviewSupertaskCreated extends TasksOverviewSuccess {
   const TasksOverviewSupertaskCreated({
     required super.tasks,
+    required super.userGroupID,
     required this.supertaskID,
   });
 
