@@ -37,7 +37,7 @@ class SchedulesListItem extends StatelessWidget {
         children: [
           if (isUpdating)
             Padding(
-              padding: const EdgeInsets.all(12.0),
+              padding: const EdgeInsets.all(16.0),
               child: SizedBox(
                 height: 16.0,
                 width: 16.0,
