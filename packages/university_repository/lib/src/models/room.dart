@@ -17,5 +17,6 @@ class Room extends Entity {
 }
 
 extension ApiToDBRoom on api.Room {
-  db.RoomsCompanion toDBModel() => db.RoomsCompanion.insert(name: shortName);
+  db.RoomsCompanion toDBModel() =>
+      db.RoomsCompanion.insert(id: Value(id), name: shortName);
 }
