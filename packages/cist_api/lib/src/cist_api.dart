@@ -32,7 +32,7 @@ class CistApi
           );
 
   final Dio _dio;
-  static const _domain = 'cist2.nure.ua';
+  static const _domain = 'cist.nure.ua';
 
   @override
   Future<List<groups_api.Faculty>> fetchGroups() async {
