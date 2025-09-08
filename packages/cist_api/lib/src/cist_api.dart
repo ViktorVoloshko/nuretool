@@ -75,7 +75,7 @@ class CistApi
                 response.data!.replaceRange(
                   response.data!.length - 2,
                   null,
-                  ']}}',
+                  ']}]}}',
                 ),
               )
               as Map<String, dynamic>;
