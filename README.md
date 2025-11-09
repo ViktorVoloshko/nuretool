@@ -6,7 +6,30 @@
 
 # nuretool
 
-A new Flutter project.
+Organizer for students of [NURE](https://nure.ua/).
+
+Functionality:
+- download and display schedule in customizable calendar
+- add custom events to the schedule
+- add or generate (based on schedule) tasks with autodeadlines
+
+## Screenshots
+
+### Calendar
+
+<img src="screenshots/1_1.png" height="300"> <img src="screenshots/1_2.png" height="300"> <img src="screenshots/1_3.png" height="300"> <img src="screenshots/1_4.png" height="300"> <img src="screenshots/1_5.png" height="300"> <img src="screenshots/1_6.png" height="300">
+
+### Tasks
+
+<img src="screenshots/2_1.png" height="300"> <img src="screenshots/2_2.png" height="300"> <img src="screenshots/2_3.png" height="300"> <img src="screenshots/2_4.png" height="300">
+
+### Settings
+
+<img src="screenshots/3_1.png" height="300"> <img src="screenshots/3_2.png" height="300"> <img src="screenshots/3_3.png" height="300">
+
+### Customization
+
+<img src="screenshots/themes_light_red.png" height="300"> <img src="screenshots/themes_dark_green.png" height="300">
 
 ## Thanks to
 
